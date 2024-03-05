@@ -1,0 +1,1701 @@
+<iframe id="iframe" class="hidden"></iframe>
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Setting" | translate }}</h1>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+
+  <div
+    class="row gx-2 gx-lg-3"
+    *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+  >
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5"></div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5"></div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <div
+        *ngIf="this.isSuperAdmin && this.companyData?.length > 0"
+        style="margin-right: 2%"
+      >
+        <label for="Business" class="d-block font-size-sm">{{
+          "Business" | translate
+        }}</label>
+        <div class="select2-custom">
+          <select
+            class="form-control custom-select"
+            size="1"
+            [(ngModel)]="this.companyId"
+            id="Business"
+            (ngModelChange)="getLocations()"
+            data-hs-select2-options='{
+              "minimumResultsForSearch": "Infinity",
+            }'
+          >
+            <option *ngFor="let item of companyData" [value]="item.id">
+              <span class="d-flex align-items-center"
+                ><span>{{ item.companyName }}</span></span
+              >
+            </option>
+          </select>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <div *ngIf="this.locationData?.length > 0">
+        <label for="Branch" class="d-block font-size-sm">{{
+          "Branch" | translate
+        }}</label>
+        <div class="select2-custom">
+          <select
+            class="form-control custom-select"
+            size="1"
+            [(ngModel)]="this.locationId"
+            (ngModelChange)="selectLocation()"
+            data-hs-select2-options='{
+                "minimumResultsForSearch": "Infinity",
+              }'
+          >
+            <option *ngFor="let item of locationData" [value]="item.id">
+              <span class="d-flex align-items-center"
+                ><span>{{ item.name }}</span></span
+              >
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">
+        <button
+          type="button"
+          class="navbar-toggler btn btn-block btn-white mb-3"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="navbarVerticalNavMenu"
+          data-toggle="collapse"
+          data-target="#navbarVerticalNavMenu"
+        >
+          <span class="d-flex justify-content-between align-items-center">
+            <span class="h5 mb-0">{{ "Nav menu" | translate }}</span>
+            <span class="navbar-toggle-default">
+              <i class="tio-menu-hamburger"></i>
+            </span>
+            <span class="navbar-toggle-toggled">
+              <i class="tio-clear"></i>
+            </span>
+          </span>
+        </button>
+
+        <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
+          <ul
+            id="navbarSettings"
+            class="js-sticky-block js-scrollspy navbar-nav navbar-nav-lg nav-tabs card card-navbar-nav"
+            data-hs-sticky-block-options='{
+                 "parentSelector": "#navbarVerticalNavMenu",
+                 "breakpoint": "lg",
+                 "startPoint": "#navbarVerticalNavMenu",
+                 "endPoint": "#stickyBlockEndPoint",
+                 "stickyOffsetTop": 20
+               }'
+          >
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="javascript:void()"
+                (click)="tabClick(tabs.WaitList)"
+                [ngClass]="{ active: currentTab === tabs.WaitList }"
+              >
+                <i class="tio-wishlist nav-icon"></i>
+                {{ "WaitList" | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                href="javascript:void()"
+                (click)="tabClick(tabs.Booking)"
+                [ngClass]="{ active: currentTab === tabs.Booking }"
+              >
+                <i class="tio-home-outlined nav-icon"></i>
+                {{ "Booking" | translate }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="javascript:void()"
+                (click)="tabClick(tabs.Styling)"
+                [ngClass]="{ active: currentTab === tabs.Styling }"
+              >
+                <i class="tio-edit nav-icon"></i> {{ "Styling" | translate }}
+              </a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="javascript:void()" (click)="tabClick(tabs.Sound)"
+                [ngClass]="{ active: currentTab === tabs.Sound }">
+                <i class="tio-online nav-icon"></i>
+                {{ "Sound" | translate }}
+              </a>
+            </li> -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="javascript:void()"
+                (click)="tabClick(tabs.Users)"
+                [ngClass]="{ active: currentTab === tabs.Users }"
+              >
+                <i class="tio-user-outlined nav-icon"></i>
+                {{ "Users" | translate }}
+              </a>
+            </li>
+            <li
+              class="nav-item"
+              *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+            >
+              <a
+                class="nav-link"
+                href="javascript:void()"
+                (click)="tabClick(tabs.BusinessInfo)"
+                [ngClass]="{ active: currentTab === tabs.BusinessInfo }"
+              >
+                <i class="tio-settings-outlined nav-icon"></i>
+                {{ "Business Info" | translate }}
+              </a>
+            </li>
+            <li
+              class="nav-item"
+              *ngIf="
+                (this.isSuperAdmin || this.isBusinessOwner) && isTwillioInfoShow
+              "
+            >
+              <a
+                class="nav-link"
+                href="javascript:void()"
+                (click)="tabClick(tabs.TwilioInfo)"
+                [ngClass]="{ active: currentTab === tabs.TwilioInfo }"
+              >
+                <i class="tio-message-outlined nav-icon"></i>
+                {{ "Twilio Info" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <!-- Card -->
+      <div class="card mb-3 mb-lg-5">
+        <!-- Profile Cover -->
+        <div class="profile-cover">
+          <div class="profile-cover-img-wrapper">
+            <img
+              id="profileCoverImg"
+              class="profile-cover-img"
+              src="./assets/img/1920x400/img1.jpg"
+              alt="Image Description"
+            />
+            <!-- Custom File Cover -->
+            <div class="profile-cover-content profile-cover-btn"></div>
+            <!-- End Custom File Cover -->
+          </div>
+        </div>
+        <!-- End Profile Cover -->
+        <!-- Avatar -->
+        <label
+          class="avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader profile-cover-avatar"
+          for="avatarUploader"
+        >
+          <img
+            id="avatarImg"
+            class="avatar-img"
+            src="{{ getCompanyLogo() }}"
+            alt="Image Description"
+            style="object-fit: contain"
+          />
+        </label>
+        <!-- End Avatar -->
+      </div>
+      <!-- End Card -->
+
+      <!-- Wait-list Card -->
+      <div class="card mb-3 mb-lg-5" *ngIf="currentTab === tabs.WaitList">
+        <div class="card-header">
+          <h2 class="card-title h4">
+            {{ "WaitList information" | translate }}
+          </h2>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="row wrap">
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Location Name" | translate }}</h4>
+                  <p *ngIf="frmLocation.controls.name.value !== null">
+                    {{ "Your location name is" | translate }}
+                    <b class="tl">{{ frmLocation.controls.name.value }}.</b>
+                  </p>
+                  <p *ngIf="frmLocation.controls.name.value === null">
+                    {{
+                      "Your location name is not
+                    set." | translate
+                    }}
+                  </p>
+                </div>
+                <div
+                  class="col-md-3 nav-item ml-auto"
+                  *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+                >
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isLocationNameEdit"
+                    (click)="isLocationNameEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isLocationNameEdit"
+                    (click)="isLocationNameEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isLocationNameEdit">
+                  <form class="basic-form" novalidate [formGroup]="frmLocation">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="name"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isLocationNameEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveLocation()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">
+                    {{ "Public WaitList" | translate }}
+                  </h4>
+                  <p *ngIf="frmWaitList.controls.waitListUrl.value !== null">
+                    {{
+                      "Customer can view your
+                    waitlist online at" | translate
+                    }}
+                    <a
+                      href="/waitlist/{{
+                        frmCheckIn.controls.checkInUrl.value
+                      }}"
+                      class="tl"
+                      target="_blank"
+                      >{{ url }}/waitlist/{{
+                        frmCheckIn.controls.checkInUrl.value
+                      }}</a
+                    >
+                  </p>
+                  <p *ngIf="frmWaitList.controls.waitListUrl.value === null">
+                    {{
+                      "Your check-in URL is
+                    not set." | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-12" *ngIf="isWaitListUrlEdit">
+                  <form class="basic-form" novalidate [formGroup]="frmWaitList">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="waitListUrl"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                    <div class="col-md-12">
+                      <mat-checkbox
+                        color="primary"
+                        formControlName="isPublicWaitList"
+                        [ngModelOptions]="{ standalone: true }"
+                      >
+                        {{
+                          "Allow customers to have public waitlist." | translate
+                        }}
+                      </mat-checkbox>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isWaitListUrlEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveWaitList()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Check In" | translate }}</h4>
+
+                  <p *ngIf="frmCheckIn.controls.checkInUrl.value !== null">
+                    {{ "Customer can check in at" | translate }}
+
+                    <a
+                      href="/checkin/{{
+                        frmCheckIn.controls.checkInUrl.value
+                      }}/{{ frmLocation.controls.qrCodeURL.value }}"
+                      class="tl"
+                      target="_blank"
+                      >{{ url }}/checkin/{{
+                        frmCheckIn.controls.checkInUrl.value
+                      }}</a
+                    >.
+                  </p>
+
+                  <p *ngIf="frmCheckIn.controls.checkInUrl.value === null">
+                    {{
+                      "Your check-in URL is not
+                    set." | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-12" *ngIf="isCheckInEdit">
+                  <form class="basic-form" novalidate [formGroup]="frmCheckIn">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="checkInUrl"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                    <mat-checkbox
+                      color="primary"
+                      formControlName="isAllowCheckIn"
+                      [ngModelOptions]="{ standalone: true }"
+                    >
+                      {{
+                        "Allow customers to have public waitlist." | translate
+                      }}
+                    </mat-checkbox>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isCheckInEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveCheckIn()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Customer Info" | translate }}</h4>
+
+                  <p>
+                    {{
+                      "What info about your customer you want to capture in your waitlist."
+                        | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    (click)="customerInfo()"
+                  >
+                    <i class="tio-edit mr-1"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+
+      <!-- Booking Card -->
+      <div class="card mb-3 mb-lg-5" *ngIf="currentTab === tabs.Sound">
+        <div class="card-header">
+          <h2 class="card-title h4">
+            {{ "Sound information" | translate }}
+          </h2>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="row wrap">
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">
+                    {{ "Enable WaitList Notification Sound" | translate }}
+                  </h4>
+
+                  <p>
+                    {{
+                      "Enable/Disable notification sound for new spot join WaitList"
+                        | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <mat-slide-toggle
+                    [checked]="waitlistSound"
+                    style="margin-top: 10px"
+                    (change)="waitlistSoundChange($event)"
+                  ></mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">
+                    {{ "Enable Booking Notification Sound" | translate }}
+                  </h4>
+
+                  <p>
+                    {{
+                      "Enable/Disable notification sound for new Booking"
+                        | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <mat-slide-toggle
+                    [checked]="bookingSound"
+                    style="margin-top: 10px"
+                    (change)="bookingSoundChange($event)"
+                  ></mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+      <div
+        class="card mb-3 mb-lg-5 mr-4 justify-content-between"
+        *ngIf="currentTab === tabs.Booking"
+      >
+        <div class="card-header">
+          <h2 class="card-title h4">
+            {{ "Booking information" | translate }}
+            <p class="alert-msg" *ngIf="isBookingsDisabled()">
+              Please add opening hours to enable booking
+            </p>
+          </h2>
+
+          <div class="row mt-1 align-items-center">
+            <h4 class="mr-2">
+              {{ "Enable" | translate }}
+            </h4>
+            <div class="">
+              <mat-slide-toggle
+                [checked]="isStoreBooking()"
+                [attr.disabled]="isBookingsDisabled()"
+                (change)="storeBookingChange($event)"
+              ></mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="accordion" id="accordionExample">
+            <div class="" id="headingOne">
+              <div
+                class="card-btn collapsed"
+                data-toggle="collapse"
+                aria-expanded="false"
+                aria-controls="collapseOne"
+              >
+                <p>
+                  <span class="card-title"
+                    ><b>{{ "Booking times" | translate }}</b></span
+                  >
+                  <br />
+                  <span
+                    >{{ "Booking duration is" | translate }}
+                    <b
+                      >{{ frmCalendar.get("slotMin").value }}
+                      {{ "min" | translate }}</b
+                    >
+                    {{ "and" | translate }}
+                    <b
+                      >{{ frmCalendar.get("maxPartySize").value }}
+                      {{ "spot" | translate }}
+                    </b>
+                    {{ "can be booked at a time" | translate }}.</span
+                  >
+                </p>
+
+                <span class="card-btn-toggle">
+                  <span class="card-btn-toggle">
+                    <button class="btn btn-white" (click)="collapse()">
+                      {{ "Expand" | translate }}
+                    </button>
+                  </span>
+                  <!-- <span class="card-btn-toggle-active">
+                    <button  class="btn btn-white">Close</button>
+                  </span> -->
+                </span>
+              </div>
+              <div
+                id="collapseOne"
+                [ngClass]="{ 'collapse show': active, collapse: !active }"
+                aria-labelledby="headingOne"
+              >
+                <form class="basic-form" novalidate [formGroup]="frmCalendar">
+                  <div class="card-body col-md-12 row">
+                    <div class="form-group col-md-6">
+                      <label>Start Date</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Select Date"
+                        bsDatepicker
+                        [minDate]="minDate"
+                        onkeydown="return false"
+                        formControlName="startDate"
+                        (ngModelChange)="changeCalDate($event)"
+                        autocomplete="nope"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                      />
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>End Date</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Select Date"
+                        bsDatepicker
+                        disabled
+                        [minDate]="minDate"
+                        onkeydown="return false"
+                        formControlName="endDate"
+                        autocomplete="nope"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="slotDuration" class="input-label">{{
+                        "Slot duration" | translate
+                      }}</label>
+                      <div class="select2-custom">
+                        <select
+                          class="form-control custom-select"
+                          formControlName="slotMin"
+                          id="slotDuration"
+                          size="1"
+                          value="slotMin"
+                          (change)="slotChange($event)"
+                          data-hs-select2-options='{
+                            "minimumResultsForSearch": "Infinity"
+                          }'
+                        >
+                          <option class="dropdown-item" value="5">5 min</option>
+                          <option class="dropdown-item" value="10">
+                            10 min
+                          </option>
+                          <option class="dropdown-item" value="15">
+                            15 min
+                          </option>
+                          <option class="dropdown-item" value="30">
+                            30 min
+                          </option>
+                          <option class="dropdown-item" value="45">
+                            45 min
+                          </option>
+                          <option class="dropdown-item" value="60">
+                            60 min
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label
+                        for="inputGroupMergeFullName"
+                        class="input-label"
+                        >{{ "Spots per time slot" | translate }}</label
+                      >
+                      <div class="input-group input-group-merge">
+                        <input
+                          type="text"
+                          formControlName="maxPartySize"
+                          class="form-control"
+                          placeholder="Spots"
+                          aria-label="Spots"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        mat-button
+                        style="margin-bottom: 5%"
+                        (click)="saveTimeSlots()"
+                      >
+                        {{ "Save" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="" id="headingTwo">
+                <div class="card-btn">
+                  <p>
+                    <span class="card-title">
+                      <b>{{ "Opening hours" | translate }}</b>
+                    </span>
+                  </p>
+
+                  <span class="">
+                    <span>
+                      <!-- <button
+                        class="btn btn-white mr-2"
+                        
+                      >
+                        Calender
+                      </button> -->
+                      <button
+                        class="btn btn-white"
+                        (click)="openingInfo(locationId, 'view')"
+                      >
+                        {{ "Edit" | translate }}
+                      </button>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Body -->
+        </div>
+      </div>
+      <!-- Styling Card -->
+      <div
+        id="emailSection"
+        class="card mb-3 mb-lg-5"
+        *ngIf="currentTab == tabs.Styling"
+      >
+        <div class="card-header">
+          <h3 class="card-title h4">{{ "Styling information" | translate }}</h3>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Form -->
+          <div class="row wrap">
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Theme" | translate }}</h4>
+
+                  <p>{{ "Change your theme color." | translate }}</p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isThemeEdit"
+                    (click)="isThemeEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isThemeEdit"
+                    (click)="isThemeEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isThemeEdit">
+                  <div
+                    *ngFor="let themes of themeData"
+                    class="service-color"
+                    [ngStyle]="{ background: themes.value }"
+                    (click)="changeTheme(themes.value)"
+                  >
+                    <div
+                      *ngIf="theme === themes.value"
+                      class="theme-active"
+                      [ngClass]="themes.key"
+                    ></div>
+                  </div>
+                </div>
+                <div class="col-md-12" *ngIf="isThemeEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveTheme()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">
+                    {{ "Hide QueLines Branding" | translate }}
+                  </h4>
+
+                  <p>
+                    {{
+                      'Hide "Create WaitList with QueLines" on your waitlist, emails, etc.'
+                        | translate
+                    }}
+                  </p>
+                </div>
+                <div
+                  class="col-md-3"
+                  *ngIf="this.planid == 2 || this.planid == 10"
+                >
+                  <mat-slide-toggle
+                    [checked]="branding"
+                    style="margin-top: 10px"
+                    (change)="brandingChange()"
+                  >
+                  </mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Logo" | translate }}</h4>
+
+                  <p>
+                    {{
+                      "Add your business logo to your waitlist and check-in."
+                        | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isLogoEdit"
+                    (click)="isLogoEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isLogoEdit"
+                    (click)="isLogoEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-6" *ngIf="isLogoEdit">
+                  <div class="pro-img">
+                    <img
+                      src="{{ getCompanyLogo() }}"
+                      width="120"
+                      height="120"
+                      alt="company logo"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6" *ngIf="isLogoEdit">
+                  <div class="upload-btn-wrapper">
+                    <button
+                      mat-raised-button
+                      type="button"
+                      class="btn btn-primary"
+                      style="margin: 5%; width: 120px"
+                      (click)="showFiles.click()"
+                    >
+                      {{ "Upload Logo" | translate }}
+                    </button>
+                    <input
+                      #showFiles
+                      type="file"
+                      ng2FileSelect
+                      [uploader]="this.logoUploader.uploader"
+                      style="
+                        position: absolute !important;
+                        left: 0 !important;
+                        top: 0 !important;
+                        display: none;
+                      "
+                      (change)="onSelectLogoFile($event)"
+                    />
+
+                    <button
+                      (click)="removeLogo()"
+                      mat-raised-button
+                      type="button"
+                      class="btn btn-primary"
+                      style="margin: 5%; width: 120px"
+                    >
+                      {{ "Remove Logo" | translate }}
+                    </button>
+                  </div>
+                </div>
+                <!-- <div class="col-md-9">
+                    <h4 class="card-title">
+                      {{ "Enable Chatting" | translate }}
+                    </h4>
+
+                    <p>
+                      {{ "Enable chat with people in que" | translate }}
+                    </p>
+                  </div>
+                  <div class="col-md-3" *ngIf="this.planid == 2">
+                    <mat-slide-toggle
+                      [checked]="chatting"
+                      style="margin-top: 10px"
+                      (change)="chattingChange()"
+                    ></mat-slide-toggle>
+                  </div> -->
+              </div>
+            </div>
+          </div>
+          <!-- End Form -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+
+      <!-- Users Card -->
+      <div
+        id="passwordSection"
+        class="card mb-3 mb-lg-5"
+        *ngIf="currentTab == tabs.Users"
+      >
+        <div class="card-header">
+          <h4 class="card-title">{{ "User information" | translate }}</h4>
+          <ul _ngcontent-wfn-c3="" class="nav nav-tabs align-items-center">
+            <li
+              _ngcontent-wfn-c3=""
+              class="nav-item ml-auto"
+              *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+            >
+              <a
+                _ngcontent-wfn-c3=""
+                class="btn btn-sm btn-white mr-2 ng-star-inserted"
+                href="javascript:;"
+                (click)="addUser()"
+                ><i _ngcontent-wfn-c3="" class="tio-user-add mr-1"></i>
+                {{ "New User" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Form -->
+          <div class="wrap" *ngFor="let user of profileData">
+            <div *ngIf="user.firstName" class="row col-md-12">
+              <div class="col-md-1">
+                <mat-card-title>
+                  <div class="avatar avatar-sm avatar-circle">
+                    <img
+                      class="avatar-img"
+                      src="{{ getProfilePic(user.id) }}"
+                    />
+                    <span
+                      class="avatar-status avatar-sm-status avatar-status-success"
+                    ></span>
+                  </div>
+                </mat-card-title>
+              </div>
+              <div class="col-md-6">
+                <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+                <div>
+                  <h4>{{ user.role }}</h4>
+                </div>
+                <div>{{ user.email }}</div>
+              </div>
+              <div *ngIf="isSuperAdmin" class="col-md-3">
+                <h3 *ngIf="user.role === 'Business Owner'">Twilio API</h3>
+                <div *ngIf="user.role === 'Business Owner'">
+                  <h4>
+                    {{
+                      user?.twilio?.sid && user?.twilio?.authtoken
+                        ? "Connected"
+                        : "Not Conncected"
+                    }}
+                  </h4>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <a
+                  class="btn btn-sm btn-white"
+                  href="javascript:;"
+                  (click)="editUserInfo(user.id)"
+                >
+                  <i class="tio-edit mr-1"></i>
+                </a>
+              </div>
+            </div>
+            <hr />
+          </div>
+          <!-- End Form -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+
+      <!-- BusinessInfo Card -->
+      <div
+        id="preferencesSection"
+        class="card mb-3 mb-lg-5"
+        *ngIf="currentTab == tabs.BusinessInfo"
+      >
+        <div class="card-header">
+          <h4 class="card-title">{{ "Business information" | translate }}</h4>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Form -->
+          <div class="row wrap">
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Business Name" | translate }}</h4>
+                  <p
+                    *ngIf="frmbusinessName.controls.companyName.value !== null"
+                  >
+                    {{
+                      "Your business name
+                    is" | translate
+                    }}
+                    <b class="tl">{{ this.selectedUser.companyName }}.</b>
+                  </p>
+                  <p
+                    *ngIf="frmbusinessName.controls.companyName.value === null"
+                  >
+                    {{
+                      "Your business name
+                    is not set." | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isCompanyNameEdit"
+                    (click)="isCompanyNameEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isCompanyNameEdit"
+                    (click)="isCompanyNameEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <form
+                  class="basic-form"
+                  novalidate
+                  [formGroup]="frmbusinessName"
+                >
+                  <div class="col-md-12" *ngIf="isCompanyNameEdit">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="companyName"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-12" *ngIf="isCompanyNameEdit">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      mat-raised-button
+                      style="margin-bottom: 5%"
+                      (click)="saveCompanyName()"
+                    >
+                      {{ "Save" | translate }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">
+                    {{ "Type of Business" | translate }}
+                  </h4>
+                  <p *ngIf="this.selectedUser.businessType !== null">
+                    {{ "Your business type is" | translate }}
+                    <b class="tl">{{ this.selectedUser.businessType }}.</b>
+                  </p>
+                  <p *ngIf="this.selectedUser.businessType === null">
+                    {{
+                      "Your business type is not
+                    set." | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isBusinessTypeEdit"
+                    (click)="isBusinessTypeEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isBusinessTypeEdit"
+                    (click)="isBusinessTypeEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isBusinessTypeEdit">
+                  <form
+                    class="basic-form"
+                    novalidate
+                    [formGroup]="frmbusinessType"
+                  >
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <mat-select
+                        formControlName="businessType"
+                        [(ngModel)]="businessType"
+                      >
+                        <mat-option
+                          *ngFor="let item of businessTypeData"
+                          [value]="item.key"
+                        >
+                          {{ item.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isBusinessTypeEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveBusinessType()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Privacy Policy" | translate }}</h4>
+
+                  <p
+                    *ngIf="
+                      frmPrivacyPolicy.controls.privacyPolicy.value !== null
+                    "
+                  >
+                    {{
+                      "Your business
+                    privacy policy are at" | translate
+                    }}
+                    <a
+                      [href]="this.selectedUser.privacyPolicy"
+                      target="_blank"
+                      class="tl"
+                      >{{ this.selectedUser.privacyPolicy }}</a
+                    >.
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isPrivacyPolicyEdit"
+                    (click)="isPrivacyPolicyEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isPrivacyPolicyEdit"
+                    (click)="isPrivacyPolicyEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isPrivacyPolicyEdit">
+                  <form
+                    class="basic-form"
+                    novalidate
+                    [formGroup]="frmPrivacyPolicy"
+                  >
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <mat-label>{{ "Privacy Policy" | translate }}</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="privacyPolicy"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isPrivacyPolicyEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="savePrivacyPolicy()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Feedback" | translate }}</h4>
+
+                  <p>{{ "Feedbacks added by you." | translate }}</p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isFeedbackEdit"
+                    (click)="isFeedbackEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isFeedbackEdit"
+                    (click)="isFeedbackEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isFeedbackEdit">
+                  <form class="basic-form" novalidate [formGroup]="frmFeedback">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <mat-label>{{ "Feedback" | translate }}</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="feedback"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isFeedbackEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveFeedback()"
+                  >
+                    {{ "Add" | translate }}
+                  </button>
+                </div>
+                <div class="col-md-12" *ngIf="isFeedbackEdit">
+                  <div *ngFor="let feedback of user.feedback">
+                    <div *ngIf="!feedback.isDeleted">
+                      <div class="row">
+                        <div class="col-md-10">
+                          <h3>{{ feedback.feedback }}</h3>
+                        </div>
+                        <span
+                          class="col-md-2"
+                          (click)="deleteFeedback(feedback.id)"
+                          ><i class="tio-remove-circle-outlined"></i
+                        ></span>
+                      </div>
+                      <hr style="margin: 0px !important" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row col-md-6" style="display: flow-root">
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Business Email" | translate }}</h4>
+
+                  <p *ngIf="this.selectedUser.businessEmail !== null">
+                    {{ "Your business email is" | translate }}
+                    <b class="tl">{{ this.selectedUser.businessEmail }}.</b>
+                  </p>
+                  <p *ngIf="this.selectedUser.businessEmail === null">
+                    {{
+                      "Your business email is not
+                    set." | translate
+                    }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isBusinessEmailEdit"
+                    (click)="isBusinessEmailEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isBusinessEmailEdit"
+                    (click)="isBusinessEmailEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isBusinessEmailEdit">
+                  <form
+                    class="basic-form"
+                    novalidate
+                    [formGroup]="frmbusinessEmail"
+                  >
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <mat-label>{{ "Business Email" | translate }}</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="businessEmail"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isBusinessEmailEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveBusinessEmail()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Website" | translate }}</h4>
+
+                  <p *ngIf="this.user.website !== null">
+                    {{ "Your websie is" | translate }}
+                    <a href="this.user.website" target="_blanck" class="tl"
+                      >{{ this.user.website }}.</a
+                    >
+                  </p>
+                  <p *ngIf="this.user.website === null">
+                    {{ "Your website is not set." | translate }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isWebsiteEdit"
+                    (click)="isWebsiteEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isWebsiteEdit"
+                    (click)="isWebsiteEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isWebsiteEdit">
+                  <form class="basic-form" novalidate [formGroup]="frmWebsite">
+                    <mat-form-field appearance="outline" style="width: 70%">
+                      <mat-label>{{ "Website" | translate }}</mat-label>
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="website"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isWebsiteEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveWebsite()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-9">
+                  <h4 class="card-title">{{ "Address" | translate }}</h4>
+
+                  <p>
+                    {{ "Your business address is" | translate }}
+                    <b class="tl" *ngIf="selectedUser.address1 !== ''">
+                      {{ selectedUser.address1 }},
+                    </b>
+                    <b class="tl" *ngIf="selectedUser.address2 !== ''">
+                      {{ selectedUser.address2 }},
+                    </b>
+                    <b class="tl" *ngIf="selectedUser.city !== ''">
+                      {{ selectedUser.city }},
+                    </b>
+                    <b class="tl" *ngIf="selectedUser.state !== ''">
+                      {{ selectedUser.state }},
+                    </b>
+                    <b class="tl" *ngIf="selectedUser.country !== ''">
+                      {{ selectedUser.country }},
+                    </b>
+                  </p>
+                  <p *ngIf="address === ''">
+                    {{ "Your business address is not set." | translate }}
+                  </p>
+                </div>
+                <div class="col-md-3">
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="!isAddressEdit"
+                    (click)="isAddressEdit = true"
+                  >
+                    <i class="tio-add mr-1"></i>
+                  </a>
+
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    *ngIf="isAddressEdit"
+                    (click)="isAddressEdit = false"
+                  >
+                    <i class="tio-remove mr-1"></i>
+                  </a>
+                </div>
+                <div class="col-md-12" *ngIf="isAddressEdit">
+                  <form
+                    class="basic-form row"
+                    novalidate
+                    [formGroup]="frmAddress"
+                  >
+                    <div class="col-md-12">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>{{
+                          "Address Line 1" | translate
+                        }}</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="address1"
+                          autocomplete="nope"
+                          value="{{ selectedUser.address1 }}"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-12">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>{{
+                          "Address Line 2" | translate
+                        }}</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="address2"
+                          autocomplete="nope"
+                          value="{{ selectedUser.address2 }}"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>{{ "City" | translate }}</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="city"
+                          autocomplete="nope"
+                          value="{{ selectedUser.city }}"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>{{ "State" | translate }}</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="state"
+                          autocomplete="nope"
+                          value="{{ selectedUser.state }}"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{ "Country" | translate }}</mat-label>
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="country"
+                          autocomplete="nope"
+                          value="{{ selectedUser.country }}"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </form>
+                </div>
+                <div class="col-md-12" *ngIf="isAddressEdit">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    mat-raised-button
+                    style="margin-bottom: 5%"
+                    (click)="saveAddress()"
+                  >
+                    {{ "Save" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End Form -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+      <!-- Twilio Card -->
+      <div
+        id="preferencesSection"
+        class="card mb-3 mb-lg-5"
+        *ngIf="currentTab == tabs.TwilioInfo"
+      >
+        <div class="card-header d-flex justify-content-between">
+          <h4 class="card-title">{{ "Twilio information" | translate }}</h4>
+          <h4 class="card-title" *ngIf="this.selectedUser?.balance?.balance">
+            {{ "Your balance " | translate
+            }}{{ this.selectedUser?.balance?.balance }}
+            {{ this.selectedUser?.balance?.currency }}
+          </h4>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Form -->
+          <div class="row wrap">
+            <form class="basic-form w-100" novalidate [formGroup]="frmTwilio">
+              <div class="row col-md-12" style="display: flow-root">
+                <div class="row col-md-12">
+                  <div class="col-md-9">
+                    <h4 class="card-title">{{ "Twilio Key" | translate }}</h4>
+                    <p *ngIf="frmTwilio.controls.sid.value !== null">
+                      {{ "Your twilio SID" | translate }}
+                      <b class="tl">{{ this.selectedUser?.twilio?.sid }}.</b>
+                    </p>
+                    <p *ngIf="frmTwilio.controls.sid.value === null">
+                      {{
+                        "Your Twilio SID
+                    is not set." | translate
+                      }}
+                    </p>
+                  </div>
+                  <div
+                    class="col-md-3 d-flex align-items-start justify-content-end"
+                  >
+                    <a
+                      class="btn btn-sm btn-white"
+                      href="javascript:;"
+                      *ngIf="!isTwilioEdit"
+                      (click)="isTwilioEdit = true"
+                    >
+                      <i class="tio-add mr-1"></i>
+                    </a>
+
+                    <a
+                      class="btn btn-sm btn-white"
+                      href="javascript:;"
+                      *ngIf="isTwilioEdit"
+                      (click)="isTwilioEdit = false"
+                    >
+                      <i class="tio-remove mr-1"></i>
+                    </a>
+                  </div>
+                  <div class="col-md-12" *ngIf="isTwilioEdit">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="sid"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row col-md-12" style="display: flow-root">
+                <div class="row col-md-12">
+                  <div class="col-md-9">
+                    <h4 class="card-title">{{ "Twilio Token" | translate }}</h4>
+                    <p *ngIf="frmTwilio.controls.authtoken.value !== null">
+                      {{ "Your twilio auth token" | translate }}
+                      <b class="tl"
+                        >{{ this.selectedUser?.twilio?.authtoken }}.</b
+                      >
+                    </p>
+                    <p *ngIf="frmTwilio.controls.authtoken.value === null">
+                      {{
+                        "Your Twilio Token
+                    is not set." | translate
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="col-md-12" *ngIf="isTwilioEdit">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="authtoken"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row col-md-12" style="display: flow-root">
+                <div class="row col-md-12">
+                  <div class="col-md-9">
+                    <h4 class="card-title">
+                      {{ "Twilio Phone Number" | translate }}
+                    </h4>
+                    <p *ngIf="frmTwilio.controls.phonenumber.value !== null">
+                      {{ "Your twilio phone number" | translate }}
+                      <b class="tl"
+                        >{{ this.selectedUser?.twilio?.phonenumber }}.</b
+                      >
+                    </p>
+                    <p *ngIf="frmTwilio.controls.phonenumber.value === null">
+                      {{
+                        "Your Twilio phone number
+                    is not set." | translate
+                      }}
+                    </p>
+                  </div>
+
+                  <div class="col-md-12" *ngIf="isTwilioEdit">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="phonenumber"
+                        autocomplete="nope"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12" *ngIf="isTwilioEdit">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  mat-raised-button
+                  style="margin-bottom: 5%"
+                  (click)="saveTwilioKey()"
+                >
+                  {{ "Save" | translate }}
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- End Form -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+
+      <!-- Card -->
+
+      <!-- Sticky Block End Point -->
+      <div id="stickyBlockEndPoint"></div>
+    </div>
+  </div>
+</div>

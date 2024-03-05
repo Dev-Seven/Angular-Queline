@@ -1,0 +1,23 @@
+.sub-menu.mat-toolbar-single-row {
+  height: 34px;
+}
+
+mat-nav-list.list-horizontal {
+  padding: 0;
+  .mat-list-item {
+    display: inline-block;
+    height: auto;
+    width: auto;
+  }
+}
+
+.btn-tab.active {
+  font-weight: bold;
+  text-decoration: underline;
+  z-index: 1;
+}
+.navbar-brand-logos {
+  width: 100%;
+  min-width: 9.5rem;
+  max-width: 6.5rem;
+}

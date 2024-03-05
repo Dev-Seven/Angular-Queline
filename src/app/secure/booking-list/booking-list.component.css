@@ -1,0 +1,103 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
+.job-row1 {
+  border: 2px solid #ccc;
+  padding: 25px;
+  margin: 0 0 25px;
+}
+
+.position {
+  width: 20%;
+  display: inline-block;
+  color: #055f9e;
+}
+
+.experience {
+  width: 20%;
+  display: inline-block;
+  text-align: center;
+}
+
+.position span,
+.experience span,
+.location span,
+.status span {
+  display: block;
+  width: 100%;
+}
+
+.location {
+  width: 20%;
+  display: inline-block;
+  text-align: center;
+}
+
+.status {
+  width: 20%;
+  display: inline-block;
+  text-align: center;
+}
+
+.buttons {
+  width: 18%;
+  display: inline-block;
+  text-align: center;
+}
+
+.buttons a {
+  display: inline;
+  margin: 0 2px;
+}
+
+a.btn-action {
+  margin: 0 10px;
+  border: 2px solid #ccc;
+  border-radius: 55px;
+  display: inline-flex;
+  padding: 0px;
+  width: 60px;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action.clr-red {
+  color: #ff0000;
+}
+
+.btn-action .mat-icon {
+  font-size: 43px;
+  width: auto;
+  height: auto;
+}
+
+.table-align-middle tbody tr {
+  border: 1px solid #ccc;
+}
+
+.table-align-middle tbody td span {
+  display: block;
+  width: 100%;
+  margin: 0 0 20px;
+}
+
+.table-align-middle tbody td {
+  font-size: 15px;
+}
+
+.btn-action.icon-rating {
+  font-size: 37px;
+}
+h3 {
+  margin: 0 0 10px;
+}
+
+pre {
+  background-color: #f5f5f5;
+  padding: 15px;
+}

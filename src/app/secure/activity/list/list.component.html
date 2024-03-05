@@ -1,0 +1,405 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Activity" | translate }}</h1>
+      </div>
+
+      <div class="col-sm-auto"></div>
+    </div>
+    <!-- End Row -->
+  </div>
+
+  <div class="card mb-3 mb-lg-5">
+    <div class="card-header">
+      <div class="row align-items-center flex-grow-1">
+        <div class="col-sm-6">
+          <h5 class="card-header-title">{{ "Users" | translate }}</h5>
+        </div>
+        <div class="col-sm-6">
+          <div class="d-flex justify-content-sm-end align-items-center">
+            <div class="hs-unfold mr-2" *ngIf="this.planid == 2">
+              <label
+                class="
+                  btn btn-sm btn-white
+                  transition-3d-hover
+                  custom-file-btn
+                  mr-2
+                "
+                for="fileAttachmentBtn"
+              >
+                <i class="tio-publish mr-1"></i>
+                <span id="customFileExample5">{{ "Import" | translate }}</span>
+                <input
+                  id="fileAttachmentBtn"
+                  name="custom-file"
+                  type="file"
+                  class="js-file-attach custom-file-btn-input"
+                  (change)="importData($event.target.files)"
+                  data-hs-file-attach-options='{
+                                          "textTarget": "#customFileExample5"
+                                       }'
+                />
+              </label>
+            </div>
+
+            <div class="hs-unfold mr-2" *ngIf="this.planid == 2">
+              <div class="dropdown export-new">
+                <button
+                  class="btn dropdown-toggle"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <i class="tio-download-to mr-1"></i>
+                  {{ "Export" | translate }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a
+                    id="export-csv"
+                    class="dropdown-item"
+                    href="javascript:;"
+                    (click)="saveCSV()"
+                  >
+                    <img
+                      class="avatar avatar-xss avatar-4by3 mr-2"
+                      src="./assets/svg/components/placeholder-csv-format.svg"
+                      alt="Image Description"
+                    />
+                    .{{ "CSV" | translate }}
+                  </a>
+                  <a
+                    id="export-pdf"
+                    class="dropdown-item"
+                    href="javascript:;"
+                    (click)="savePDF()"
+                  >
+                    <img
+                      class="avatar avatar-xss avatar-4by3 mr-2"
+                      src="./assets/svg/brands/pdf.svg"
+                      alt="Image Description"
+                    />
+                    {{ "PDF" | translate }}
+                  </a>
+                </div>
+              </div>
+
+              <div
+                id="usersExportDropdown"
+                class="
+                  hs-unfold-content
+                  dropdown-unfold dropdown-menu dropdown-menu-sm-right
+                "
+              >
+                <a id="export-excel" class="dropdown-item" href="javascript:;">
+                  <img
+                    class="avatar avatar-xss avatar-4by3 mr-2"
+                    src="./assets/svg/brands/excel.svg"
+                    alt="Image Description"
+                  />
+                  {{ "Excel" | translate }}
+                </a>
+                <a
+                  id="export-csv"
+                  class="dropdown-item"
+                  href="javascript:;"
+                  (click)="saveCSV()"
+                >
+                  <img
+                    class="avatar avatar-xss avatar-4by3 mr-2"
+                    src="./assets/svg/components/placeholder-csv-format.svg"
+                    alt="Image Description"
+                  />
+                  .{{ "CSV" | translate }}
+                </a>
+                <a
+                  id="export-pdf"
+                  class="dropdown-item"
+                  href="javascript:;"
+                  (click)="savePDF()"
+                >
+                  <img
+                    class="avatar avatar-xss avatar-4by3 mr-2"
+                    src="./assets/svg/brands/pdf.svg"
+                    alt="Image Description"
+                  />
+                  {{ "PDF" | translate }}
+                </a>
+              </div>
+            </div>
+            <!-- Datatable Info -->
+            <div id="datatableCounterInfo" style="display: none">
+              <div class="d-flex align-items-center">
+                <span class="font-size-sm mr-3">
+                  <span id="datatableCounter">0</span>
+                  {{ "Selected" | translate }} Selected
+                </span>
+                <a class="btn btn-sm btn-outline-danger" href="javascript:;">
+                  <i class="tio-delete-outlined"></i> {{ "Delete" | translate }}
+                </a>
+              </div>
+            </div>
+            <!-- End Datatable Info -->
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- Filter -->
+          <div class="row align-items-sm-center">
+            <div class="col-md">
+              <form>
+                <!-- Search -->
+              </form>
+            </div>
+          </div>
+          <!-- End Filter -->
+        </div>
+
+        <div class="col-lg-6">
+          <div class="d-sm-flex justify-content-sm-end align-items-sm-center">
+            <!-- Datatable Info -->
+            <div
+              id="datatableCounterInfo"
+              class="mr-2 mb-2 mb-sm-0"
+              style="display: none"
+            >
+              <div class="d-flex align-items-center">
+                <span class="font-size-sm mr-3">
+                  <span id="datatableCounter">0</span>
+                  {{ "Selected" | translate }}
+                </span>
+                <a class="btn btn-sm btn-outline-danger" href="javascript:;">
+                  <i class="tio-delete-outlined"></i> {{ "Delete" | translate }}
+                </a>
+              </div>
+            </div>
+            <!-- End Datatable Info -->
+
+            <!-- Unfold -->
+
+            <!-- End Unfold -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive datatable-custom" id="content" #content>
+      <table
+        id="datatable"
+        class="
+          table
+          table-borderless
+          table-thead-bordered
+          table-nowrap
+          table-align-middle
+          card-table
+        "
+      >
+        <thead class="thead-light">
+          <tr>
+            <th>{{ "COMPANY" | translate }}</th>
+            <th>{{ "Store" | translate }}</th>
+            <th>{{ "USER NAME" | translate }}</th>
+            <th>{{ "VISITED" | translate }}</th>
+            <th>{{ "PHONE NUMBER" | translate }}</th>
+            <th>{{ "EMAIL ADDRESS" | translate }}</th>
+            <th>{{ "ACCOUNT CREATED" | translate }}</th>
+            <th>{{ "ACTIONS" | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            *ngFor="
+              let row of activityData
+                | paginate
+                  : {
+                      id: 'activity_Data',
+                      itemsPerPage: 10,
+                      currentPage: page,
+                      totalItems: activityData.length
+                    }
+            "
+          >
+            <td>{{ row.companyName }}</td>
+            <td>{{ row.location }}</td>
+            <td>{{ row.username }}</td>
+            <td>{{ row.visits }}</td>
+            <td>{{ row.phone }}</td>
+            <td>{{ row.email }}</td>
+            <td>{{ row.lastVisited | date: "MM/dd/yyyy" }}</td>
+
+            <td>
+              <a
+                class="btn btn-sm btn-white"
+                href="javascript:;"
+                title="map"
+                (click)="viewMap($event, row)"
+              >
+                <i class="tio-map-outlined"></i>
+              </a>
+              <a
+                class="btn btn-sm btn-white"
+                href="javascript:;"
+                title="feedback"
+                (click)="viewFeedback($event, row)"
+              >
+                <i class="tio-feed"></i>
+              </a>
+              <a
+                class="btn btn-sm btn-white"
+                href="javascript:;"
+                title="Edit"
+                (click)="getBookingDetails(row.id)"
+                data-toggle="modal"
+                data-target="#exampleModalCenteredScrollable"
+              >
+                <i class="tio-visible-outlined"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- End  Button trigger modal -->
+
+    <!-- Modal -->
+    <div
+      id="exampleModalCenteredScrollable"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenteredScrollableTitle"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+        role="document"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenteredScrollableTitle">
+              {{ "Booking Details" | translate }}
+            </h5>
+            <button
+              type="button"
+              class="btn btn-xs btn-icon btn-ghost-secondary"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <i class="tio-clear tio-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngFor="let user of userBookingDetails">
+              <div class="form-group">
+                <!-- <div class="input-group input-group-merge input-group-borderless input-group-flush"> -->
+                <div class="input-group align-items-center col">
+                  <label
+                    for="inputGroupBorderlessFullName"
+                    class="input-label col-sm-3"
+                    >{{ user.label }}</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control col-sm-9"
+                    id="inputGroupBorderlessFullName"
+                    placeholder="{{ user.value }}"
+                    aria-describedby="inputGroupBorderlessFullNameAddOn"
+                    disabled
+                  />
+                  <!-- </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">
+              {{ "Close" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Footer -->
+    <div class="card-footer">
+      <!-- Pagination -->
+      <div
+        class="
+          row
+          justify-content-center justify-content-sm-between
+          align-items-sm-center
+        "
+      >
+        <div class="col-sm mb-2 mb-sm-0">
+          <div class="mt-2" *ngIf="this.planid == 2">
+            <a
+              class="text-body mr-3"
+              href="../../../../assets/sample/Sample-Quelines-Import-Template.csv"
+            >
+              <i class="tio-download-to mr-1"></i>
+              {{ "Sample import CSV" | translate }}
+            </a>
+          </div>
+
+          <div class="tab-pane fade p-4 active show text-right">
+            <pagination-controls
+              class="paginator"
+              id="activity_Data"
+              (pageChange)="pageChanged($event)"
+              (pageBoundsCorrection)="pageChanged($event)"
+              directionLinks="true"
+              autoHide="true"
+              responsive="true"
+              previousLabel=""
+              nextLabel=""
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+            >
+            </pagination-controls>
+          </div>
+        </div>
+
+        <div class="col-sm-auto">
+          <div class="d-flex justify-content-center justify-content-sm-end">
+            <!-- Pagination -->
+            <nav
+              id="datatablePagination"
+              aria-label="Activity pagination"
+            ></nav>
+          </div>
+        </div>
+      </div>
+      <!-- End Pagination -->
+    </div>
+    <!-- End Row -->
+  </div>
+</div>
+
+<style>
+  .btn.dropdown-toggle::after {
+    display: none;
+  }
+
+  .export-new .btn {
+    background-color: #fff;
+
+    padding: 0.4375rem 0.65625rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    font-weight: 400;
+    color: #677788;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
+    border: 0.0625rem solid #e7eaf3;
+  }
+</style>

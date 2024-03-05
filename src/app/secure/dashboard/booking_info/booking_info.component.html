@@ -1,0 +1,502 @@
+<div class="msc-overlay"></div>
+<div class="content container-fluid">
+  <div class="">
+    <mat-card class="row msc-content msc-alert--animate">
+      <div class="row">
+        <div class="col-md-10" *ngIf="!isEditMode">
+          <mat-card-title style="font-size: 22px; margin-bottom: auto"
+            >{{ "Booking Details" | translate }}
+          </mat-card-title>
+        </div>
+        <div class="col-md-1" *ngIf="!isEditMode">
+          <button
+            type="button"
+            class="btn btn-icon btn-sm btn-ghost-secondary"
+            data-dismiss="modal"
+            (click)="edit()"
+            aria-label="Edit"
+          >
+            <i class="tio-edit tio-lg"></i>
+          </button>
+        </div>
+        <div class="col-md-11" *ngIf="isEditMode">
+          <mat-card-title style="font-size: 22px; margin-bottom: auto"
+            >{{ "Edit Booking Details" | translate }}
+          </mat-card-title>
+        </div>
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="btn btn-icon btn-sm btn-ghost-secondary"
+            data-dismiss="modal"
+            (click)="close()"
+            aria-label="Close"
+          >
+            <i class="tio-clear tio-lg"></i>
+          </button>
+        </div>
+      </div>
+      <mat-card-content class="text-center">
+        <form
+          class="basic-form"
+          novalidate
+          [formGroup]="frmReservSpot"
+          (submit)="save()"
+        >
+          <mat-card>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>{{ "Name" | translate }}</mat-label>
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="name"
+                      autocomplete="nope"
+                      readonly
+                    />
+                    <mat-validation-message
+                      [control]="frmReservSpot.controls.name"
+                      [message]="'Name'"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>{{ "Email Address" | translate }}</mat-label>
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="email"
+                      autocomplete="nope"
+                      readonly
+                    />
+                    <mat-validation-message
+                      [control]="frmReservSpot.controls.email"
+                      [message]="'Email Address'"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>{{ "Phone Number" | translate }}</mat-label>
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="phone"
+                      autocomplete="nope"
+                      readonly
+                    />
+                    <mat-validation-message
+                      [control]="frmReservSpot.controls.phone"
+                      [message]="'Phone Number'"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>{{ "Party Size" | translate }}</mat-label>
+                    <input
+                      type="number"
+                      matInput
+                      formControlName="partySize"
+                      autocomplete="nope"
+                      [readonly]="!isEditMode"
+                    />
+                    <mat-validation-message
+                      [control]="frmReservSpot.controls.partySize"
+                      [message]="'Party Size'"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row" *ngIf="customeBookingInput">
+                <div
+                  class="col-md-6"
+                  *ngFor="let input of customBookingLocationInputs"
+                >
+                  <div *ngIf="input.type === 'Text Field'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Number'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="number"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'URL'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="url"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Date'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div
+                    *ngIf="input.type === 'Checkbox'"
+                    style="float: left; margin: 10%"
+                  >
+                    
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [(ngModel)]="input.defaultInput"
+                      (click)="toggle($event)"
+                      >{{ input.label }}</mat-checkbox
+                    >
+                    <mat-validation-message
+                      [control]="frmReservSpot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                          [disabled]="!isEditMode"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && !input.multiple">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        [(ngModel)]="input.defaultInput"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                          [disabled]="!isEditMode"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="customeUserInput">
+                <div
+                  class="col-md-6"
+                  *ngFor="let input of customUserLocationInputs"
+                >
+                  <div *ngIf="input.type === 'Text Field'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Number'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="number"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'URL'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="url"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Date'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                        [readonly]="!isEditMode"
+                      />
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div
+                    *ngIf="input.type === 'Checkbox'"
+                    style="float: left; margin: 10%"
+                  >
+                   
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [(ngModel)]="input.defaultInput"
+                      (click)="toggle($event)"
+                      selected="input.preselect"
+                      >{{ input.label }}
+                    </mat-checkbox>
+                    <mat-validation-message
+                      [control]="frmReservSpot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                          [disabled]="!isEditMode"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && !input.multiple">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        [(ngModel)]="input.defaultInput"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                          [disabled]="!isEditMode"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmReservSpot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-content style="text-align: center" *ngIf="isEditMode">
+              <button type="submit" mat-raised-button color="primary">
+                {{ "SAVE" | translate }}
+              </button>
+            </mat-card-content>
+          </mat-card>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

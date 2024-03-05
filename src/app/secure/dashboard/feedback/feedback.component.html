@@ -1,0 +1,141 @@
+<div
+  class="modal fade show"
+  id="welcomeMessageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  style="padding-right: 17px; display: block"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-close">
+        <button
+          type="button"
+          class="btn btn-icon btn-sm btn-ghost-secondary"
+          data-dismiss="modal"
+          aria-label="Close"
+          (click)="close()"
+        >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div class="modal-body p-sm-5">
+        <mat-card-content class="text-center">
+          <mat-card>
+            <div class="row">
+              <div class="col-md-12">
+                <mat-card-title style="font-size: 22px; margin-bottom: auto"
+                  >{{ "Feedback" | translate }}
+                </mat-card-title>
+              </div>
+            </div>
+            <mat-card-title
+              style="font-size: 22px; margin-bottom: auto"
+              *ngIf="booking.username"
+            >
+              {{ booking.username
+              }}{{ " 's Feedback" | translate }}</mat-card-title
+            >
+            <mat-card-content>
+              <div class="row">
+                <div class="col-lg-2 col-md-1"></div>
+                <div class="col-lg-8 col-md-10 col-sm-12">
+                  <div class="row col-sm-12">
+                    <div class="col-md-12 text-center">
+                      <div class="col-sm-12">
+                        <ul class="list-inline rating-list">
+                          <li
+                            [ngStyle]="{
+                              color: 1 == booking.rating ? 'red' : '#A9A9A9'
+                            }"
+                          >
+                            <span class="tio-sad"></span>
+                          </li>
+                          <li
+                            [ngStyle]="{
+                              color: 2 == booking.rating ? 'orange' : '#A9A9A9'
+                            }"
+                          >
+                            <span class="tio-neutral-face"></span>
+                          </li>
+                          <li
+                            [ngStyle]="{
+                              color: 3 == booking.rating ? 'green' : '#A9A9A9'
+                            }"
+                          >
+                            <span class="tio-smile"></span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-1"></div>
+              </div>
+              <div class="row">
+                <div class="col-lg-2 col-md-1"></div>
+                <div class="col-lg-8 col-md-10 col-sm-12">
+                  <div
+                    class="row col-md-12"
+                    *ngFor="let selected of booking.feedback"
+                  >
+                    <div *ngIf="!selected.isDeleted" class="col-md-12">
+                      <div style="font-size: 18px; display: flow-root">
+                        <span style="float: left">{{ selected.feedback }}</span>
+                        <span style="float: right">
+                          <i class="tio-thumbs-up" style="font-size: 20px"
+                            >&nbsp;</i
+                          >{{ selected.points }}
+                        </span>
+                      </div>
+                      <hr />
+                    </div>
+                  </div>
+                  <div class="row col-md-12" style="margin-top: 5%">
+                    <form
+                      class="basic-form col-md-12"
+                      novalidate
+                      [formGroup]="frmFeedback"
+                      (submit)="save()"
+                    >
+                      <mat-card-content style="text-align: center">
+                        <mat-form-field
+                          appearance="outline"
+                          style="width: 100%"
+                        >
+                          <mat-label>Feedback Comment</mat-label>
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="comment"
+                            autocomplete="nope"
+                          />
+                          <mat-validation-message
+                            [control]="frmFeedback.controls.comment"
+                            [message]="'Comment'"
+                            [formSubmitted]="isFormSubmitted"
+                          >
+                          </mat-validation-message>
+                        </mat-form-field>
+                      </mat-card-content>
+                      <mat-card-content style="text-align: center">
+                        <button type="submit" mat-raised-button color="primary">
+                          Add
+                        </button>
+                      </mat-card-content>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-1"></div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </mat-card-content>
+      </div>
+    </div>
+  </div>
+</div>

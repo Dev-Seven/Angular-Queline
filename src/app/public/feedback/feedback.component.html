@@ -1,0 +1,169 @@
+<div class="container py-5 py-sm-7">
+  <div class="row justify-content-center">
+    <div class="">
+      <!-- Card -->
+      <div
+        class="card card-lg mb-5"
+        [ngStyle]="{ background: theme }"
+        [ngStyle]="{ color: theme !== 'unset' ? white : '' }"
+      >
+        <div class="card-body">
+          <div class="row m-b-10 mb-5" *ngIf="companyLogo !== null">
+            <div class="col-md-12 text-center pro-img">
+              <img src="{{ companyLogo }}" alt="company logo" height="100" />
+            </div>
+          </div>
+          <!-- Form -->
+          <form novalidate [formGroup]="frmFeedback" (submit)="save()">
+            <div class="text-center" style="padding-bottom: 20px">
+              <div id="map" style="height: 200px; width: 100%"></div>
+            </div>
+            <div class="col-md-12 text-center">
+              <h3>{{ "You have been served" | translate }}</h3>
+            </div>
+            <div class="col-md-12 text-center">
+              <strong>{{ "How was your experience" | translate }}</strong>
+              <div class="col-sm-12">
+                <ul class="list-inline rating-list">
+                  <li
+                    (click)="countStar(3)"
+                    class="rating-list"
+                    [ngStyle]="{
+                      color: 3 == selectedValue ? 'green' : '#A9A9A9'
+                    }"
+                  >
+                    <span class="tio-smile"></span>
+                  </li>
+                  <li
+                    (click)="countStar(2)"
+                    class="rating-list"
+                    [ngStyle]="{
+                      color: 2 == selectedValue ? 'orange' : '#A9A9A9'
+                    }"
+                  >
+                    <span class="tio-neutral-face"></span>
+                  </li>
+                  <li
+                    (click)="countStar(1)"
+                    class="rating-list"
+                    [ngStyle]="{
+                      color: 1 == selectedValue ? 'red' : '#A9A9A9'
+                    }"
+                  >
+                    <span class="tio-sad"></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div
+              class="col-md-12"
+              *ngIf="this.isSelected"
+              style="margin-bottom: 25px"
+            >
+              <div *ngFor="let selected of selectedFeedbackData">
+                <div
+                  class="text-dark"
+                  style="padding: 10px"
+                  *ngIf="feedbackIds.includes(selected.id)"
+                >
+                  <div style="display: contents">{{ selected.feedback }}</div>
+                  <div style="float: right">
+                    <i class="tio-thumbs-up">&nbsp;</i
+                    ><span>{{ selected.points }}&nbsp;</span>
+                    <span (click)="removeFeedback(selected.id)" *ngIf="!isSaved"
+                      ><i class="tio-remove-circle-outlined">&nbsp;</i></span
+                    >
+                  </div>
+                </div>
+                <hr *ngIf="feedbackIds.includes(selected.id)" />
+              </div>
+            </div>
+            <div
+              class="col-md-12 text-center"
+              style="margin-top: -15px"
+              *ngIf="!this.isSaved"
+            >
+              <mat-form-field appearance="outline">
+                <mat-label>{{ "Feedback" | translate }}</mat-label>
+                <mat-select
+                  formControlName="feedback"
+                  (selectionChange)="addFeedback($event)"
+                >
+                  <mat-option
+                    *ngFor="let item of feedbackData"
+                    [value]="item.id"
+                  >
+                    <b>{{ item.feedback }}</b>
+                    <span style="float: right">
+                      <i class="tio-thumbs-up" style="font-size: 20px">&nbsp;</i
+                      ><b>{{ item.points }}</b>
+                    </span>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div
+              class="col-md-12 text-center"
+              style="margin-top: -15px"
+              *ngIf="
+                this.isSaved &&
+                (this.bookingData.comment || this.bookingData.comment === '')
+              "
+            >
+              <mat-card-content style="text-align: center">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <mat-label>{{ "Feedback Comment" | translate }}</mat-label>
+                  <textarea
+                    type="text"
+                    matInput
+                    formControlName="comment"
+                    autocomplete="nope"
+                    [disabled]="true"
+                  ></textarea>
+                  <mat-validation-message
+                    [control]="frmFeedback.controls.comment"
+                    [message]="'Comment'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </mat-form-field>
+              </mat-card-content>
+            </div>
+            <div class="col-md-12 m-b-10 text-center" *ngIf="!this.isSaved">
+              <button
+                type="submit"
+                mat-raised-button
+                class="btn btn-lg btn-block btn-primary"
+                name="Submit"
+              >
+                {{ "Submit" | translate }}
+              </button>
+            </div>
+            <div *ngIf="this.isSaved">
+              <div class="row">
+                <div class="col-md-12 text-center">
+                  <h3>
+                    {{ "Your feedback submitted successfully!!" | translate }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+        <div class="text-center">
+          <small class="text-cap mb-4">
+            <img
+              class="navbar-brand-logo"
+              src="./assets/svg/logos/logo/quelines.png"
+              alt=""
+            />
+            {{ "Create Waitlist with Quelines at" | translate }}
+            <a href="/" target="_blank">{{ "link" | translate }}</a>
+          </small>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,263 @@
+<div
+  class="position-fixed top-0 right-0 left-0 bg-img-hero"
+  style="
+    height: 32rem;
+    background-image: url(./assets/svg/components/abstract-bg-4.svg);
+  "
+>
+  <!-- SVG Bottom Shape -->
+  <figure class="position-absolute right-0 bottom-0 left-0">
+    <svg
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      viewBox="0 0 1921 273"
+    >
+      <polygon fill="#fff" points="0,273 1921,273 1921,0 " />
+    </svg>
+  </figure>
+  <!-- End SVG Bottom Shape -->
+</div>
+
+<!-- Content -->
+<div class="container py-5 py-sm-7">
+  <a
+    class="d-flex justify-content-center mb-5"
+    href="https://quelines.com"
+    target="_blank"
+  >
+    <img
+      class="z-index-2"
+      src="./assets/svg/logos/logo/quelines.png"
+      srcset="./assets/svg/logos/logo/logo@1x.png 1x w250, ./assets/svg/logos/logo/logo@2x.png 2x w250, ./assets/svg/logos/logo/logo@3x.png 3x w500, ./assets/svg/logos/logo/logo@4x.png 4x w600"
+      alt=""
+    />
+  </a>
+
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+      <!-- Card -->
+      <div class="card card-lg mb-5">
+        <div class="card-body">
+          <!-- Form -->
+          <form
+            class="js-validate"
+            novalidate
+            [formGroup]="frmSignup"
+            (submit)="signup()"
+          >
+            <div class="text-center">
+              <div class="mb-5">
+                <h1 class="display-4">
+                  {{ "Create your account" | translate }}
+                </h1>
+
+                <p>
+                  {{ "Already have an account?" | translate }}
+                  <a href="javascript:;" title="Log In" (click)="signin()"
+                    ><div>{{ "Sign in here" | translate }}</div></a
+                  >
+                </p>
+              </div>
+
+              <!-- <a
+                class="btn btn-lg btn-block btn-white mb-4"
+                (click)="signGoogle()"
+              >
+                <span class="d-flex justify-content-center align-items-center">
+                  <img
+                    class="avatar avatar-xss mr-2"
+                    src="./assets/svg/brands/google.svg"
+                    alt=""
+                  />
+                  {{ "Sign up with Google" | translate }}
+                </span>
+              </a>
+              <a class="btn btn-lg btn-block btn-white mb-4" (click)="signFB()">
+                <span class="d-flex justify-content-center align-items-center">
+                  <img
+                    class="avatar avatar-xss mr-2"
+                    src="./assets/svg/logos/fb.png"
+                    alt=""
+                    (click)="signGoogle()"
+                  />
+                  {{ "Sign up with Facebook" | translate }}
+                </span>
+              </a>
+              <span class="divider text-muted mb-4">{{
+                "OR" | translate
+              }}</span> -->
+            </div>
+
+            <label class="input-label" for="fullNameSrEmail">{{
+              "Full name" | translate
+            }}</label>
+
+            <!-- Form Group -->
+            <div class="form-row">
+              <div class="col-sm-6">
+                <div class="js-form-message form-group">
+                  <input
+                    type="text"
+                    class="form-control form-control-lg"
+                    placeholder="{{ 'First Name' | translate }}"
+                    matInput
+                    formControlName="firstName"
+                    autocomplete="nope"
+                    tabindex="1"
+                    [readonly]="this.value ? !active : active"
+                  />
+                  <mat-validation-message
+                    [control]="frmSignup.controls.firstName"
+                    [message]="'First Name' | translate"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="js-form-message form-group">
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="lastName"
+                    placeholder="{{ 'Last Name' | translate }}"
+                    autocomplete="nope"
+                    class="form-control form-control-lg"
+                    tabindex="2"
+                  />
+                  <mat-validation-message
+                    [control]="frmSignup.controls.lastName"
+                    [message]="'Last Name' | translate"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+            </div>
+            <!-- End Form Group -->
+            <!-- Form Group -->
+            <div class="js-form-message form-group">
+              <label class="input-label" for="signupCrName">{{
+                "Company Name" | translate
+              }}</label>
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                matInput
+                formControlName="companyName"
+                autocomplete="nope"
+                placeholder="{{ 'Company Name' | translate }}"
+                tabindex="3"
+              />
+
+              <mat-validation-message
+                [control]="frmSignup.controls.companyName"
+                [message]="'Company Name' | translate"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </div>
+            <div class="js-form-message form-group">
+              <label class="input-label" for="signupSrEmail">{{
+                "Email" | translate
+              }}</label>
+
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                matInput
+                formControlName="email"
+                autocomplete="nope"
+                placeholder="{{ 'Enter your Email Address' | translate }}"
+                tabindex="4"
+                email="true"
+                [readonly]="this.value ? !active : active"
+              />
+              <mat-validation-message
+                [control]="frmSignup.controls.email"
+                [message]="'Email' | translate"
+                [formSubmitted]="isFormSubmitted"
+              ></mat-validation-message>
+            </div>
+            <!-- End Form Group -->
+            <!-- Form Group -->
+            <div class="js-form-message form-group">
+              <label class="input-label" for="signupSrPassword">{{
+                "Password" | translate
+              }}</label>
+
+              <div class="input-group input-group input-group-merge">
+                <input
+                  [type]="fieldTextType ? 'text' : 'password'"
+                  class="form-control"
+                  matInput
+                  formControlName="password"
+                  placeholder="{{ '8+ characters required' | translate }}"
+                  aria-label="8+ characters required"
+                  tabindex="5"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i
+                      class="fa"
+                      [ngClass]="{
+                        'tio-hidden-outlined': !fieldTextType,
+                        'tio-visible-outlined': fieldTextType
+                      }"
+                      (click)="toggleFieldTextType()"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+              <mat-validation-message
+                [control]="frmSignup.controls.password"
+                [message]="'Please enter your valid password' | translate"
+                [formSubmitted]="isFormSubmitted"
+              ></mat-validation-message>
+            </div>
+            <!-- End Form Group -->
+            <!-- Checkbox -->
+            <div class="js-form-message form-group">
+              <div class="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="termsCheckbox"
+                  name="termsCheckbox"
+                  [(ngModel)]="terms"
+                  [ngModelOptions]="{ standalone: true }"
+                  required
+                  data-msg="Please accept our Terms and Conditions."
+                  tabindex="6"
+                />
+                <label
+                  class="custom-control-label text-muted"
+                  for="termsCheckbox"
+                >
+                  {{ "I accept the" | translate }}
+                  <a href="javascript:;" (click)="showTermsAndConditions()">{{
+                    "Terms and Conditions" | translate
+                  }}</a>
+                </label>
+              </div>
+            </div>
+            <!-- End Checkbox -->
+            <button
+              type="submit"
+              class="btn btn-lg btn-block btn-primary mb-2"
+              [disabled]="!terms"
+              tabindex="7"
+            >
+              {{ "Create an account" | translate }}
+            </button>
+          </form>
+          <!-- End Form -->
+        </div>
+      </div>
+      <!-- End Card -->
+      <!-- Footer -->
+      <!-- End Footer -->
+    </div>
+  </div>
+</div>

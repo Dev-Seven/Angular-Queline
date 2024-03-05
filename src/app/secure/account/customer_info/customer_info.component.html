@@ -1,0 +1,103 @@
+<div class="content container-fluid">
+  <div class="">
+    <div class="modal-close">
+      <button
+        type="button"
+        class="btn btn-icon btn-sm btn-ghost-secondary"
+        data-dismiss="modal"
+        (click)="close()"
+        aria-label="Close"
+      >
+        <i class="tio-clear tio-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body p-sm-5">
+      <div class="text-center">
+        <h4 class="h1">{{ "Customer Information" | translate }}</h4>
+
+        <p>{{ "We are happy to see you." | translate }}</p>
+      </div>
+    </div>
+    <div class="col-sm-7 col-md-12">
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-8">
+            <strong>{{
+              "Specify what info about your customer you want to capture."
+                | translate
+            }}</strong>
+          </div>
+          <div class="col-md-4">
+            <button
+              type="button"
+              mat-raised-button
+              style="float: right"
+              (click)="addInfo()"
+            >
+              {{ "New Field" | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-content>
+        <div class="row" *ngFor="let info of customerDefaultInfo">
+          <div class="col-md-2">
+            <mat-slide-toggle
+              checked="checked"
+              disabled="disabled"
+              style="margin-top: 10px"
+            ></mat-slide-toggle>
+          </div>
+          <div class="col-md-7">
+            <mat-card-title>{{ info.name }}</mat-card-title>
+            <mat-card-subtitle style="margin-bottom: auto">
+              {{ "Required:" | translate }}
+              <strong *ngIf="info.required">{{ "Yes" | translate }}</strong>
+              <strong *ngIf="!info.required">{{ "No" | translate }}</strong>
+            </mat-card-subtitle>
+          </div>
+          <div class="col-md-3">
+            <button
+              type="button"
+              mat-raised-button
+              style="float: right"
+              (click)="editDefaultInfo(info)"
+            >
+              {{ "Edit" | translate }}
+            </button>
+          </div>
+          <hr />
+        </div>
+        <div class="row" *ngFor="let info of customerInfo">
+          <div class="col-md-2">
+            <mat-slide-toggle
+              [checked]="info.enabled"
+              style="margin-top: 10px"
+              (change)="infoChange(info)"
+            ></mat-slide-toggle>
+          </div>
+          <div class="col-md-7">
+            <mat-card-title>{{ info.name }}</mat-card-title>
+            <mat-card-subtitle style="margin-bottom: auto">
+              {{ "Required:" | translate }}
+              <strong *ngIf="info.required">{{ "Yes" | translate }}</strong>
+              <strong *ngIf="!info.required">{{ "No" | translate }}</strong>
+            </mat-card-subtitle>
+          </div>
+          <div class="col-md-3">
+            <button
+              type="button"
+              mat-raised-button
+              style="float: right"
+              (click)="editInfo(info)"
+            >
+              {{ "Edit" | translate }}
+            </button>
+          </div>
+          <hr />
+        </div>
+      </mat-card-content>
+    </div>
+  </div>
+  <!-- End Row -->
+</div>

@@ -1,0 +1,77 @@
+<div class="msc-overlay"></div>
+<div class="content container-fluid">
+  <div class="">
+    <mat-card class="row msc-content msc-alert--animate">
+      <div class="row">
+        <div class="col-md-11">
+          <mat-card-title style="font-size: 22px; margin-bottom: auto"
+            >Edit {{ name }}</mat-card-title
+          >
+          <br />
+        </div>
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="btn btn-icon btn-sm btn-ghost-secondary"
+            data-dismiss="modal"
+            (click)="close()"
+            aria-label="Close"
+          >
+            <i class="tio-clear tio-lg"></i>
+          </button>
+        </div>
+      </div>
+      <form class="basic-form" novalidate [formGroup]="frmLocationInput">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" *ngIf="isPartySize">
+              <mat-label>Party Size</mat-label>
+              <input
+                type="number"
+                matInput
+                formControlName="partySize"
+                autocomplete="nope"
+              />
+              <mat-validation-message
+                [control]="frmLocationInput.controls.partySize"
+                [message]="'Party Size'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-checkbox
+              color="primary"
+              formControlName="required"
+              [ngModelOptions]="{ standalone: true }"
+              ><b style="color: red">*</b>
+            </mat-checkbox>
+            Required
+          </div>
+          <div class="col-md-6"></div>
+        </div>
+        <mat-card-content style="text-align: center">
+          <div
+            fxFlex.gt-lg="100"
+            fxFlex.gt-md="100"
+            fxFlex.gt-xs="100"
+            fxFlex="100"
+          >
+            <button
+              type="button"
+              mat-raised-button
+              color="primary"
+              (click)="save()"
+            >
+              SAVE
+            </button>
+          </div>
+        </mat-card-content>
+      </form>
+    </mat-card>
+  </div>
+</div>

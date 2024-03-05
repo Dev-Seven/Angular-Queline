@@ -1,0 +1,246 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm-8 mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Bookings" | translate }}</h1>
+      </div>
+      <div class="col-sm-2">
+        <button
+          type="button"
+          class="btn btn-md btn-primary"
+          (click)="openCalendar()"
+        >
+          <i class="tio-home mr-1"></i>
+          {{ (!calendarView ? "View Calendar" : "View List") | translate }}
+        </button>
+      </div>
+      <div class="col-sm-2" *ngIf="isSuperAdmin || isBusinessOwner">
+        <div *ngIf="locationData?.length > 0">
+          <label for="Branch" class="font-size-sm">{{
+            "Branch" | translate
+          }}</label>
+          <div class="select2-custom">
+            <select
+              class="form-control custom-select"
+              size="1"
+              [(ngModel)]="locationId"
+              (ngModelChange)="selectLocation()"
+              data-hs-select2-options='{
+                        "minimumResultsForSearch": "Infinity"
+                      }'
+            >
+              <option *ngFor="let item of locationData" [value]="item.id">
+                <span class="d-flex align-items-center"
+                  ><span>{{ item.name }}</span></span
+                >
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+  <!-- Table View -->
+  <div
+    class="table-responsive datatable-custom"
+    *ngIf="!calendarView && bookingData && bookingData.length > 0"
+  >
+    <table
+      id="datatable"
+      class="
+        table
+        table-borderless
+        table-thead-bordered
+        table-nowrap
+        table-align-middle
+        card-table
+      "
+    >
+      <tbody>
+        <tr
+          *ngFor="
+            let row of bookingData
+              | paginate
+                : {
+                    id: 'spot_data',
+                    itemsPerPage: 10,
+                    currentPage: page,
+                    totalItems: bookingData.length
+                  }
+          "
+        >
+          <td>
+            <span>{{ "BOOKING ID" | translate }}</span
+            >{{ row.id }}
+          </td>
+          <td>
+            <span>{{ "CUSTOMER" | translate }}</span
+            >{{ row.user?.name ? row.user?.name : row.user?.email }}
+          </td>
+          <td>
+            <span>{{ "BOOKING DATE" | translate }}</span>
+            <ng-container>
+              {{ row.bookingDate | date: "MM/dd/yyyy" }}
+            </ng-container>
+          </td>
+          <td>
+            <span>{{ "BOOKING TIME" | translate }}</span>
+            <ng-container>
+              {{ row.slotDuration.replace(
+                ",",
+                " - ") }}
+            </ng-container>
+          </td>
+          <td>
+            <span>{{ "STATUS" | translate }}</span
+            >{{ row.status }}
+          </td>
+          <td>
+            <a
+              class="btn-action clr-red"
+              *ngIf="row.status === 'Waiting'"
+              title="Check In"
+              href="javascript:;"
+              (click)="checkIn(row.id)"
+            >
+              <mat-icon>check_circle</mat-icon>
+            </a>
+            <a
+              class="btn-action"
+              *ngIf="row.status === 'Serving'"
+              title="Check Out"
+              href="javascript:;"
+              (click)="checkOut(row.id)"
+            >
+              <mat-icon>next_plan</mat-icon>
+            </a>
+
+            <a
+              class="btn-action"
+              *ngIf="row.status === 'Waiting'"
+              href="javascript:;"
+              title="Cancel"
+              (click)="cancelBooking(row.id)"
+            >
+              <mat-icon>disabled_by_default</mat-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <div class="tab-pane fade p-4 active show text-right">
+          <pagination-controls
+            class="paginator"
+            id="spot_data"
+            (pageChange)="pageChanged($event)"
+            (pageBoundsCorrection)="pageChanged($event)"
+            directionLinks="true"
+            autoHide="true"
+            responsive="true"
+            previousLabel=""
+            nextLabel=""
+            screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page"
+          >
+          </pagination-controls>
+        </div>
+      </tfoot>
+    </table>
+  </div>
+  <!-- CalendarView -->
+  <div *ngIf="calendarView">
+    <div class="row text-center">
+      <div class="col-md-4">
+        <div class="btn-group">
+          <div
+            class="btn btn-primary"
+            mwlCalendarPreviousView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()"
+          >
+            Previous
+          </div>
+          <div
+            class="btn btn-outline-secondary"
+            mwlCalendarToday
+            [(viewDate)]="viewDate"
+          >
+            Today
+          </div>
+          <div
+            class="btn btn-primary"
+            mwlCalendarNextView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="closeOpenMonthViewDay()"
+          >
+            Next
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+      </div>
+      <div class="col-md-4">
+        <div class="btn-group">
+          <div
+            class="btn btn-primary"
+            (click)="setView(CalendarView.Month)"
+            [class.active]="view === CalendarView.Month"
+          >
+            Month
+          </div>
+          <div
+            class="btn btn-primary"
+            (click)="setView(CalendarView.Week)"
+            [class.active]="view === CalendarView.Week"
+          >
+            Week
+          </div>
+          <div
+            class="btn btn-primary"
+            (click)="setView(CalendarView.Day)"
+            [class.active]="view === CalendarView.Day"
+          >
+            Day
+          </div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        [activeDayIsOpen]="activeDayIsOpen"
+        (dayClicked)="dayClicked($event.day)"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view
+        *ngSwitchCase="CalendarView.Week"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-week-view>
+      <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [events]="events"
+        [refresh]="refresh"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)"
+      >
+      </mwl-calendar-day-view>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,174 @@
+.service-color{
+  width: 36px;
+  height: 36px;
+  float: left;
+  border-radius: 5px;
+  margin-right: 5px;
+  position: relative;
+  margin-bottom: .25rem!important;
+  cursor: pointer;
+  border:1px solid #d4d9e2;
+}
+
+.theme-active {
+  background: url(/assets/images/tick.png) no-repeat;
+  content: " ";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 9px;
+  left: 9px;
+}
+
+.A.theme-active {
+  background: url(/assets/images/black-tick.png) no-repeat;
+  content: " ";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 9px;
+  left: 9px;
+}
+
+.container {
+   text-align: center;
+     
+}
+.alert-msg{
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 14px;
+  color: red;
+}
+
+.coolQRCode {
+  filter: drop-shadow(3px 3px 3px #999);
+  img {
+     width: 300px;
+     background-color: orange;
+  }   
+}
+
+
+
+.printbutton
+{
+   text-align: right;
+}
+
+
+.hidden
+{
+   display: none;
+   visibility: hidden;
+}
+
+.sub-menu.mat-toolbar-single-row {
+   height: 34px;
+}
+
+mat-nav-list.list-horizontal {
+   padding: 0;
+   .mat-list-item {
+     display: inline-block;
+     height: auto;
+     width: auto;
+     font-family: "Open Sans", sans-serif;
+   }
+}
+
+.btn-tab.active {
+   font-weight: bold;
+   text-decoration: underline;
+   z-index: 1;
+   font-family: "Open Sans", sans-serif
+}
+
+.container {
+   text-align: center;
+}
+
+.coolQRCode {
+ filter: drop-shadow(3px 3px 3px #999);
+ img {
+    width: 300px;
+    background-color: orange;
+ }   
+}
+
+.printbutton {
+  text-align: right;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.tab {
+   padding: 14px 20px 14px 20px;
+}
+
+.tab-blue {
+  background-color: blue;
+  color:white;
+}
+
+.tab-icon {
+  display: block;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+
+  color:white;
+  text-align: center;
+}
+
+.tab-icon-margin {
+  margin-top: 12px;
+}
+
+.tab-icon-red {
+  background-color: red;
+}
+
+.tab-icon-green {
+  background-color: green;
+}
+
+.tab-icon-blue {
+  background-color: blue;
+}
+
+.mat-dropdown {
+ background-color: white !important; 
+ padding: 4px 3px 4px 6px !important; 
+ border-radius: 3px !important;
+}
+
+.btn-action {
+ cursor:pointer;
+ color:orange;
+ margin-right: 5px;
+}
+
+.saveBtn{
+      justify-content: center;
+      align-items: center;
+      display: flex;
+}
+.tl{
+  color: blue;
+}
+.mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "Open Sans", sans-serif;
+}
+
+p {
+  font-family: "Open Sans", sans-serif;
+}

@@ -1,0 +1,271 @@
+
+
+
+
+
+<div class="content container-fluid">
+
+
+    <!-- <div class="card-header">
+        <div class="row justify-content-between align-items-center flex-grow-1">
+          <div class="col-12 col-md">
+           
+          </div>
+        </div>
+    </div>
+
+<div class="">
+    <div class="">
+
+        <mat-toolbar color="primary">
+            <button mat-icon-button (click)="drawer.toggle()">
+                <mat-icon matSuffix>menu</mat-icon>
+            </button>
+            
+            <button mat-icon-button (click)="open(list)" class="end"  *ngIf="this.isSuperAdmin">
+                <mat-icon matSuffix>person_add</mat-icon>
+            </button>
+            <button mat-icon-button (click)="logoutModal(logoutContent)" class="end">
+                <mat-icon matSuffix>close</mat-icon>
+            </button>
+        </mat-toolbar>
+
+    
+        <mat-drawer-container class="example-container" autosize >
+            <mat-drawer #drawer class="example-sidenav" mode="side" opened >
+           
+                
+                <mat-list cdk-virtual-scroll-viewport itemSize="50"
+                    *ngIf="api.currentUser && api.currentUser.conversations">
+                    <mat-list-item *ngFor="let x of api.currentUser.conversations | filterBy: userFilter"
+                       >
+                        <mat-icon matListIcon>face</mat-icon>
+                        <a href="javascript:void(0)"  (click)="selectUser(x)" matLine class="text-primary">{{ x?.name }}</a>
+                        <p matLine>
+                            <span class="small text-muted"> New Message </span><br />
+                            <span class="demo-2 text-muted small">
+                                {{ x.timestamp?.toDate() | date: "dd MMM hh:mm" }}</span>
+                        </p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-drawer>
+           
+
+
+
+           
+            <div class="example-sidenav-content" style="margin-top: 30px">
+                <div class="mesgs" id="container">
+                    <cdk-virtual-scroll-viewport itemSize="40" class="msg_history " *ngIf="showMessages">
+                        <div *cdkVirtualFor="let x of messages; let i = index">
+                            <div class="incoming_msg" *ngIf="x.senderId !== api.currentUser.uid">
+                                <div class="incoming_msg_img">
+                                    <img src="https://ptetutorials.com/images/user-profile.png" alt="" />
+                                </div>
+                                <div class="received_msg">
+                                    <div class="received_withd_msg">
+                                        <p>{{ x.content }}</p>
+                                        <span class="time_date"
+                                            id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}">
+                                            {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="outgoing_msg" *ngIf="x.senderId == api.currentUser.uid">
+                                <div class="sent_msg">
+                                    <p>{{ x.content }}</p>
+                                    <span class="time_date" id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}">
+                                        {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </cdk-virtual-scroll-viewport>
+
+                    <div class="type_msg" *ngIf="showMessages">
+                        <div class="input_msg_write">
+                            <input mat-input type="text" placeholder="Type a message" [(ngModel)]="message"
+                                (keydown.enter)="sendMessage()" />
+                            <button class="msg_send_btn" type="button" (click)="sendMessage()"
+                                (keydown.enter)="sendMessage()">
+                                <mat-icon matSuffix>send</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer-container>
+      
+    </div>
+</div>
+
+
+<ng-template #list>
+    <mat-list role="list" cdk-virtual-scroll-viewport itemSize="10" *ngIf="users">
+        <mat-list-item role="listitem" *ngFor="let x of users " (click)="selectUser(x)">
+            <div>
+                {{ x?.firstName + x?.lastName}}
+              
+            </div>
+        </mat-list-item>
+    </mat-list>
+</ng-template>
+
+<ng-template #logoutContent>
+    Are you sure you want to Log out? <br />
+    <br />
+    <button mat-button mat-raised-button color="warn" (click)="logout()">
+        LOGOUT
+    </button>
+    <button mat-button (click)="closeModal()">cancel</button>
+</ng-template> -->
+
+
+
+
+
+<div id="frame">
+    <div id="sidepanel">
+      <div id="profile">
+        <div class="wrap">
+         
+                    <p>{{'Chat Board' | translate}}</p>
+          
+         
+        </div>
+        <hr/>
+      </div>
+      
+      <div id="contacts">
+        <ul  *ngIf="api.currentUser && api.currentUser.conversations"> 
+            
+          <li class="contact"
+          *ngFor="let x of api.currentUser.conversations | filterBy: userFilter">
+        
+            <div class="wrap" href="javascript:void(0)"  (click)="selectUser(x)">
+              <span class="contact-status online"></span>
+              <img src="./assets/images/background/support.png" alt=""  />
+              <div class="meta">
+                <p class="name">{{ x?.name }}</p>
+                <!-- <p class="preview">You just got LITT up, Mike.</p> -->
+              </div>
+            </div>
+        
+          </li>
+         
+        </ul>
+      </div>
+      <div id="bottom-bar">
+       
+        <!-- <button id="addcontact" (click)="open(list)" ><i class="fa fa-user-plus fa-fw"  aria-hidden="true" ></i> <span>Add contact</span></button> -->
+                <button id="settings" (click)="logoutModal(logoutContent)"><i class="fa fa-cog fa-fw" aria-hidden="true" ></i> <span>{{'Close' | translate}}</span></button>
+        
+        
+        <!-- <button id="addcontact" (click)="open()" ><i class="fa fa-user-plus fa-fw" *ngIf="this.isSuperAdmin" aria-hidden="true" ></i> <span>Add contact</span></button>
+        <button id="settings" (click)="logoutModal(logoutContent)"><i class="fa fa-cog fa-fw" aria-hidden="true" ></i> <span>Close</span></button> -->
+      </div>
+    </div>
+    <div class="content">
+      
+      <div class="messages">
+        <div class="mesgs" id="container">
+             <div class="messages">
+          <!-- <ul>
+            <li class="sent">
+              <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+              <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
+            </li>
+            <li class="replies">
+              <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+              <p>When you're backed against the wall, break the god damn thing down.</p>
+            </li>
+           
+          </ul> -->
+        </div>
+          <cdk-virtual-scroll-viewport itemSize="40" class="msg_history " *ngIf="showMessages">
+              <div *cdkVirtualFor="let x of messages; let i = index">
+                  <div class="incoming_msg" *ngIf="x.senderId !== api.currentUser.uid">
+                      <div class="incoming_msg_img sent">
+                        <img src="./assets/images/background/user1.png" class="online" alt=""  style="border-radius:10px ;"/>
+                      </div>
+                      <div class="received_msg">
+                          <div class="received_withd_msg">
+                            <p *ngIf="x.content.indexOf('base64')>-1">
+                                <img src="{{x.content}}" width="400px"/>
+                                <!-- {{ x.content }} -->
+                            </p>
+                            <p *ngIf="x.content.indexOf('base64')<=-1">
+                                {{ x.content }}
+                            </p>
+                              <span class="time_date"
+                                  id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}">
+                                  {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="outgoing_msg replies" *ngIf="x.senderId == api.currentUser.uid">
+                      <div class="sent_msg">
+                        <img src="./assets/images/background/user2.png" class="out_img" alt=""   style="border-radius:10px ;"/>
+                        <p *ngIf="x.content.indexOf('base64')>-1">
+                            <img src="{{x.content}}" width="400px"/>
+                            <!-- {{ x.content }} -->
+                        </p>
+                        <p *ngIf="x.content.indexOf('base64')<=-1">
+                            {{ x.content }}
+                        </p>
+                          <span class="time_date" id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}">
+                              {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span>
+                      </div>
+                  </div>
+              </div>
+          </cdk-virtual-scroll-viewport>
+
+          <div class="type_msg" *ngIf="showMessages">
+            <div class="message-input">
+                <div class="wrap">
+                <input type="text" placeholder="Write your message..." [(ngModel)]="message"
+                (keydown.enter)="sendMessage()"  />
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button class="submit"  (click)="sendMessage()"
+                (keydown.enter)="sendMessage()"><mat-icon matSuffix>send</mat-icon></button>
+                </div>
+              </div>
+
+              <!-- <div class="input_msg_write">
+                  <input mat-input type="text" placeholder="Type a message" [(ngModel)]="message"
+                      (keydown.enter)="sendMessage()" />
+                  <button class="msg_send_btn" type="button" (click)="sendMessage()"
+                      (keydown.enter)="sendMessage()">
+                      <mat-icon matSuffix>send</mat-icon>
+                  </button>
+              </div> -->
+          </div>
+      </div>
+      
+      </div>
+     
+    </div>
+  </div>
+
+</div>
+<ng-template #list>
+    <mat-list role="list" cdk-virtual-scroll-viewport itemSize="10" *ngIf="users">
+        <mat-list-item role="listitem" *ngFor="let x of users " (click)="selectUser(x)">
+            <div>
+                {{ x?.firstName + x?.lastName}}
+              
+            </div>
+        </mat-list-item>
+    </mat-list>
+</ng-template>
+
+<ng-template #logoutContent>
+    {{'Are you sure you want to Log out?' | translate}} <br />
+    <br />
+    <button mat-button mat-raised-button color="warn" (click)="logout()">
+        {{'LOGOUT' | translate}}
+    </button>
+    <button mat-button (click)="closeModal()">{{'cancel' | translate}}</button>
+</ng-template>
+

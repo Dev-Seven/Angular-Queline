@@ -1,0 +1,161 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm-8 mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Latest Spots" | translate }}</h1>
+      </div>
+
+      <div class="col-sm-4" *ngIf="this.isSuperAdmin || this.isBusinessOwner">
+        <div class="col">
+          <div *ngIf="this.locationData?.length > 0">
+            <label for="Branch" class="font-size-sm">{{
+              "Branch" | translate
+            }}</label>
+            <div class="select2-custom">
+              <select
+                class="form-control custom-select"
+                size="1"
+                [(ngModel)]="this.locationId"
+                (ngModelChange)="selectLocation()"
+                data-hs-select2-options='{
+                      "minimumResultsForSearch": "Infinity"
+                    }'
+              >
+                <option *ngFor="let item of locationData" [value]="item.id">
+                  <span class="d-flex align-items-center"
+                    ><span>{{ item.name }}</span></span
+                  >
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+
+  <div class="table-responsive datatable-custom">
+    <table
+      id="datatable"
+      class="
+        table
+        table-borderless
+        table-thead-bordered
+        table-nowrap
+        table-align-middle
+        card-table
+      "
+    >
+      <tbody>
+        <tr
+          *ngFor="
+            let row of spotData
+              | paginate
+                : {
+                    id: 'spot_data',
+                    itemsPerPage: 10,
+                    currentPage: page,
+                    totalItems: spotData.length
+                  }
+          "
+        >
+          <td>
+            <span>{{ "SPOTID" | translate }}</span
+            >{{ row.spotId }}
+          </td>
+          <td>
+            <span>{{ "CUSTOMER" | translate }}</span
+            >{{ row.user?.name ? row.user?.name : row.user?.email }}
+          </td>
+          <td>
+            <span>{{ "PARTY SIZE" | translate }}</span>
+            <ng-container
+              *ngIf="row.status === 'Waiting' || row.status === 'Serving'"
+            >
+              {{ row.partySize }}
+            </ng-container>
+            <ng-container
+              *ngIf="row.status !== 'Waiting' && row.status !== 'Serving'"
+            >
+              <span>
+                {{ row.partySize }}
+              </span>
+            </ng-container>
+          </td>
+          <td>
+            <span>{{ "STATUS" | translate }}</span
+            >{{ row.status }}
+          </td>
+          <td>
+            <a
+              class="btn-action clr-red"
+              *ngIf="row.status === 'Waiting'"
+              title="Check In"
+              href="javascript:;"
+              (click)="checkIn(row.id, row.partySize)"
+            >
+              <mat-icon>check_circle</mat-icon>
+            </a>
+            <a
+              class="btn-action"
+              *ngIf="row.status === 'Serving'"
+              title="Check Out"
+              href="javascript:;"
+              (click)="checkOut(row.id)"
+            >
+              <mat-icon>next_plan</mat-icon>
+            </a>
+            <a
+              class="btn-action"
+              *ngIf="row.status === 'Waiting'"
+              title="Skip"
+              href="javascript:;"
+              (click)="skip(row.id)"
+            >
+              <mat-icon>exit_to_app</mat-icon>
+            </a>
+
+            <a
+              class="btn-action"
+              *ngIf="row.status === 'Waiting'"
+              href="javascript:;"
+              title="Cancel"
+              (click)="cancel(row.id)"
+            >
+              <mat-icon>disabled_by_default</mat-icon>
+            </a>
+            <a
+              class="btn-action icon-rating"
+              *ngIf="row.status === 'Resolved' && row.feedback"
+              href="javascript:;"
+              title="Rating"
+              (click)="feedback(row)"
+            >
+              <mat-icon>feedback</mat-icon>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <div class="tab-pane fade p-4 active show text-right">
+          <pagination-controls
+            class="paginator"
+            id="spot_data"
+            (pageChange)="pageChanged($event)"
+            (pageBoundsCorrection)="pageChanged($event)"
+            directionLinks="true"
+            autoHide="true"
+            responsive="true"
+            previousLabel=""
+            nextLabel=""
+            screenReaderPaginationLabel="Pagination"
+            screenReaderPageLabel="page"
+            screenReaderCurrentLabel="You're on page"
+          >
+          </pagination-controls>
+        </div>
+      </tfoot>
+    </table>
+  </div>
+</div>

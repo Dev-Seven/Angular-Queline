@@ -1,0 +1,144 @@
+.formBorder {
+  padding: 10px !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  background-color: white;
+  border-radius: 5px;
+}
+
+.spotButton {
+  background-color: orange;
+  border-radius: 25px;
+  color: white;
+  text-transform: capitalize;
+}
+
+.change {
+  background-color: orange;
+  border-radius: 25px;
+  color: white;
+  text-transform: capitalize;
+}
+
+.button {
+  width: 265px;
+}
+
+.textbox {
+  width: 100%;
+}
+
+.count {
+  border: black 1px solid;
+  border-radius: 5%;
+}
+
+.counts {
+  font-size: 1.5rem;
+  border: none;
+}
+
+.card-lg[_ngcontent-usx-c371] > .card-body[_ngcontent-usx-c371],
+.card-lg[_ngcontent-usx-c371]
+  > .collapse[_ngcontent-usx-c371]
+  .card-body[_ngcontent-usx-c371] {
+  padding: 2rem 2rem;
+  border: #4385ff4a 1px solid;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 0.0625rem solid rgba(0, 119, 255, 0.432);
+  border-radius: 0.75rem;
+}
+
+.input-group-quantity-counter .input-group-quantity-counter-btn {
+  margin-right: 8px;
+}
+
+.input-group-quantity-counter {
+  width: auto;
+
+  display: flex;
+}
+
+.input-group-quantity-counter .input-group-quantity-counter-control {
+  padding-right: 0px !important;
+  width: 50px !important;
+  display: inline-block;
+}
+
+.input-group-quantity-counter .input-group-quantity-counter-toggle {
+  position: relative;
+  top: inherit;
+  right: inherit;
+  transform: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.input-group-quantity-counter .input-group-quantity-counter-btn {
+  display: inline-block;
+}
+
+.input-group-quantity-counter .input-group-quantity-counter-btn {
+  position: relative;
+  display: inline;
+  flex-shrink: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+  color: #fff;
+  font-size: 0.75rem;
+  width: 25px;
+  height: 25px;
+  background-color: #377dff;
+  border: 0px solid #e7eaf3;
+  border-radius: 50%;
+  margin: 0 10px;
+  z-index: 0;
+  padding: 0;
+}
+
+.clogo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.clogo img {
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.count {
+  border: black 1px solid;
+  border-radius: 5px;
+}
+.btn-tgl {
+  margin-top: 7px;
+  display: flex;
+  align-items: center;
+}
+.check-back .dynamic-check ::ng-deep .mat-checkbox-inner-container {
+  background-color: white;
+}
+
+@media (max-width: 1399px) {
+  .input-group-quantity-counter .input-group-quantity-counter-btn {
+    margin: 0 7px;
+    text-align: center;
+  }
+}

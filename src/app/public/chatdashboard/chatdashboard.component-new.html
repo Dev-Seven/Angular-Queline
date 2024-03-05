@@ -1,0 +1,315 @@
+<div class="row public-box justify-content-center">
+  <div class="col-xl-4 col-lg-6 col-md-7 col-sm-12 col-12 align-self-center">
+    <!-- Topbar  -->
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon matSuffix>{{'menu' | translate}}</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="open(list)" class="end">
+        <mat-icon matSuffix>{{'person_add' | translate}}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="logoutModal(logoutContent)" class="end">
+        <mat-icon matSuffix>{{'close' | translate}}</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <!-- Conversations sidebar - start -->
+    <mat-drawer-container class="example-container" autosize>
+      <mat-drawer #drawer class="example-sidenav" mode="side" opened>
+        <mat-list cdk-virtual-scroll-viewport itemSize="50">
+          <mat-list-item>
+            <a class="d-flex justify-content-center mb-5"> </a>
+
+            <mat-icon
+              matListIcon
+              *ngIf="companyLogo == null"
+              style="margin-top: -10px"
+              ><img
+                class="z-index-2"
+                src="./assets/images/background/support.png"
+                alt="Image Description"
+                style="width: 1.5rem"
+            /></mat-icon>
+            <mat-icon
+              matListIcon
+              *ngIf="companyLogo!== null"
+              style="margin-top: -10px"
+              ><img
+                class="z-index-2"
+                src="{{companyLogo}}"
+                alt="Image Description"
+                style="width: 1.5rem"
+            /></mat-icon>
+            <a
+              href="javascript:void(0)"
+              (click)="drawer.toggle() && selectBusinessUser()"
+              matLine
+              class="text-primarys"
+              style="padding-bottom: 15px"
+            >
+              {{'Support' | translate}}</a
+            >
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListIcon style="margin-top: -10px"
+              ><img
+                class="z-index-2"
+                src="./assets/images/background/chat.png"
+                alt="Image Description"
+                style="width: 1.5rem"
+            /></mat-icon>
+            <a
+              href="javascript:void(0)"
+              (click)="drawer.toggle() && selectPublicRoom()"
+              matLine
+              class="text-primarys"
+              style="padding-bottom: 15px"
+              >{{'Public Chat' | translate}}</a
+            >
+          </mat-list-item>
+        </mat-list>
+        <hr />
+        <mat-list
+          cdk-virtual-scroll-viewport
+          itemSize="50"
+          *ngIf="api.currentUser && api.currentUser.conversations"
+        >
+          <mat-list-item
+            *ngFor="let x of api.currentUser.conversations | filterBy: userFilter"
+          >
+            <!-- {{x?.name}} -->
+            <div *ngIf="(selectedUsers.indexOf(x.uid)>-1) == true">
+              <mat-icon matListIcon style="margin-top: -10px"
+                ><img
+                  class="z-index-2"
+                  src="./assets/images/background/user1.png"
+                  alt="Image Description"
+                  style="width: 1.5rem"
+              /></mat-icon>
+              <a
+                href="javascript:void(0)"
+                (click)="drawer.toggle() && selectUser(x)"
+                matLine
+                class="text-primarys"
+                style="padding-bottom: 10px"
+                >{{ x?.name }}</a
+              >
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-drawer>
+      <!-- Conversations sidebar - ends -->
+
+      <!-- Chat Screen Main Content - start -->
+      <div class="example-sidenav-content">
+        <div class="mesgs" id="container">
+          <cdk-virtual-scroll-viewport
+            itemSize="40"
+            class="msg_history"
+            *ngIf="showMessages"
+          >
+            <h4 class="headers" *ngIf="isPublicChat">
+              {{'Public Chat' | translate}}
+            </h4>
+            <h4 class="headerblue" *ngIf="isStoreSupport">
+              {{'Support' | translate}}
+            </h4>
+            <h4 class="header" *ngIf="!isPublicChat && !isStoreSupport">
+              {{'Private Chat' | translate}}
+            </h4>
+            <div *cdkVirtualFor="let x of messages; let i = index">
+              <div
+                class="incoming_msg"
+                *ngIf="x.senderId !== api.currentUser.uid"
+              >
+                <div class="incoming_msg_img sent">
+                  <img
+                    src="./assets/images/background/user1.png"
+                    class="online"
+                    alt=""
+                    style="border-radius: 10px"
+                  />
+                </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p *ngIf="x.content.indexOf('base64')>-1">
+                      <img src="{{x.content}}" width="400px" />
+                    </p>
+
+                    <p *ngIf="x.content.indexOf('base64')<=-1">
+                      {{ x.name }} {{ x.content }}
+                    </p>
+                    <span
+                      class="time_date"
+                      id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}"
+                    >
+                      {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="outgoing_msg replies"
+                *ngIf="x.senderId == api.currentUser.uid"
+              >
+                <div class="sent_msg">
+                  <img
+                    src="./assets/images/background/user2.png"
+                    class="out_img"
+                    alt=""
+                    style="border-radius: 10px"
+                  />
+                  <p *ngIf="x.content.indexOf('base64')>-1">
+                    <img src="{{x.content}}" width="400px" />
+                  </p>
+
+                  <p *ngIf="x.content.indexOf('base64')<=-1">
+                    {{ x.name }} {{ x.content }}
+                  </p>
+                  <span
+                    class="time_date"
+                    id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}"
+                  >
+                    {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+
+          <div class="type_msg" *ngIf="showMessages">
+            <div class="input_msg_write row">
+              <input
+                mat-input
+                type="text"
+                placeholder="Type a message"
+                [(ngModel)]="message"
+                (keyup.enter)="sendMessage()"
+                *ngIf="!isPublicChat"
+              />
+              <input
+                type="file"
+                #showfiles
+                (change)="fileChangeEvent($event)"
+                class="fileInputProfile"
+                style="display: none"
+              />
+
+              <input
+                mat-input
+                type="text"
+                placeholder="Type a message"
+                [(ngModel)]="message"
+                (keyup.enter)="sendPublicMessage()"
+                *ngIf="isPublicChat"
+              />
+              <input
+                type="file"
+                #showfiles
+                (change)="fileChangeEvent($event)"
+                class="fileInputProfile"
+                style="display: none"
+              />
+
+              <button
+                class="msg_send_btns"
+                (click)="showfiles.click()"
+                style="
+                  float: right;
+                  position: absolute;
+                  right: 40px;
+                  margin-top: 12px;
+                  border: none;
+                  background-color: #fafafa;
+                  color: #3a7ebf;
+                "
+                type="button"
+                (keyup.enter)="sendMessage()"
+                *ngIf="!isPublicChat"
+              >
+                <mat-icon matSuffix>attachment</mat-icon>
+              </button>
+              <button
+                class="msg_send_btns"
+                (click)="showfiles.click()"
+                style="
+                  float: right;
+                  position: absolute;
+                  right: 40px;
+                  margin-top: 12px;
+                  border: none;
+                  background-color: #fafafa;
+                  color: #3a7ebf;
+                "
+                type="button"
+                (keyup.enter)="sendPublicMessage()"
+                *ngIf="isPublicChat"
+              >
+                <mat-icon matSuffix>attachment</mat-icon>
+              </button>
+              <button
+                class="msg_send_btn"
+                type="button"
+                (click)="sendMessage()"
+                (keyup.enter)="sendMessage()"
+                *ngIf="!isPublicChat"
+              >
+                <mat-icon matSuffix></mat-icon>
+              </button>
+              <button
+                class="msg_send_btn"
+                type="button"
+                (click)="sendPublicMessage()"
+                (keyup.enter)="sendPublicMessage()"
+                *ngIf="isPublicChat"
+              >
+                <mat-icon matSuffix>{{'send' | translate}}</mat-icon>
+              </button>
+              <button
+                class="msg_send_btn"
+                type="button"
+                (click)="sendMessage()"
+                (keyup.enter)="sendMessage()"
+                *ngIf="!isPublicChat"
+              >
+                <mat-icon matSuffix>{{'send' | translate}}</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-drawer-container>
+    <!-- Conversations sidebar - ends -->
+  </div>
+</div>
+
+<!-- user-list template - start -->
+<ng-template #list>
+  <mat-list role="list" cdk-virtual-scroll-viewport itemSize="10" *ngIf="users">
+    <mat-list-item
+      role="listitem"
+      *ngFor="let x of users "
+      (click)="selectUserList(x)"
+    >
+      <div>{{ x?.email }}</div>
+    </mat-list-item>
+    <mat-list-item (click)="selectPublicRoom()">
+      <div>Public Chat Group</div>
+      <hr />
+    </mat-list-item>
+  </mat-list>
+</ng-template>
+<!-- user-list template - ends -->
+
+<!-- logout-content - start -->
+<ng-template #logoutContent>
+  Are you sure you want to Log out? <br />
+  <br />
+  <button mat-button mat-raised-button color="warn" (click)="logout()">
+    LOGOUT
+  </button>
+  <button mat-button (click)="closeModal()">cancel</button>
+</ng-template>
+<!-- logout-content - start -->

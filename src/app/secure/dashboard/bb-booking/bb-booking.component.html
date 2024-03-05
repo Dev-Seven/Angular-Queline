@@ -1,0 +1,658 @@
+<div class="modal-close row">
+  <div class="col-md-1">
+    <button
+      type="button"
+      class="btn btn-icon btn-sm btn-ghost-secondary"
+      data-dismiss="modal"
+      (click)="close()"
+      aria-label="Close"
+    >
+      <i class="tio-clear tio-lg"></i>
+    </button>
+  </div>
+</div>
+<div
+  class="modal fade show"
+  id="welcomeMessageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<div class="content container-fluid">
+  <!-- Step Form -->
+
+  <form
+    class="js-step-form py-md-5"
+    novalidate
+    [formGroup]="frmBookSlot"
+    (submit)="save()"
+  >
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-12">
+        <!-- Step -->
+        <ul
+          id="addUserStepFormProgress"
+          class="
+            js-step-progress
+            step step-sm step-icon-sm step step-inline step-item-between
+            mb-3 mb-md-5
+          "
+        >
+          <li class="step-item">
+            <a
+              class="step-content-wrapper"
+              href="javascript:;"
+              data-hs-step-form-next-options='{
+                    "targetSelector": "#addUserStepProfile"
+                  }'
+            >
+              <div class="step-content">
+                <h4 class="step-title">{{ "Book Slot" | translate }}</h4>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- End Step -->
+
+        <!-- Content Step Form -->
+        <div id="addUserStepFormContent">
+          <!-- Card -->
+          <div id="addUserStepProfile" class="card card-lg active">
+            <!-- Body -->
+            <div class="card-body">
+              <div class="row form-group">
+                <label
+                  for="firstNameLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Name" | translate }}</label
+                >
+
+                <div class="col-sm-9">
+                  <div class="input-group input-group-sm-down-break">
+                    <input
+                      type="text"
+                      class="form-control"
+                      formControlName="name"
+                      id="firstNameLabel"
+                      placeholder="Name"
+                      aria-label="Name"
+                    />
+                  </div>
+                  <mat-validation-message
+                    [control]="frmBookSlot.controls.name"
+                    [message]="'Name'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+              <div class="row form-group">
+                <label
+                  for="emailLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Email" | translate }}</label
+                >
+
+                <div class="col-sm-9">
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    id="emailLabel"
+                    placeholder="test@example.com"
+                    aria-label="test@example.com"
+                  />
+                  <mat-validation-message
+                    [control]="frmBookSlot.controls.email"
+                    [message]="'Email'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <div class="row form-group">
+                <label
+                  for="dateLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Date" | translate }}</label
+                >
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Select Date"
+                    id="dateLabel"
+                    onkeydown="return false"
+                    bsDatepicker
+                    [minDate]="minDate"
+                    formControlName="date"
+                    autocomplete="nope"
+                    (ngModelChange)="changeSlotData($event)"
+                    [bsConfig]="{
+                      showWeekNumbers: false,
+                      selectFromOtherMonth: true
+                    }"
+                  />
+                  <mat-validation-message
+                    [control]="frmBookSlot.controls.date"
+                    [message]="'Date'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- Select Slot from Available Time -->
+              <div class="row form-group">
+                <label
+                  for="timeLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Available Time" | translate }}</label
+                >
+                <div class="col-sm-9">
+                  <mat-select
+                    autocomplete="nope"
+                    id="timeLabel"
+                    class="form-control"
+                    formControlName="slot"
+                    [(ngModel)]="selectedSlot"
+                    (ngModelChange)="availSlot($event)"
+                  >
+                    <!-- *ngFor="let item of input.options.split(',')" -->
+                    <div *ngFor="let slot of availableSlots">
+                      <mat-option [value]="slot">
+                        {{ slot.slotDuration.replace(",", "-") }}
+                      </mat-option>
+                    </div>
+                  </mat-select>
+                  <mat-validation-message
+                    [control]="frmBookSlot.controls.slot"
+                    [message]="'Slot'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+
+              <!-- Form Group -->
+
+              <div *ngIf="customeBookingInput">
+                <div *ngFor="let input of customBookingLocationInputs">
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Text Field'"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.name"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmBookSlot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'Number'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="number"
+                        class="form-control"
+                        formControlName="input.name"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'URL'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.placeholder"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'Date'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.placeholder"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="input.type === 'Checkbox'"
+                    style="float: left; margin: 10%"
+                  >
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [selected]="input.preselect"
+                      >{{ input.label }}</mat-checkbox
+                    >
+                    <mat-validation-message
+                      [control]="frmBookSlot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div class="row form-group" *ngIf="input.type === 'Checkbox'">
+                    <div class="col-sm-9">
+                      <mat-checkbox
+                        class="form-control"
+                        color="primary"
+                        mInput
+                        [formControlName]="input.name"
+                        [ngModelOptions]="{ standalone: true }"
+                        [selected]="input.preselect"
+                        >{{ input.label }}</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <mat-select
+                      [formControlName]="input.name"
+                      autocomplete="nope"
+                      class="mat-dropdown"
+                      multiple
+                      [(ngModel)]="input.defaultValue"
+                    >
+                      <mat-option
+                        *ngFor="let item of input.options.split(',')"
+                        [value]="item"
+                      >
+                        {{ item }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-validation-message
+                      [control]="frmBookSlot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Selection' && input.multiple"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="form-control"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Selection' && input.multiple"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="form-control"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="customeUserInput">
+                <div *ngFor="let input of customUserLocationInputs">
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Text Field'"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.name"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmBookSlot.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'Number'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="number"
+                        class="form-control"
+                        formControlName="input.name"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'URL'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.placeholder"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="row form-group" *ngIf="input.type === 'Date'">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="input.placeholder"
+                        id="input.placeholder"
+                        placeholder=""
+                        aria-label="input.placeholder"
+                        [value]="input.defaultInput"
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    *ngIf="input.type === 'Checkbox'"
+                    style="float: left; margin: 10%"
+                  >
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [selected]="input.preselect"
+                      >{{ input.label }}</mat-checkbox
+                    >
+                    <mat-validation-message
+                      [control]="frmBookSlot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div class="row form-group" *ngIf="input.type === 'Checkbox'">
+                    <div class="col-sm-9">
+                      <mat-checkbox
+                        class="form-control"
+                        color="primary"
+                        mInput
+                        [formControlName]="input.name"
+                        [ngModelOptions]="{ standalone: true }"
+                        [selected]="input.preselect"
+                        >{{ input.label }}</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <mat-select
+                      [formControlName]="input.name"
+                      autocomplete="nope"
+                      class="mat-dropdown"
+                      multiple
+                      [(ngModel)]="input.defaultValue"
+                    >
+                      <mat-option
+                        *ngFor="let item of input.options.split(',')"
+                        [value]="item"
+                      >
+                        {{ item }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-validation-message
+                      [control]="frmBookSlot.get(input.name)"
+                      [message]="input.label"
+                      [formSubmitted]="isFormSubmitted"
+                    >
+                    </mat-validation-message>
+                  </div>
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Selection' && input.multiple"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="form-control"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div
+                    class="row form-group"
+                    *ngIf="input.type === 'Selection' && input.multiple"
+                  >
+                    <label
+                      for="organizationLabel"
+                      class="col-sm-3 col-form-label input-label"
+                      >{{ input.label }}</label
+                    >
+                    <div class="col-sm-9">
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="form-control"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="card-footer d-flex justify-content-end align-items-center"
+            >
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!allowBooking"
+              >
+                {{ "Book" | translate }}
+              </button>
+            </div>
+            <!-- End Footer -->
+          </div>
+        </div>
+        <!-- End Content Step Form -->
+
+        <!-- Message Body -->
+
+        <!-- End Message Body -->
+      </div>
+    </div>
+    <!-- End Row -->
+  </form>
+  <!-- End Step Form -->
+</div>

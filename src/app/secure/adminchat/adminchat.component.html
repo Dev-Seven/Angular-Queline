@@ -1,0 +1,175 @@
+<div class="content container-fluid">
+  <div id="frame">
+    <div id="sidepanel">
+      <div id="profile">
+        <div class="wrap">
+          <p>{{ "Chat Board" | translate }}</p>
+        </div>
+        <hr />
+      </div>
+      <div id="contacts">
+        <ul *ngIf="api.currentUser && api.currentUser.conversations">
+          <li
+            class="contact"
+            *ngFor="
+              let x of api.currentUser.conversations | filterBy: userFilter
+            "
+          >
+            <div class="wrap" href="javascript:void(0)" (click)="selectUser(x)">
+              <span class="contact-status online"></span>
+              <img src="./assets/images/background/support.png" alt="" />
+              <div class="meta">
+                <p class="name">{{ x?.name }}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div id="bottom-bar">
+        <button id="settings" (click)="logoutModal(logoutContent)">
+          <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
+          <span>{{ "Close" | translate }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="content">
+      <div class="messages">
+        <div class="mesgs" id="container">
+          <div class="messages"></div>
+          <cdk-virtual-scroll-viewport
+            itemSize="40"
+            class="msg_history"
+            *ngIf="showMessages"
+          >
+            <div *cdkVirtualFor="let x of messages; let i = index">
+              <div
+                class="incoming_msg"
+                *ngIf="x.senderId !== api.currentUser.uid"
+              >
+                <div class="incoming_msg_img sent">
+                  <img
+                    src="./assets/images/background/user1.png"
+                    class="online"
+                    alt=""
+                    style="border-radius: 10px"
+                  />
+                </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p *ngIf="x.content.indexOf('base64') > -1">
+                      <img src="{{ x.content }}" width="400px" />
+                    </p>
+                    <p *ngIf="x.content.indexOf('base64') <= -1">
+                      {{ x.content }}
+                    </p>
+                    <span
+                      class="time_date"
+                      id="{{
+                        i == messages.length - 3 ? 'destination' : 'abc'
+                      }}"
+                    >
+                      {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="outgoing_msg replies"
+                *ngIf="x.senderId == api.currentUser.uid"
+              >
+                <div class="sent_msg">
+                  <img
+                    src="./assets/images/background/user2.png"
+                    class="out_img"
+                    alt=""
+                    style="border-radius: 10px"
+                  />
+                  <p *ngIf="x.content.indexOf('base64') > -1">
+                    <img src="{{ x.content }}" width="400px" />
+                  </p>
+                  <p *ngIf="x.content.indexOf('base64') <= -1">
+                    {{ x.content }}
+                  </p>
+                  <span
+                    class="time_date"
+                    id="{{ i == messages.length - 3 ? 'destination' : 'abc' }}"
+                  >
+                    {{ x.timestamp.toDate() | date: "dd MMM hh:mm" }}</span
+                  >
+                </div>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+
+          <div class="type_msg" *ngIf="showMessages">
+            <div class="message-input">
+              <div class="wrap">
+                <input
+                  mat-input
+                  type="text"
+                  placeholder="Type a message"
+                  [(ngModel)]="message"
+                  (keyup.enter)="sendMessage()"
+                />
+                <input
+                  type="file"
+                  #showfiles
+                  (change)="fileChangeEvent($event)"
+                  class="fileInputProfile"
+                  style="display: none"
+                />
+
+                <button
+                  class="msg_send_btns"
+                  (click)="showfiles.click()"
+                  style="
+                    float: right;
+                    position: absolute;
+                    right: 40px;
+                    border: none;
+                    color: #3a7ebf;
+                  "
+                  type="button"
+                  (keyup.enter)="sendMessage()"
+                >
+                  <mat-icon matSuffix>attachment</mat-icon>
+                </button>
+                <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                <button
+                  class="submit"
+                  (click)="sendMessage()"
+                  (keydown.enter)="sendMessage()"
+                >
+                  <mat-icon matSuffix>send</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #list>
+  <mat-list role="list" cdk-virtual-scroll-viewport itemSize="10" *ngIf="users">
+    <mat-list-item
+      role="listitem"
+      *ngFor="let x of users"
+      (click)="selectUser(x)"
+    >
+      <div>
+        {{ x?.firstName + x?.lastName }}
+      </div>
+    </mat-list-item>
+  </mat-list>
+</ng-template>
+
+<ng-template #logoutContent>
+  {{ "Are you sure you want to Log out?" | translate }} <br />
+  <br />
+  <button mat-button mat-raised-button color="warn" (click)="logout()">
+    {{ "LOGOUT" | translate }}
+  </button>
+  <button mat-button (click)="closeModal()">{{ "cancel" | translate }}</button>
+</ng-template>

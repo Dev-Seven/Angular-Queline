@@ -1,0 +1,268 @@
+<aside
+  class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered"
+  id="sidebarMenu"
+>
+  <div class="navbar-vertical-container">
+    <div class="navbar-vertical-footer-offset">
+      <div class="navbar-brand-wrapper justify-content-between">
+        <!-- Logo -->
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+          >
+            <polygon
+              fill="#8493A9"
+              points="2 16.769 3.231 18 10 11.231 16.769 18 18 16.769 11.231 10 18 3.231 16.769 2 10 8.769 3.231 2 2 3.231 8.769 10"
+            ></polygon></svg
+        ></a>
+
+        <a class="navbar-brand" aria-label="Queline">
+          <img
+            class="navbar-brand-logo"
+            src="./assets/svg/logos/logo.png"
+            alt="Queline"
+          />
+          <img
+            class="navbar-brand-logo-mini"
+            src="./assets/svg/logos/logo.png"
+            alt="Queline"
+          />
+        </a>
+      </div>
+      <div class="dropdown-divider"></div>
+      <!-- Content -->
+      <div class="navbar-vertical-content">
+        <a
+          class="navbar-brand"
+          aria-label="Queline"
+          style="padding-left: 1.5rem"
+        >
+          <img
+            class="navbar-brand-logo"
+            src="{{ getCompanyLogo() }}"
+            alt="Logo"
+            style="width: 200px; margin-left: 40px; object-fit: contain"
+          />
+          <img
+            class="navbar-brand-logo-mini"
+            src="{{ getCompanyLogo() }}"
+            alt="Logo"
+            style="object-fit: contain"
+          />
+        </a>
+        <ul class="navbar-nav navbar-nav-lg nav-tabs">
+          <li class="nav-item">
+            <small class="nav-subtitle" title="Menu">{{
+              "Menu" | translate
+            }}</small>
+            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+          </li>
+
+          <!-- Pages -->
+          <li class="navbar-vertical-aside-has-menu">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              title="Dashboard"
+              (click)="dashboard()"
+              href="javascript:;"
+            >
+              <i class="tio-pages-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Dashboard" | translate }}</span
+              >
+            </a>
+          </li>
+          <!-- End Pages -->
+
+          <!-- Apps -->
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="
+              this.isBusinessOwner || this.isManager || this.isStoreSupport
+            "
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Latest Spots"
+              (click)="latestSpot()"
+            >
+              <i class="tio-apps nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Latest Spots" | translate }}</span
+              >
+            </a>
+          </li>
+
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="
+              this.isBusinessOwner || this.isManager || this.isStoreSupport
+            "
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Bookings"
+              (click)="bookings()"
+            >
+              <i class="tio-book-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Scheduled Bookings" | translate }}</span
+              >
+            </a>
+          </li>
+
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="this.isSuperAdmin || this.isBusinessOwner || this.isManager"
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              title="Actvities"
+              href="javascript:;"
+              (click)="activity()"
+            >
+              <i class="tio-play-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Actvities" | translate }}
+              </span>
+            </a>
+          </li>
+          <!-- End Apps -->
+
+          <!-- Authentication -->
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Store"
+              (click)="store()"
+            >
+              <i class="tio-home-vs-1-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Store" | translate }}</span
+              >
+            </a>
+          </li>
+          <!-- End Authentication -->
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="this.isSuperAdmin || this.isBusinessOwner || this.isManager"
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Setting"
+              (click)="settings()"
+            >
+              <i class="tio-settings-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Setting" | translate }}</span
+              >
+            </a>
+          </li>
+          <li class="navbar-vertical-aside-has-menu" *ngIf="this.showBilling">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Setting"
+              (click)="pricing()"
+            >
+              <i class="tio-file-outlined nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Billing" | translate }}</span
+              >
+            </a>
+          </li>
+          <li
+            class="navbar-vertical-aside-has-menu"
+            *ngIf="this.isStoreSupport"
+          >
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Customer Chat"
+              (click)="customerchat()"
+            >
+              <i class="tio-message nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Customer Chat" | translate }}</span
+              >
+            </a>
+          </li>
+
+          <li class="navbar-vertical-aside-has-menu" *ngIf="this.isSuperAdmin">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Inquiries"
+              (click)="inquiries()"
+            >
+              <i class="tio-apps nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Inquiries" | translate }}</span
+              >
+            </a>
+          </li>
+          <li class="navbar-vertical-aside-has-menu" *ngIf="this.isSuperAdmin">
+            <a
+              class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
+              href="javascript:;"
+              title="Bussines Owners"
+              (click)="locationAdmins()"
+            >
+              <i class="tio-apps nav-icon"></i>
+              <span
+                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate"
+                >{{ "Bussines Owners" | translate }}</span
+              >
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+          </li>
+        </ul>
+      </div>
+      <!-- End Content -->
+
+      <!-- Footer -->
+      <!-- <div class="navbar-vertical-footer">
+        <ul class="navbar-vertical-footer-list">
+          <li
+            class="navbar-vertical-footer-list-item"
+            *ngIf="this.isSuperAdmin || this.isBusinessOwner"
+          >
+            <a href="javascript:;" class="" (click)="chat()">
+              <i class="tio-message nav-icon"></i>&nbsp;&nbsp;
+              <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ "Support" | translate }}</span>
+            </a>
+          </li>
+
+          <li class="">
+            Language
+
+            End Language
+          </li>
+        </ul>
+      </div> -->
+      <!-- End Footer -->
+    </div>
+  </div>
+</aside>

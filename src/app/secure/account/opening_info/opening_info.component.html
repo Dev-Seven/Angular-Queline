@@ -1,0 +1,122 @@
+<div class="content container-fluid">
+  <div class="">
+    <div class="modal-close">
+      <button
+        type="button"
+        class="btn btn-icon btn-sm btn-ghost-secondary"
+        data-dismiss="modal"
+        (click)="close()"
+        aria-label="Close"
+      >
+        <i class="tio-clear tio-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body p-sm-5">
+      <div class="text-center">
+        <h4 class="h1">{{ "Edit Opening Hours" | translate }}</h4>
+      </div>
+    </div>
+    <div class="col-sm-7 col-md-12" *ngIf="isLoaded">
+      <mat-card-content>
+        <form [formGroup]="frmOpening">
+          <div
+            class="row"
+            *ngFor="let info of openingInfo"
+            formGroupName="frm{{ info.weekDay }}"
+          >
+            <div class="col-md-2">
+              <h4 style="margin-top: 10px">{{ info.weekDay | translate }}</h4>
+            </div>
+            <div class="col-md-3" style="margin-bottom: 1.5rem">
+              <select
+                formControlName="status"
+                class="custom-select"
+                (change)="statusChange($event, info.weekDay)"
+              >
+                <option
+                  *ngFor="let status of statusData"
+                  [value]="status"
+                  [selected]="status === info.status"
+                >
+                  {{ status | translate }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-7" *ngIf="info.status === 'Open'">
+              <div
+                formArrayName="time"
+                *ngFor="
+                  let t of timeArrays[info.weekDay].controls;
+                  let i = index
+                "
+              >
+                <div class="row" [formGroupName]="i">
+                  <div class="row col-md-10">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="time"
+                            class="form-control open-boxtime"
+                            formControlName="openTime"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="time"
+                            class="form-control open-boxtime"
+                            formControlName="closeTime"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <a
+                      class="btn btn-sm btn-white"
+                      href="javascript:;"
+                      *ngIf="i === 0"
+                      (click)="addTime(info.weekDay, info.id)"
+                    >
+                      <i class="tio-add mr-1"></i>
+                    </a>
+                    <a
+                      class="btn btn-sm btn-white"
+                      href="javascript:;"
+                      *ngIf="i !== 0"
+                      (click)="removeTime(info.weekDay, i)"
+                    >
+                      <i class="tio-remove mr-1"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-card-content style="text-align: right">
+            <div
+              fxFlex.gt-lg="100"
+              fxFlex.gt-md="100"
+              fxFlex.gt-xs="100"
+              fxFlex="100"
+            >
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="save()"
+              >
+                {{ "SAVE" | translate }}
+              </button>
+            </div>
+          </mat-card-content>
+        </form>
+      </mat-card-content>
+    </div>
+  </div>
+  <!-- End Row -->
+</div>

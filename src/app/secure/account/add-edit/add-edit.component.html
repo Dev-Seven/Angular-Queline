@@ -1,0 +1,684 @@
+<iframe id="iframe" class="hidden"></iframe>
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Store Detail" | translate }}</h1>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-12">
+      <!-- Profile Cover -->
+      <div class="profile-cover">
+        <div class="profile-cover-img-wrapper">
+          <img
+            class="profile-cover-img"
+            src="./assets/img/1920x400/img1.jpg"
+            alt="Image Description"
+          />
+        </div>
+      </div>
+      <!-- End Profile Cover -->
+
+      <!-- Profile Header -->
+      <div class="text-center mb-5">
+        <!-- Avatar -->
+        <div
+          class="avatar avatar-xxl avatar-circle avatar-border-lg profile-cover-avatar"
+        >
+          <img
+            class="avatar-img"
+            src="./assets/svg/logos/logosmall.png"
+            alt="Image Description"
+            style="margin-left: auto; margin-right: auto"
+          />
+        </div>
+      </div>
+      <!-- End Profile Header -->
+
+      <!-- Nav -->
+      <div class="js-nav-scroller hs-nav-scroller-horizontal mb-5">
+        <span class="hs-nav-scroller-arrow-prev" style="display: none">
+          <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+            <i class="tio-chevron-left"></i>
+          </a>
+        </span>
+
+        <span class="hs-nav-scroller-arrow-next" style="display: none">
+          <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+            <i class="tio-chevron-right"></i>
+          </a>
+        </span>
+
+        <ul class="nav nav-tabs align-items-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="javascript:;">{{
+              "Store Detail" | translate
+            }}</a>
+          </li>
+
+          <li class="nav-item ml-auto">
+            <a
+              class="btn btn-sm btn-white mr-2"
+              href="javascript:;"
+              *ngIf="isEditMode"
+              (click)="addLocation()"
+            >
+              <i class="tio-user-add mr-1"></i> {{ "New Location" | translate }}
+            </a>
+
+            <!-- End Unfold -->
+          </li>
+        </ul>
+      </div>
+      <!-- End Nav -->
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div id="accountSidebarNav"></div>
+
+          <!-- Card -->
+          <div
+            class="js-sticky-block card mb-3 mb-lg-5"
+            data-hs-sticky-block-options='{
+                   "parentSelector": "#accountSidebarNav",
+                   "breakpoint": "lg",
+                   "startPoint": "#accountSidebarNav",
+                   "endPoint": "#stickyBlockEndPoint",
+                   "stickyOffsetTop": 20
+                 }'
+          >
+            <!-- Header -->
+            <div class="card-header">
+              <h5 class="card-header-title">
+                {{ "Store QR Code" | translate }}
+              </h5>
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="card-body">
+              <ul class="list-unstyled list-unstyled-py-3 text-dark mb-3">
+                <li class="py-0">
+                  <div class="chartjs-custom mx-auto">
+                    <mat-card-title class="text-center">
+                      <div id="canvas"></div>
+                      <div class="container" *ngIf="isEditMode">
+                        <button
+                          type="button"
+                          mat-raised-button
+                          (click)="storeActivate()"
+                          [ngClass]="{
+                            'btn-primary': activateButtonText === 'ACTIVATE'
+                          }"
+                        >
+                          {{ activateButtonText }}
+                        </button>
+                      </div>
+                    </mat-card-title>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!-- End Body -->
+          </div>
+          <!-- End Card -->
+        </div>
+
+        <div class="col-lg-8">
+          <!-- Card -->
+          <div class="card mb-3 mb-lg-5">
+            <!-- Header -->
+            <div class="card-header">
+              <h5 class="card-header-title">
+                {{ "Store Details" | translate }}
+              </h5>
+
+              <!-- Unfold -->
+
+              <!-- End Unfold -->
+            </div>
+            <!-- End Header -->
+
+            <!-- Body -->
+            <div class="card-body card-body-height" style="height: 30rem">
+              <form
+                class="basic-form"
+                novalidate
+                [formGroup]="frmAccount"
+                (submit)="save()"
+              >
+                <div>
+                  <div class="row" *ngIf="isSuperAdmin">
+                    <div class="col-md-6">
+                      <mat-form-field appearance="outline">
+                        <mat-label>{{ "Company Name" | translate }}</mat-label>
+                        <mat-select
+                          formControlName="businessAdminId"
+                          [(ngModel)]="this.companyId"
+                        >
+                          <mat-option
+                            *ngFor="let item of companyData"
+                            [value]="item.id"
+                          >
+                            {{ item.name }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.businessAdminId"
+                          [message]="'Company Name'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Store Name" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="name"
+                            placeholder="Store Name"
+                            aria-label="Store Name"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.name"
+                          [message]="'Store Name'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Contact/Phone No." | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="contact"
+                            placeholder="Contact/Phone No."
+                            aria-label="Store Name"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.contact"
+                          [message]="'contact'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{
+                            "Waitlist
+                                                    Time(In Minutes)"
+                              | translate
+                          }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="number"
+                            class="form-control"
+                            formControlName="waitTime"
+                            placeholder="WaitTime"
+                            aria-label="WaitTime"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.waitTime"
+                          [message]="'waitlist Time'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{
+                            "Store
+                                                    Capacity Size" | translate
+                          }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="number"
+                            class="form-control"
+                            formControlName="partySize"
+                            placeholder="Max Party Size"
+                            aria-label="Max Party Size"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.partySize"
+                          [message]="'Max Party Size'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Address" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="address"
+                            placeholder="Address"
+                            aria-label="Address"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.address"
+                          [message]="'Address'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{
+                            "Zip/Postal
+                                                    Code" | translate
+                          }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="zipCode"
+                            placeholder="Zip/Postal Code"
+                            aria-label="Zip Code"
+                            required
+                            (ngModelChange)="getZipData($event)"
+                          />
+                        </div>
+                        <a
+                          href="javascript:;"
+                          (click)="reset(undefined)"
+                          style="float: right"
+                          >{{ "Reset" | translate }}</a
+                        >
+                        <mat-validation-message
+                          [control]="frmAccount.controls.zipCode"
+                          [message]="'Zip Code'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "City" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="city"
+                            placeholder="City"
+                            aria-label="City"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.city"
+                          [message]="'City'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "State/Province" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="state"
+                            placeholder="State/Province"
+                            aria-label="State"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.state"
+                          [message]="'State'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Country" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="country"
+                            placeholder="Country"
+                            aria-label="Country"
+                            disabled
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.country"
+                          [message]="'Country'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "TimeZone" | translate }}</label
+                        >
+                        <div class="input-group">
+                          <select
+                            class="custom-select"
+                            size="1"
+                            (change)="timeZoneChange($event)"
+                            formControlName="timeZone"
+                          >
+                            <option
+                              *ngFor="let name of offsetTmz"
+                              [value]="name"
+                            >
+                              {{ name }}
+                            </option>
+                          </select>
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.timeZone"
+                          [message]="'TimeZone'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Latitude" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="latitude"
+                            placeholder="Latitude"
+                            aria-label="Store Name"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.latitude"
+                          [message]="'latitude'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Longitude" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <input
+                            type="text"
+                            class="form-control"
+                            formControlName="longitude"
+                            placeholder="longitude"
+                            aria-label="Store Name"
+                            required
+                          />
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.longitude"
+                          [message]="'longitude'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="inputGroupMergeFullName"
+                          class="input-label"
+                          >{{ "Language" | translate }}</label
+                        >
+                        <div class="input-group input-group-merge">
+                          <select
+                            class="select2-selection custom-select"
+                            #langSelect
+                            (change)="changeLang(langSelect.value)"
+                            formControlName="language"
+                          >
+                            <option
+                              *ngFor="let lang of translate.getLangs()"
+                              [value]="lang"
+                              [selected]="lang === translate.currentLang"
+                            >
+                              {{ lang }}
+                            </option>
+                          </select>
+                        </div>
+                        <mat-validation-message
+                          [control]="frmAccount.controls.language"
+                          [message]="'Language'"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="col-md-12">
+                        <button
+                          type="button"
+                          (click)="openingInfo(0, 'add-edit')"
+                          mat-raised-button
+                          color="primary"
+                          style="float: right; margin: 10%"
+                        >
+                          {{ "Opening Hours" | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <p
+                        class="input-label-secondary"
+                        style="color: red"
+                        *ngIf="error"
+                      >
+                        {{ error }}
+                      </p>
+                      <button type="submit" mat-raised-button color="primary">
+                        {{ "SAVE" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- End Body -->
+
+            <!-- Footer -->
+            <div class="card-footer"></div>
+            <!-- End Footer -->
+          </div>
+
+          <!-- Sticky Block End Point -->
+          <div id="stickyBlockEndPoint"></div>
+        </div>
+      </div>
+      <!-- End Row -->
+    </div>
+  </div>
+
+  <div
+    *ngIf="allLocationData && allLocationData.length > 0"
+    class="card mb-3 mb-lg-5"
+  >
+    <div class="table-responsive datatable-custom">
+      <form
+        class="basic-form"
+        novalidate
+        [formGroup]="frmAccount"
+        (submit)="save()"
+      >
+        <table
+          id="datatable"
+          class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
+        >
+          <thead class="thead-light">
+            <tr>
+              <th>{{ "Company Name" | translate }}</th>
+              <th>{{ "NAME" | translate }}</th>
+              <th>{{ "Contact" | translate }}</th>
+              <th>{{ "Actions" | translate }}</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr
+              *ngFor="
+                let row of allLocationData
+                  | paginate
+                    : {
+                        id: 'allLocation_Data',
+                        itemsPerPage: 10,
+                        currentPage: page,
+                        totalItems: allLocationData.length
+                      }
+              "
+            >
+              <td>{{ row?.businessAdmin?.companyName }}</td>
+              <td>{{ row?.name }}</td>
+              <td>{{ row?.contact }}</td>
+              <td>
+                <a
+                  href="javascript:;"
+                  class="btn-action"
+                  title="Edit"
+                  (click)="edit(row.id)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </a>
+                <a
+                  href="javascript:;"
+                  class="btn-action"
+                  title="Opening Info"
+                  (click)="openingInfo(row.id, 'view')"
+                >
+                  <mat-icon>schedule</mat-icon>
+                </a>
+                <a
+                  href="javascript:;"
+                  class="btn-action"
+                  title="Remove"
+                  (click)="deletestore(row.id)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <div class="tab-pane fade p-4 active show">
+              <pagination-controls
+                class="paginator"
+                id="allLocation_Data"
+                (pageChange)="pageChanged($event)"
+                (pageBoundsCorrection)="pageChanged($event)"
+                directionLinks="true"
+                autoHide="true"
+                responsive="true"
+                previousLabel=""
+                nextLabel=""
+                screenReaderPaginationLabel="Pagination"
+                screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page"
+              >
+              </pagination-controls>
+            </div>
+          </tfoot>
+        </table>
+      </form>
+    </div>
+    <!-- End Row -->
+  </div>
+  <!-- End Row -->
+</div>

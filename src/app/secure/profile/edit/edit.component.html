@@ -1,0 +1,282 @@
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "User Profile" | translate }}</h1>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <!-- Navbar -->
+      <div class="navbar-vertical navbar-expand-lg mb-3 mb-lg-5">
+        <!-- Navbar Toggle -->
+        <button
+          type="button"
+          class="navbar-toggler btn btn-block btn-white mb-3"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="navbarVerticalNavMenu"
+          data-toggle="collapse"
+          data-target="#navbarVerticalNavMenu"
+        >
+          <span class="d-flex justify-content-between align-items-center">
+            <span class="h5 mb-0">Nav menu</span>
+
+            <span class="navbar-toggle-default">
+              <i class="tio-menu-hamburger"></i>
+            </span>
+
+            <span class="navbar-toggle-toggled">
+              <i class="tio-clear"></i>
+            </span>
+          </span>
+        </button>
+        <!-- End Navbar Toggle -->
+
+        <div id="navbarVerticalNavMenu" class="collapse navbar-collapse">
+          <!-- Navbar Nav -->
+          <ul
+            id="navbarSettings"
+            class="
+              js-sticky-block js-scrollspy
+              navbar-nav navbar-nav-lg
+              nav-tabs
+              card card-navbar-nav
+            "
+            data-hs-sticky-block-options='{
+                   "parentSelector": "#navbarVerticalNavMenu",
+                   "breakpoint": "lg",
+                   "startPoint": "#navbarVerticalNavMenu",
+                   "endPoint": "#stickyBlockEndPoint",
+                   "stickyOffsetTop": 20
+                 }'
+          >
+            <li class="nav-item">
+              <a class="nav-link active">
+                <i class="tio-user-outlined nav-icon"></i>
+                {{ "Basic information" | translate }}
+              </a>
+            </li>
+          </ul>
+          <!-- End Navbar Nav -->
+        </div>
+      </div>
+      <!-- End Navbar -->
+    </div>
+
+    <div class="col-lg-9">
+      <!-- Card -->
+      <div class="card mb-3 mb-lg-5">
+        <!-- Profile Cover -->
+        <div class="profile-cover">
+          <div class="profile-cover-img-wrapper">
+            <img
+              id="profileCoverImg"
+              class="profile-cover-img"
+              src="./assets/img/1920x400/img2.jpg"
+              alt="Image Description"
+            />
+
+            <!-- End Custom File Cover -->
+          </div>
+        </div>
+        <!-- End Profile Cover -->
+
+        <!-- Avatar -->
+        <label
+          class="
+            avatar avatar-xxl avatar-circle avatar-border-lg avatar-uploader
+            profile-cover-avatar
+          "
+          for="avatarUploader"
+        >
+          <img
+            id="avatarImg"
+            class="avatar-img"
+            src="{{ getProfilePic() }}"
+            alt="Image Description"
+            style="object-fit: contain"
+          />
+
+          <input
+            type="file"
+            class="js-file-attach avatar-uploader-input"
+            ng2FileSelect
+            [uploader]="this.fileUploader.uploader"
+            (change)="onSelectFile($event)"
+            id="avatarUploader"
+            data-hs-file-attach-options='{
+                      "textTarget": "#avatarImg",
+                      "mode": "image",
+                      "targetAttr": "src",
+                      "allowTypes": [".png", ".jpeg", ".jpg"]
+                   }'
+          />
+
+          <span class="avatar-uploader-trigger">
+            <i class="tio-edit avatar-uploader-icon shadow-soft"></i>
+          </span>
+        </label>
+        <!-- End Avatar -->
+      </div>
+      <!-- End Card -->
+      <!-- Card -->
+      <div class="card mb-3 mb-lg-5">
+        <div class="card-header">
+          <h2 class="card-title h4">{{ "Basic information" | translate }}</h2>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Form -->
+          <form novalidate [formGroup]="frmProfile" (submit)="save()">
+            <!-- Form Group -->
+            <div class="row form-group">
+              <label
+                for="firstNameLabel"
+                class="col-sm-3 col-form-label input-label"
+                >{{ "Full name" | translate
+                }}<i
+                  class="tio-help-outlined text-body ml-1"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Displayed on public forums, such as Front."
+                ></i
+              ></label>
+
+              <div class="col-sm-9">
+                <div class="input-group input-group-sm-down-break">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="firstName"
+                    id="firstNameLabel"
+                    placeholder="{{ 'Your first name' | translate }}"
+                    aria-label="Your first name"
+                  />
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="lastName"
+                    id="lastNameLabel"
+                    placeholder="{{ 'Your last name' | translate }}"
+                    aria-label="Your last name"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- End Form Group -->
+
+            <!-- Form Group -->
+            <div class="row form-group">
+              <label
+                for="emailLabel"
+                class="col-sm-3 col-form-label input-label"
+                >{{ "Email" | translate }}</label
+              >
+
+              <div class="col-sm-9">
+                <input
+                  type="email"
+                  class="form-control"
+                  formControlName="email"
+                  id="emailLabel"
+                  placeholder="Email"
+                  aria-label="Email"
+                  value="frmProfile.controls.email"
+                  disabled
+                />
+              </div>
+            </div>
+            <!-- End Form Group -->
+
+            <!-- Form Group -->
+            <div class="row form-group">
+              <label
+                for="phoneLabel"
+                class="col-sm-3 col-form-label input-label"
+                >{{ "Phone" | translate }}
+                <span class="input-label-secondary"
+                  >({{ "Optional" | translate }})</span
+                ></label
+              >
+
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="js-masked-input form-control"
+                  formControlName="phone"
+                  id="phoneLabel"
+                  placeholder="+x(xxx)xxx-xx-xx"
+                  aria-label="+x(xxx)xxx-xx-xx"
+                  value="+1 (609) 972-22-22"
+                  data-hs-mask-options='{
+                           "template": "+0(000)000-00-00"
+                         }'
+                />
+              </div>
+            </div>
+            <!-- End Form Group -->
+
+            <!-- Form Group -->
+            <div class="row form-group">
+              <label
+                for="organizationLabel"
+                class="col-sm-3 col-form-label input-label"
+                >{{ "Date Of Birth" | translate }}</label
+              >
+
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  bsDatepicker
+                  formControlName="dob"
+                  autocomplete="nope"
+                  class="js-flatpickr form-control flatpickr-custom"
+                  [bsConfig]="{
+                    showWeekNumbers: false,
+                    maxDate: maxDate,
+                    selectFromOtherMonth: true
+                  }"
+                />
+              </div>
+            </div>
+
+            <!-- End Form Group -->
+
+            <div class="d-flex justify-content-end row">
+              <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary">
+                  {{ "Save changes" | translate }}
+                </button>
+              </div>
+              <div class="col-sm-3">
+                <button
+                  type="btn btn-primary"
+                  mat-raised-button
+                  color="primary"
+                  *ngIf="this.isCurrentUser"
+                  (click)="changeUserPassword()"
+                >
+                  {{ "Change Password" | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+
+      <!-- End Card -->
+
+      <!-- Sticky Block End Point -->
+      <div id="stickyBlockEndPoint"></div>
+    </div>
+  </div>
+  <!-- End Row -->
+</div>

@@ -1,0 +1,44 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUkCisNim29ukTbamtTpgcMNGonJziWQA"></script>
+<div
+  class="modal fade show"
+  id="welcomeMessageModal"
+  tabindex="-1"
+  role="dialog"
+  aria-modal="true"
+  style="padding-right: 17px; display: block"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-close">
+        <button
+          type="button"
+          class="btn btn-icon btn-sm btn-ghost-secondary"
+          data-dismiss="modal"
+          (click)="close()"
+          aria-label="Close"
+        >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div class="modal-body p-sm-5">
+        <div class="text-center">
+          <h4 class="h1" *ngIf="!activityData.username">User's route</h4>
+          <h4 class="h1" *ngIf="activityData.username">
+            {{ activityData.username }}'s route
+          </h4>
+          <hr />
+          <div class="row"></div>
+          <div class="row">
+            <div class="col-md-12 text-center" style="padding-bottom: 2%">
+              <div id="map" style="height: 300px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

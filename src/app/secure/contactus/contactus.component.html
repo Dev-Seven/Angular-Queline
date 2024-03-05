@@ -1,0 +1,143 @@
+<div class="container">
+  <!-- Form -->
+  <div class="card">
+    <div class="card-header">
+      <h4 class="card-header-title">{{ "Contact Us" | translate }}</h4>
+    </div>
+    <div class="card-body">
+      <form
+        class="js-validate"
+        #contactusdetail="ngForm"
+        (ngSubmit)="
+          contactusdetails(contactusdetail.value); contactusdetail.reset()
+        "
+      >
+        <!-- Input -->
+        <div class="form-group row">
+          <label
+            for="nameLabel"
+            class="col-sm-3 col-form-label input-label text-right"
+            >{{ "Full Name:" | translate }}
+          </label>
+          <div class="col-sm-9 js-form-message">
+            <input
+              type="text"
+              class="form-control"
+              id="nameLabel"
+              name="name"
+              ngModel
+              #name
+              placeholder="Jack Wayley"
+              aria-label="Jack Wayley"
+              required
+              data-msg="Please enter your name."
+            />
+          </div>
+        </div>
+        <!-- End Input -->
+
+        <!-- Input -->
+        <div class="form-group row">
+          <label
+            for="emailLabel"
+            class="col-sm-3 col-form-label input-label text-right"
+            >{{ "Email Address:" | translate }}
+          </label>
+          <div class="col-sm-9 js-form-message">
+            <input
+              type="email"
+              class="form-control"
+              id="emailLabel"
+              name="email"
+              ngModel
+              #email
+              placeholder="email@gmail.com"
+              aria-label="email@gmail.com"
+              required
+              data-msg="Please enter a valid email address."
+            />
+          </div>
+        </div>
+        <!-- End Input -->
+
+        <div class="w-100"></div>
+
+        <!-- Input -->
+        <div class="form-group row">
+          <label
+            for="subjectLabel"
+            class="col-sm-3 col-form-label input-label text-right"
+            >{{ "Organization:" | translate }}
+          </label>
+          <div class="col-sm-9 js-form-message">
+            <input
+              type="text"
+              class="form-control"
+              id="subjectLabel"
+              name="organization"
+              ngModel
+              #organization
+              placeholder="Web design"
+              aria-label="Web design"
+              required
+              data-msg="Please enter a subject."
+            />
+          </div>
+        </div>
+        <!-- End Input -->
+
+        <!-- Input -->
+        <div class="form-group row">
+          <label
+            for="phoneLabel"
+            class="col-sm-3 col-form-label input-label text-right"
+            >{{ "Mobile Number:" | translate }}
+          </label>
+          <div class="col-sm-9 js-form-message">
+            <input
+              type="number"
+              class="form-control"
+              id="phoneLabel"
+              name="mobile"
+              ngModel
+              #mobile
+              placeholder="1-800-643-4500"
+              aria-label="1-800-643-4500"
+              required
+              data-msg="Please enter a valid phone number."
+            />
+          </div>
+        </div>
+        <!-- End Input -->
+
+        <div class="form-group row">
+          <label
+            for="textareaLabel"
+            class="col-sm-3 col-form-label input-label text-right"
+            >{{ "Comment" | translate }}</label
+          >
+          <div class="col-sm-9 js-form-message">
+            <textarea
+              class="form-control"
+              id="textareaLabel"
+              rows="4"
+              name="comment"
+              ngModel
+              #comment
+              placeholder="Hi there, I would like to ..."
+              aria-label="Hi there, I would like to ..."
+              required
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-group text-right">
+          <button type="submit" class="btn btn-primary text-center">
+            {{ "Submit" | translate }}
+          </button>
+        </div>
+      </form>
+      <!-- End Form -->
+    </div>
+  </div>
+</div>

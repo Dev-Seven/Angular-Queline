@@ -1,0 +1,31 @@
+ul.footer-link {
+  margin: 10px 0 0 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ul.footer-link li {
+  margin: 0 9px;
+  padding: 0;
+  display: inline-block;
+}
+
+ul.footer-link li a {
+  color: #677788;
+}
+
+@media (max-width: 1199px) {
+  ul.footer-link li {
+    margin: 0 6px;
+  }
+}
+
+@media (max-width: 991px) {
+}
+
+@media (max-width: 767px) {
+  ul.footer-link {
+    text-align: center;
+    margin-top: 15px;
+  }
+}

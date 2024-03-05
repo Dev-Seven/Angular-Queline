@@ -1,0 +1,602 @@
+<div class="container py-5 py-sm-7">
+  <div class="row justify-content-center" *ngIf="!endUserSignUp">
+    <div class="col-sm-12 col-md-9 col-lg-7 col-xl-5">
+      <!-- Card -->
+      <div
+        class="card card-lg mb-5"
+        [ngStyle]="{ background: theme }"
+        [ngStyle]="{ color: theme !== 'unset' ? white : '' }"
+      >
+        <div class="card-body">
+          <a
+            class="d-flex justify-content-center mb-5"
+            *ngIf="companyLogo == null"
+          >
+            <img
+              class="z-index-2"
+              src="./assets/svg/logos/logo.png"
+              alt="Image Description"
+              style="width: 8rem; height: 2rem"
+            />
+          </a>
+          <a
+            class="d-flex justify-content-center mb-5 clogo"
+            *ngIf="companyLogo !== null"
+          >
+            <img
+              class="z-index-2"
+              src="{{ companyLogo }}"
+              alt="Image Description"
+            />
+          </a>
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ storeName }}</span
+          >
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ address }}, {{ city }}, {{ zipCode }}
+          </span>
+          <span
+            class="d-flex justify-content-center mb-5"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ state }}, {{ country }}</span
+          >
+          <!-- Form -->
+          <form
+            class="all-type"
+            novalidate
+            [formGroup]="frmBooking"
+            (submit)="save()"
+          >
+            <div class="text-center" style="padding-bottom: 20px">
+              <div id="map" style="height: 200px; width: 100%"></div>
+            </div>
+
+            <div class="js-form-message form-group">
+              <mat-form-field class="textbox" appearance="outline">
+                <mat-label>{{ "Email" | translate }}</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="email"
+                  autocomplete="nope"
+                />
+              </mat-form-field>
+              <mat-validation-message
+                [control]="frmBooking.controls.email"
+                [message]="'Email'"
+                [formSubmitted]="isFormSubmitted"
+              ></mat-validation-message>
+              <!-- Select Date for booking -->
+              <mat-form-field appearance="outline" class="textbox">
+                <mat-label>Date</mat-label>
+                <input
+                  type="text"
+                  placeholder="Select Date"
+                  matInput
+                  bsDatepicker
+                  [minDate]="minDate"
+                  onkeydown="return false"
+                  formControlName="date"
+                  autocomplete="nope"
+                  (ngModelChange)="changeSlotData($event)"
+                  [bsConfig]="{
+                    showWeekNumbers: false,
+                    selectFromOtherMonth: true
+                  }"
+                />
+              </mat-form-field>
+              <!-- Select Slot from Available Time -->
+              <mat-form-field appearance="outline" class="textbox">
+                <mat-label>Select Available Time</mat-label>
+                <mat-select
+                  autocomplete="nope"
+                  class="mat-dropdown"
+                  formControlName="slot"
+                  [(ngModel)]="selectedSlot"
+                  (ngModelChange)="availSlot($event)"
+                >
+                  <!-- *ngFor="let item of input.options.split(',')" -->
+                  <div *ngFor="let slot of availableSlots">
+                    <mat-option [value]="slot">
+                      {{ slot.slotDuration.replace(",", "-") }}
+                    </mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+
+              <div *ngIf="customeBookingInput">
+                <div *ngFor="let input of customBookingLocationInputs">
+                  <div *ngIf="input.type === 'Text Field'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      />
+                      <mat-validation-message
+                        [control]="frmBooking.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmBooking.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Number'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <input
+                        type="number"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'URL'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <input
+                        type="url"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Date'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Checkbox'">
+                    <!-- <mat-label>{{ input.label }}</mat-label> -->
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [selected]="input.preselect"
+                      >{{ input.label }}</mat-checkbox
+                    >
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && !input.multiple">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label
+                        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                        >{{ input.label }}</mat-label
+                      >
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        [(ngModel)]="input.defaultInput"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                          [ngStyle]="{
+                            color: theme !== 'unset' ? 'white' : ''
+                          }"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <a
+              class="btn btn-lg btn-block btn-white mb-4"
+              id="googleBtn"
+              (click)="signGoogle()"
+            >
+              <span class="d-flex justify-content-center align-items-center">
+                <img
+                  class="avatar avatar-xss mr-2"
+                  src="./assets/svg/brands/google.svg"
+                  alt="Image Description"
+                />
+                {{ "Sign in with Google" | translate }}
+              </span>
+            </a>
+            <a class="btn btn-lg btn-block btn-white mb-4" (click)="signFB()">
+              <span class="d-flex justify-content-center align-items-center">
+                <img
+                  class="avatar avatar-xss mr-2"
+                  src="./assets/svg/logos/fb.png"
+                  alt="Image Description"
+                />
+                {{ "Sign in with Facebook" | translate }}
+              </span>
+            </a> -->
+            <div *ngIf="isLoaded" class="check-back">
+              <mat-checkbox
+                color="primary"
+                class="dynamic-check"
+                [(ngModel)]="privacyPolicyCheck"
+                [ngModelOptions]="{ standalone: true }"
+                [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+              >
+                I accept for the
+                <a
+                  href="{{ locationData.businessAdmin.privacyPolicy }}"
+                  target="_blank"
+                  [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                  >Privacy Policy</a
+                >
+              </mat-checkbox>
+            </div>
+
+            <p [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }">
+              {{ "By signing up you accept our Terms of use" | translate }}
+            </p>
+            <button
+              type="submit"
+              class="btn btn-lg btn-block btn-primary"
+              mat-raised-button
+              [disabled]="!privacyPolicyCheck || !allowBooking"
+            >
+              {{ "Book Spot" | translate }}
+            </button>
+          </form>
+          <!-- End Form -->
+        </div>
+        <div
+          class="text-center"
+          *ngIf="branding"
+          [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+        >
+          <small class="text-cap mb-4">
+            <img
+              class="navbar-brand-logo"
+              src="./assets/svg/logos/logo/quelines.png"
+              alt=""
+            />
+            {{ "Create Waitlist with Quelines at" | translate }}
+            <a
+              href="/"
+              target="_blank"
+              [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+              >{{ "link" | translate }}</a
+            >
+          </small>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+</div>
+
+<div class="container py-5 py-sm-7" *ngIf="endUserSignUp">
+  <div class="row justify-content-center">
+    <div class="col-sm-12 col-md-9 col-lg-7 col-xl-5">
+      <!-- Card -->
+      <div
+        class="card card-lg mb-5"
+        [ngStyle]="{ background: theme }"
+        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+      >
+        <div class="card-body">
+          <div class="text-center" *ngIf="userId">
+            <h3>{{ "Add Missing Details" | translate }}</h3>
+          </div>
+          <div class="text-center" *ngIf="!userId">
+            <h3 [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }">
+              {{ "SIGN UP" | translate }}
+            </h3>
+          </div>
+          <!-- Form -->
+          <form
+            class="basic-form"
+            novalidate
+            [formGroup]="frmSignup"
+            (submit)="signup()"
+          >
+            <div class="js-form-message form-group">
+              <mat-form-field appearance="outline" class="textbox">
+                <mat-label>{{ "Name" | translate }}</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="name"
+                  autocomplete="nope"
+                />
+                <mat-validation-message
+                  [control]="frmSignup.controls.name"
+                  [message]="'Name'"
+                  [formSubmitted]="isFormSubmitted"
+                >
+                </mat-validation-message>
+              </mat-form-field>
+
+              <mat-form-field class="textbox" appearance="outline">
+                <mat-label>{{ "Email" | translate }}</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="email"
+                  autocomplete="nope"
+                />
+                <mat-validation-message
+                  [control]="frmSignup.controls.email"
+                  [message]="'Email Address'"
+                  [formSubmitted]="isFormSubmitted"
+                >
+                </mat-validation-message>
+              </mat-form-field>
+
+              <div *ngIf="customeUserInput">
+                <div class="" *ngFor="let input of customUserLocationInputs">
+                  <div *ngIf="input.type === 'Text Field'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      />
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Text Area'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <textarea
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      ></textarea>
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Number'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="number"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      />
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'URL'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="url"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                      />
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Date'">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <input
+                        type="text"
+                        [placeholder]="input.placeholder"
+                        matInput
+                        bsDatepicker
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        [value]="input.defaultInput"
+                        [bsConfig]="{
+                          showWeekNumbers: false,
+                          selectFromOtherMonth: true
+                        }"
+                      />
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Checkbox'">
+                    <mat-checkbox
+                      color="primary"
+                      matInput
+                      [formControlName]="input.name"
+                      [ngModelOptions]="{ standalone: true }"
+                      [selected]="input.preselect"
+                      >{{ input.label }}</mat-checkbox
+                    >
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && input.multiple">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        multiple
+                        [(ngModel)]="input.defaultValue"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="input.type === 'Selection' && !input.multiple">
+                    <mat-form-field appearance="outline" class="textbox">
+                      <mat-label>{{ input.label }}</mat-label>
+                      <mat-select
+                        [formControlName]="input.name"
+                        autocomplete="nope"
+                        class="mat-dropdown"
+                        [(ngModel)]="input.defaultInput"
+                      >
+                        <mat-option
+                          *ngFor="let item of input.options.split(',')"
+                          [value]="item"
+                        >
+                          {{ item }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-validation-message
+                        [control]="frmSignup.get(input.name)"
+                        [message]="input.label"
+                        [formSubmitted]="isFormSubmitted"
+                      ></mat-validation-message>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="userId">
+                <button type="submit" class="btn btn-lg btn-block btn-primary">
+                  {{ "Add Details" | translate }}
+                </button>
+              </div>
+              <div *ngIf="!userId">
+                <button type="submit" class="btn btn-lg btn-block btn-primary">
+                  {{ "SIGN UP" | translate }}
+                </button>
+              </div>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+        <div
+          class="text-center"
+          *ngIf="branding"
+          [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+        >
+          <small class="text-cap mb-4">
+            <img
+              class="navbar-brand-logo"
+              src="./assets/svg/logos/logo/quelines.png"
+              alt=""
+            />
+            {{ "Create Waitlist with Quelines at" | translate }}
+            <a
+              href="/"
+              target="_blank"
+              [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+              >{{ "link" | translate }}</a
+            >
+          </small>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+</div>

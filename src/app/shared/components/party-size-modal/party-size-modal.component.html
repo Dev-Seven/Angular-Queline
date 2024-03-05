@@ -1,0 +1,37 @@
+<div>
+    <div>
+        <div class="msc-overlay">
+        </div>
+        <div class="msc-content msc-alert--animate">
+            <h4 class="msc-title">{{'Change Party Size' | translate}}</h4>
+            <br /><br />
+            <div class="msc-body">
+                <form class="basic-form" novalidate [formGroup]="frmPartySize">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{'Party Size' | translate}}</mat-label>
+                                <input type="number" matInput formControlName="partySize" autocomplete="nope">
+                                <mat-validation-message [control]="frmPartySize.controls.partySize" [message]="'Party Size'" [formSubmitted]="isFormSubmitted">
+                                </mat-validation-message>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                        </div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <button type="button" class="btn btn-info btn-transparent" (click)="updatePartySize();">
+                                <i class="fa fa-check"></i>
+                                {{'Update Party Size' | translate}}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

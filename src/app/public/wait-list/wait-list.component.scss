@@ -1,0 +1,84 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.formBorder {
+  padding: 10px !important;
+}
+
+.waitlist-box {
+  border: 2px solid black;
+  color: black !important;
+}
+
+.button {
+  width: 110px;
+  color: orange;
+  background-color: seashell;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -38px;
+  margin-left: -38px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 0.0625rem solid rgba(0, 119, 255, 0.432);
+  border-radius: 0.75rem;
+}
+
+.clogo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.clogo img {
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.uname {
+  width: 49%;
+  display: inline-block;
+  text-align: left;
+}
+
+.btime {
+  width: 49%;
+  display: inline-block;
+  text-align: right;
+}
+.chatBox-waitlist {
+  width: 200px;
+  height: 40px;
+  background-color: tomato;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  border-radius: 20px;
+  padding-left: 20px;
+  right: 0px;
+  margin-right: 50px;
+}
+.row1 {
+  display: flex;
+  flex-wrap: wrap;
+}

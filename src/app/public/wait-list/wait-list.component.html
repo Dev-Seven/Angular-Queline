@@ -1,0 +1,200 @@
+<div class="container py-5 py-sm-7">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7 col-xxl-5">
+      <div
+        class="card card-lg mb-5"
+        [ngStyle]="{ background: theme }"
+        [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+      >
+        <div class="card-body">
+          <!-- Form -->
+
+          <a
+            class="d-flex justify-content-center mb-5"
+            *ngIf="companyLogo == null"
+          >
+            <img
+              class="z-index-2"
+              src="./assets/svg/logos/logo.png"
+              alt="Image Description"
+              style="width: 8rem; height: 2rem"
+            />
+          </a>
+          <a
+            class="d-flex justify-content-center mb-5 clogo"
+            *ngIf="companyLogo !== null"
+          >
+            <img
+              class="z-index-2"
+              src="{{ companyLogo }}"
+              srcset="{{companyLogo}}"
+              alt=""
+            />
+          </a>
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ storeName }}</span
+          >
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ address }}, {{ city }}, {{ zipCode }}
+          </span>
+          <span
+            class="d-flex justify-content-center mb-5"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ state }}, {{ country }}</span
+          >
+
+          <div class="text-center" style="padding-bottom: 2%">
+            <div id="map" style="height: 200px; width: 100%"></div>
+
+            <div class="container py-8 py-sm-7" *ngIf="!isList">
+              <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-11">
+                  <!-- Card -->
+                  <div class="card card-lg mb-10">
+                    <div class="card-body">
+                      <div class="js-form-message form-group">
+                        <p>
+                          {{ "Your Lineup Reservation Number:" | translate }}
+                          <b>{{ spotId }}</b>
+                        </p>
+                        <p>
+                          {{ "Your in the waitlist for" | translate }}
+                          <b>{{ storeName }}</b>
+                        </p>
+                        <h3 class="text-center">
+                          {{ this.minutes | number: "2.0" }}:{{
+                            this.seconds | number: "2.0"
+                          }}
+                          {{ "Minutes" | translate }}
+                        </h3>
+                        <p class="font-15">
+                          <u>{{ "Estimated wait time" | translate }}</u>
+                        </p>
+                      </div>
+                      <div class="row1">
+                        <div
+                          class="col-md-6 col-lg-6"
+                          style="padding-bottom: 5px"
+                        >
+                          <button
+                            type="submit"
+                            class="btn btn-lg btn-block btn-primary"
+                            (click)="newSpot()"
+                          >
+                            {{ "New Spot" | translate }}
+                          </button>
+                        </div>
+                        <div
+                          class="col-md-6 col-lg-6"
+                          style="padding-bottom: 5px"
+                        >
+                          <button
+                            type="submit"
+                            class="btn btn-lg btn-block btn-primary"
+                            (click)="cancelSpot()"
+                          >
+                            {{ "Cancel" | translate }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- End Form -->
+            </div>
+            <div class="container py-8 py-sm-7" *ngIf="isList">
+              <div class="row mb-5">
+                <div class="col-md-12">
+                  <h2 [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }">
+                    WaitList
+                  </h2>
+                </div>
+                <div
+                  class="col-md-12"
+                  *ngIf="waitlist.length > 1"
+                  [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                >
+                  {{ waitlist.length }} Parties waiting | {{ avgWaitTime }} min
+                  Estimated wait
+                </div>
+                <div
+                  class="col-md-12"
+                  *ngIf="waitlist.length <= 1"
+                  [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+                >
+                  {{ waitlist.length }} Party waiting | {{ avgWaitTime }} min
+                  Estimated wait
+                </div>
+              </div>
+              <div
+                class="card card-lg mb-5"
+                *ngIf="isList && waitlist.length > 0"
+              >
+                <div class="card-body" style="padding: 1rem !important">
+                  <div class="col-md-12" *ngFor="let user of waitlist">
+                    <h3 class="uname">
+                      {{ user.username }} ({{ user.partySize }})
+                    </h3>
+                    <div class="btime">{{ user.bookingTime }} Minutes</div>
+                    <hr style="margin-top: 10px" />
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                mat-raised-button
+                class="btn btn-lg btn-block btn-primary"
+                (click)="goToReserveSpot()"
+              >
+                Join WaitList
+              </button>
+            </div>
+          </div>
+          <!-- <div *ngIf="chatting">
+            <div
+              style="position: absolute; bottom: 8%; right: 0"
+              *ngIf="!isList"
+            >
+              <p
+                routerLink="/chatdashboard"
+                class="chatBox-waitlist"
+                *ngIf="chatting"
+              >
+                Chat with people in line
+              </p>
+            </div>
+          </div> -->
+        </div>
+
+        <div
+          class="text-center"
+          *ngIf="branding"
+          [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+        >
+          <small class="text-cap mb-4">
+            <img
+              class="navbar-brand-logo"
+              src="./assets/svg/logos/logo/quelines.png"
+              alt=""
+            />
+            Create Waitlist with Quelines at
+            <a
+              href="/"
+              target="_blank"
+              [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+              >link</a
+            >
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

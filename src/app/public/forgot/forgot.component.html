@@ -1,0 +1,105 @@
+<div
+  class="position-fixed top-0 right-0 left-0 bg-img-hero"
+  style="
+    height: 32rem;
+    background-image: url(./assets/svg/components/abstract-bg-4.svg);
+  "
+>
+  <!-- SVG Bottom Shape -->
+  <figure class="position-absolute right-0 bottom-0 left-0">
+    <svg
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      viewBox="0 0 1921 273"
+    >
+      <polygon fill="#fff" points="0,273 1921,273 1921,0 " />
+    </svg>
+  </figure>
+  <!-- End SVG Bottom Shape -->
+</div>
+
+<!-- Content -->
+<div class="container py-5 py-sm-7">
+  <a class="d-flex justify-content-center mb-5">
+    <img
+      class="z-index-2"
+      src="./assets/svg/logos/logo/quelines.png"
+      srcset="./assets/svg/logos/logo/logo@1x.png 1x w250, ./assets/svg/logos/logo/logo@2x.png 2x w554, ./assets/svg/logos/logo/logo@3x.png 3x w2000, ./assets/svg/logos/logo/logo@4x.png 4x w4501"
+      alt=""
+    />
+  </a>
+
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+      <!-- Card -->
+      <div class="card card-lg mb-5">
+        <div class="card-body">
+          <!-- Form -->
+          <form
+            class="js-validate"
+            novalidate
+            [formGroup]="frmForgot"
+            (submit)="forgot()"
+          >
+            <div class="text-center">
+              <div class="mb-5">
+                <h1 class="display-4">{{ "Forgot password" | translate }}</h1>
+                <p>
+                  {{
+                    "Enter the email address you used when you joined and we'll send you instructions to reset your password."
+                      | translate
+                  }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Form Group -->
+            <div class="js-form-message form-group">
+              <label
+                class="input-label"
+                for="resetPasswordSrEmail"
+                tabindex="0"
+                >{{ "Email" | translate }}</label
+              >
+
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                matInput
+                formControlName="email"
+                autocomplete="nope"
+                id="resetPasswordSrEmail"
+                tabindex="1"
+                placeholder="{{ 'Enter your email address' | translate }}"
+                aria-label="Enter your email address"
+                required
+                data-msg="Please enter a valid email address."
+              />
+            </div>
+            <!-- End Form Group -->
+            <p class="text-danger m-0" *ngIf="error">{{ error.error }}</p>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">
+              {{ "Submit" | translate }}
+            </button>
+
+            <div class="text-center mt-2">
+              <a
+                class="btn btn-link"
+                href="javascript:;"
+                title="Log In"
+                (click)="signin()"
+              >
+                <i class="tio-chevron-left"></i>
+                {{ "Back to Sign in" | translate }}
+              </a>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+</div>

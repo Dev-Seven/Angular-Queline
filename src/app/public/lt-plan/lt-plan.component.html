@@ -1,0 +1,446 @@
+<main id="content" role="main">
+  <!-- Content -->
+  <div class="content-space-md-2 px-lg-5 px-xl-10">
+    <!-- Card -->
+    <div class="card">
+      <!-- Header -->
+      <div class="card-header"></div>
+      <!-- End Header -->
+      <!-- Tab Content -->
+      <div class="tab-content" id="navTabContent3">
+        <div
+          class="tab-pane fade p-4 show active"
+          id="nav-result3"
+          role="tabpanel"
+          aria-labelledby="nav-resultTab3"
+        >
+          <!-- Pricing -->
+          <div class="container content-space-1">
+            <!-- Heading -->
+            <div class="w-lg-50 text-center mx-lg-auto mb-5 mb-md-9">
+              <h2>Quelines Lifetime Deal</h2>
+              <p>
+                Our online application gives your business control over customer
+                wait times.
+              </p>
+            </div>
+            <!-- End Heading -->
+            <div class="row gx-0 align-items-lg-center mb-7 mb-md-10">
+              <div class="col-lg-7">
+                <!-- Card -->
+                <div class="card card-lg text-center zi-2" data-aos="fade-up">
+                  <div class="card-header pb-0">
+                    <div class="mb-1">
+                      <span class="display-4 text-primary">95.4% OFF</span>
+                      <span
+                        style="color: #ffff"
+                        class="badge bg-dark rounded-pill align-top ms-1"
+                      >
+                        $69 Instead of $1,499.00</span
+                      >
+                    </div>
+                    <p>60-day money back guarantee</p>
+                  </div>
+                  <div class="card-body">
+                    <div
+                      class="row justify-content-sm-center align-items-sm-center mb-5"
+                    >
+                      <div class="col-sm-5">
+                        <div class="mb-2">
+                          <img
+                            class="avatar avatr-xl avatar-4x3"
+                            src="./assets/svg/illustrations/account-creation.svg"
+                            alt="SVG"
+                          />
+                        </div>
+                        <h4>Account creation</h4>
+                      </div>
+                      <!-- End Col -->
+                      <div class="col-sm-1 my-3 my-sm-0">
+                        <span class="fs-3 text-primary">+</span>
+                      </div>
+                      <!-- End Col -->
+                      <div class="col-sm-5">
+                        <div class="mb-2">
+                          <img
+                            class="avatar avatr-xl avatar-4x3"
+                            src="./assets/svg/illustrations/pro-account.svg"
+                            alt="SVG"
+                          />
+                        </div>
+                        <h4>Professional account</h4>
+                      </div>
+                      <!-- End Col -->
+                    </div>
+                    <!-- End Row -->
+                    <div class="mb-7"></div>
+                    <!-- Form -->
+                    <form
+                      class="js-validate form-lt-plan"
+                      novalidate
+                      [formGroup]="frmSignup"
+                      (submit)="signup()"
+                    >
+                      <label class="input-label" for="fullNameSrEmail">{{
+                        "Full name" | translate
+                      }}</label>
+
+                      <!-- Form Group -->
+                      <div class="form-row">
+                        <div class="col-sm-6">
+                          <div class="js-form-message form-group">
+                            <input
+                              type="text"
+                              class="form-control form-control-lg"
+                              placeholder="{{ 'First Name' | translate }}"
+                              matInput
+                              formControlName="firstName"
+                              autocomplete="nope"
+                              tabindex="1"
+                            />
+                            <mat-validation-message
+                              [control]="frmSignup.controls.firstName"
+                              [message]="'First Name' | translate"
+                              [formSubmitted]="isFormSubmitted"
+                            ></mat-validation-message>
+                          </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                          <div class="js-form-message form-group">
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="lastName"
+                              placeholder="{{ 'Last Name' | translate }}"
+                              autocomplete="nope"
+                              class="form-control form-control-lg"
+                              tabindex="2"
+                            />
+                            <mat-validation-message
+                              [control]="frmSignup.controls.lastName"
+                              [message]="'Last Name' | translate"
+                              [formSubmitted]="isFormSubmitted"
+                            ></mat-validation-message>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- End Form Group -->
+                      <!-- Form Group -->
+                      <div class="js-form-message form-group">
+                        <label class="input-label" for="signupCrName">{{
+                          "Company Name" | translate
+                        }}</label>
+                        <input
+                          type="text"
+                          class="form-control form-control-lg"
+                          matInput
+                          formControlName="companyName"
+                          autocomplete="nope"
+                          placeholder="{{ 'Company Name' | translate }}"
+                          tabindex="3"
+                        />
+
+                        <mat-validation-message
+                          [control]="frmSignup.controls.companyName"
+                          [message]="'Company Name' | translate"
+                          [formSubmitted]="isFormSubmitted"
+                        >
+                        </mat-validation-message>
+                      </div>
+                      <div class="js-form-message form-group">
+                        <label class="input-label" for="signupSrEmail">{{
+                          "Coupon Code" | translate
+                        }}</label>
+
+                        <input
+                          type="text"
+                          class="form-control form-control-lg"
+                          matInput
+                          formControlName="couponCode"
+                          autocomplete="nope"
+                          placeholder="{{
+                            'A431337A-AAC0-4D98-82B5-7E37F0D367FC' | translate
+                          }}"
+                          tabindex="4"
+                        />
+                        <mat-validation-message
+                          [control]="frmSignup.controls.couponCode"
+                          [message]="'Coupon Code' | translate"
+                          [formSubmitted]="isFormSubmitted"
+                        ></mat-validation-message>
+                      </div>
+                      <div class="js-form-message form-group">
+                        <label class="input-label" for="signupSrEmail">{{
+                          "Email" | translate
+                        }}</label>
+
+                        <input
+                          type="email"
+                          class="form-control form-control-lg"
+                          matInput
+                          formControlName="email"
+                          autocomplete="nope"
+                          placeholder="{{
+                            'Enter your Email Address' | translate
+                          }}"
+                          tabindex="5"
+                          email="true"
+                        />
+                        <mat-validation-message
+                          [control]="frmSignup.controls.email"
+                          [message]="'Email' | translate"
+                          [formSubmitted]="isFormSubmitted"
+                        ></mat-validation-message>
+                      </div>
+
+                      <!-- End Form Group -->
+                      <!-- Form Group -->
+                      <div class="js-form-message form-group">
+                        <label class="input-label" for="signupSrPassword">{{
+                          "Password" | translate
+                        }}</label>
+
+                        <div class="input-group input-group input-group-merge">
+                          <input
+                            [type]="fieldTextType ? 'text' : 'password'"
+                            class="form-control"
+                            matInput
+                            formControlName="password"
+                            placeholder="{{
+                              '8+ characters required' | translate
+                            }}"
+                            aria-label="8+ characters required"
+                            tabindex="6"
+                          />
+                          <div class="input-group-append">
+                            <span class="input-group-text">
+                              <i
+                                class="fa"
+                                [ngClass]="{
+                                  'tio-hidden-outlined': !fieldTextType,
+                                  'tio-visible-outlined': fieldTextType
+                                }"
+                                (click)="toggleFieldTextType()"
+                              ></i>
+                            </span>
+                          </div>
+                        </div>
+                        <mat-validation-message
+                          [control]="frmSignup.controls.password"
+                          [message]="
+                            'Please enter your valid password' | translate
+                          "
+                          [formSubmitted]="isFormSubmitted"
+                        ></mat-validation-message>
+                      </div>
+                      <!-- End Form Group -->
+
+                      <button
+                        type="submit"
+                        class="btn btn-lg btn-block btn-primary mb-2"
+                        tabindex="7"
+                      >
+                        {{ "Create an account" | translate }}
+                      </button>
+                    </form>
+                    <!-- End Form -->
+                  </div>
+                </div>
+                <!-- End Card -->
+              </div>
+              <!-- End Col -->
+              <div class="col-lg-5">
+                <!-- Card -->
+                <div
+                  class="card card-lg bg-dark ms-md-n2"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
+                  <div class="card-body">
+                    <!-- List Checked -->
+                    <ul
+                      class="list-pointer list-pointer-soft-bg-light list-pointer-lg"
+                    >
+                      <li class="list-pointer-item">
+                        <h4 class="text-white mb-1">2,000 Guests</h4>
+                      </li>
+                      <li class="list-pointer-item">
+                        <h4 class="text-white mb-1">
+                          400 one-time SMS Credits
+                        </h4>
+                      </li>
+                      <li class="list-pointer-item">
+                        <h4 class="text-white mb-1">Unlimited Emails</h4>
+                      </li>
+                      <li class="list-pointer-item">
+                        <h4 class="text-white mb-1">
+                          Future updates of Advance Plan are included
+                        </h4>
+                      </li>
+                      <li class="list-pointer-item">
+                        <h4 class="text-white mb-1">Twilio Integration</h4>
+                      </li>
+                    </ul>
+                    <!-- End List Checked -->
+                  </div>
+                </div>
+                <!-- End Card -->
+              </div>
+              <!-- End Col -->
+            </div>
+            <!-- End Row -->
+            <!-- CTA -->
+            <!-- <div class="w-lg-75 mx-lg-auto">
+              <div class="d-block d-sm-flex align-items-sm-center">
+                <div class="flex-shrink-0 mb-3 mb-sm-0">
+                  <img
+                    class="avatar avatar-xl avatar-4x3"
+                    src="./assets/svg/illustrations/growing-business.svg"
+                    alt="SVG"
+                  />
+                </div>
+                <div class="flex-grow-1 ms-4">
+                  <h4>Grow your business with Front Pay</h4>
+                  <p class="mb-0">
+                    From startups to Fortune 500s, explore how millions of
+                    businesses use Front Pay to start and scale their companies.
+                    <a class="link" href="#"
+                      >See our customers <i class="bi-chevron-right small"></i
+                    ></a>
+                  </p>
+                </div>
+              </div>
+            </div> -->
+            <!-- End CTA -->
+          </div>
+          <!-- End Pricing -->
+        </div>
+        <div
+          class="tab-pane fade"
+          id="nav-html3"
+          role="tabpanel"
+          aria-labelledby="nav-htmlTab3"
+        >
+          <pre>
+         <code class="language-markup" data-lang="html">
+           &lt;!-- Pricing --&gt;
+           &lt;div class="container content-space-2 content-space-lg-3"&gt;
+             &lt;!-- Heading --&gt;
+             &lt;div class="w-lg-50 text-center mx-lg-auto mb-5 mb-md-9"&gt;
+               &lt;h2&gt;Always know what you'll pay.&lt;/h2&gt;
+               &lt;p&gt;Once you're setup, instantly withdraw payments or deposit into your bank account within 2-3 business days.&lt;/p&gt;
+             &lt;/div&gt;
+             &lt;!-- End Heading --&gt;
+
+             &lt;div class="row gx-0 align-items-lg-center mb-7 mb-md-10"&gt;
+               &lt;div class="col-lg-7"&gt;
+                 &lt;!-- Card --&gt;
+                 &lt;div class="card card-lg text-center zi-2" data-aos="fade-up"&gt;
+                   &lt;div class="card-header pb-0"&gt;
+                     &lt;div class="mb-1"&gt;
+                       &lt;span class="display-4 text-primary"&gt;1.5%&lt;/span&gt;
+                       &lt;span class="badge bg-dark rounded-pill align-top ms-1"&gt;+0.5 USD&lt;/span&gt;
+                     &lt;/div&gt;
+                     &lt;p&gt;per successful transaction&lt;/p&gt;
+                   &lt;/div&gt;
+
+                   &lt;div class="card-body"&gt;
+                     &lt;div class="row justify-content-sm-center align-items-sm-center mb-5"&gt;
+                       &lt;div class="col-sm-5"&gt;
+                         &lt;div class="mb-2"&gt;
+                           &lt;img class="avatar avatr-xl avatar-4x3" src="./assets/svg/illustrations/account-creation.svg" alt="SVG"&gt;
+                         &lt;/div&gt;
+
+                         &lt;h4&gt;Account creation&lt;/h4&gt;
+                       &lt;/div&gt;
+                       &lt;!-- End Col --&gt;
+
+                       &lt;div class="col-sm-1 my-3 my-sm-0"&gt;
+                         &lt;span class="fs-3 text-primary"&gt;+&lt;/span&gt;
+                       &lt;/div&gt;
+                       &lt;!-- End Col --&gt;
+
+                       &lt;div class="col-sm-5"&gt;
+                         &lt;div class="mb-2"&gt;
+                           &lt;img class="avatar avatr-xl avatar-4x3" src="./assets/svg/illustrations/pro-account.svg" alt="SVG"&gt;
+                         &lt;/div&gt;
+
+                         &lt;h4&gt;Professional account&lt;/h4&gt;
+                       &lt;/div&gt;
+                       &lt;!-- End Col --&gt;
+                     &lt;/div&gt;
+                     &lt;!-- End Row --&gt;
+
+                     &lt;div class="mb-7"&gt;
+                       &lt;p class="card-text small"&gt;Included for 3 months,&lt;br&gt;then $2.5/monthly included VAT&lt;/p&gt;
+                     &lt;/div&gt;
+
+                     &lt;button type="button" class="btn btn-primary btn-transition px-6"&gt;Get started&lt;/button&gt;
+                   &lt;/div&gt;
+                 &lt;/div&gt;
+                 &lt;!-- End Card --&gt;
+               &lt;/div&gt;
+               &lt;!-- End Col --&gt;
+
+               &lt;div class="col-lg-5"&gt;
+                 &lt;!-- Card --&gt;
+                 &lt;div class="card card-lg bg-dark ms-md-n2" data-aos="fade-up" data-aos-delay="200"&gt;
+                   &lt;div class="card-body"&gt;
+                     &lt;!-- List Checked --&gt;
+                     &lt;ul class="list-pointer list-pointer-soft-bg-light list-pointer-lg"&gt;
+                       &lt;li class="list-pointer-item"&gt;
+                         &lt;h4 class="text-white mb-1"&gt;135+ currencies&lt;/h4&gt;
+                         &lt;p class="text-white-70 mb-0"&gt;Process charges and display prices in your customer's.&lt;/p&gt;
+                       &lt;/li&gt;
+
+                       &lt;li class="list-pointer-item"&gt;
+                         &lt;h4 class="text-white mb-1"&gt;Global support&lt;/h4&gt;
+                         &lt;p class="text-white-70 mb-0"&gt;Businesses in 25+ countries can accept payments.&lt;/p&gt;
+                       &lt;/li&gt;
+
+                       &lt;li class="list-pointer-item"&gt;
+                         &lt;h4 class="text-white mb-1"&gt;Secure payment info collection&lt;/h4&gt;
+                         &lt;p class="text-white-70 mb-0"&gt;Use our libraries to collect payment information without sensitive data.&lt;/p&gt;
+                       &lt;/li&gt;
+
+                       &lt;li class="list-pointer-item"&gt;
+                         &lt;h4 class="text-white mb-1"&gt;Over 10 million customers&lt;/h4&gt;
+                         &lt;p class="text-white-70 mb-0"&gt;We’re on average 8x cheaper than leading world high street banks.&lt;/p&gt;
+                       &lt;/li&gt;
+                     &lt;/ul&gt;
+                     &lt;!-- End List Checked --&gt;
+                   &lt;/div&gt;
+                 &lt;/div&gt;
+                 &lt;!-- End Card --&gt;
+               &lt;/div&gt;
+               &lt;!-- End Col --&gt;
+             &lt;/div&gt;
+             &lt;!-- End Row --&gt;
+
+             &lt;!-- CTA --&gt;
+             &lt;div class="w-lg-75 mx-lg-auto"&gt;
+               &lt;div class="d-block d-sm-flex align-items-sm-center"&gt;
+                 &lt;div class="flex-shrink-0 mb-3 mb-sm-0"&gt;
+                   &lt;img class="avatar avatar-xl avatar-4x3" src="./assets/svg/illustrations/growing-business.svg" alt="SVG"&gt;
+                 &lt;/div&gt;
+
+                 &lt;div class="flex-grow-1 ms-4"&gt;
+                   &lt;h4&gt;Grow your business with Front Pay&lt;/h4&gt;
+                   &lt;p class="mb-0"&gt;From startups to Fortune 500s, explore how millions of businesses use Front Pay to start and scale their companies. &lt;a class="link" href="#"&gt;See our customers &lt;i class="bi-chevron-right small"&gt;&lt;/i&gt;&lt;/a&gt;&lt;/p&gt;
+                 &lt;/div&gt;
+               &lt;/div&gt;
+             &lt;/div&gt;
+             &lt;!-- End CTA --&gt;
+           &lt;/div&gt;
+           &lt;!-- End Pricing --&gt;
+         </code>
+       </pre>
+        </div>
+      </div>
+      <!-- End Tab Content -->
+    </div>
+    <!-- End Card -->
+  </div>
+  <!-- End Content -->
+</main>

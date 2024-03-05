@@ -1,0 +1,189 @@
+<div
+  class="position-fixed top-0 right-0 left-0 bg-img-hero"
+  style="
+    height: 32rem;
+    background-image: url(./assets/svg/components/abstract-bg-4.svg);
+  "
+>
+  <!-- SVG Bottom Shape -->
+  <figure class="position-absolute right-0 bottom-0 left-0">
+    <svg
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      viewBox="0 0 1921 273"
+    >
+      <polygon fill="#fff" points="0,273 1921,273 1921,0 " />
+    </svg>
+  </figure>
+  <!-- End SVG Bottom Shape -->
+</div>
+
+<!-- Content -->
+<div class="container py-5 py-sm-7">
+  <a
+    class="d-flex justify-content-center mb-5"
+    href="https://quelines.com"
+    target="_blank"
+  >
+    <img
+      class="z-index-2"
+      src="./assets/svg/logos/logo/quelines.png"
+      srcset="./assets/svg/logos/logo/logo@1x.png 1x w250, ./assets/svg/logos/logo/logo@2x.png 2x w250, ./assets/svg/logos/logo/logo@3x.png 3x w500, ./assets/svg/logos/logo/logo@4x.png 4x w600"
+      alt=""
+    />
+  </a>
+  <div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+      <!-- Card -->
+      <div class="card card-lg mb-5">
+        <div class="card-body">
+          <!-- Form -->
+          <form
+            class="js-validate"
+            novalidate
+            [formGroup]="frmLogin"
+            (submit)="login()"
+          >
+            <div class="text-center">
+              <div class="mb-5">
+                <h1 class="display-4">{{ "Sign in" | translate }}</h1>
+                <p>
+                  {{ "Don't have an account yet ?" | translate }}{{ " " }}
+                  <a
+                    href="javascript:;"
+                    title="Sign up here"
+                    (click)="signup()"
+                    >{{ "Sign up here" | translate }}</a
+                  >
+                </p>
+              </div>
+            </div>
+
+            <!-- Form Group -->
+            <div class="js-form-message form-group">
+              <label class="input-label" for="signinSrEmail">{{
+                "Your Email" | translate
+              }}</label>
+
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                matInput
+                formControlName="email"
+                id="signinSrEmail"
+                tabindex="1"
+                placeholder="{{ 'email@address.com' | translate }}"
+                aria-label="email@address.com"
+                data-msg="Please enter a valid email address."
+                required
+                tabindex="1"
+              />
+              <mat-validation-message
+                [control]="frmLogin.controls.email"
+                [message]="'Email id' | translate"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </div>
+            <!-- End Form Group -->
+
+            <!-- Form Group -->
+            <div class="js-form-message form-group">
+              <label class="input-label" for="signupSrPassword" tabindex="0">
+                <span class="d-flex justify-content-between align-items-center">
+                  {{ "Password" | translate }}
+                  <a class="input-label-secondary" routerLink="/forgot">{{
+                    "Forgot Password ?" | translate
+                  }}</a>
+                </span>
+              </label>
+
+              <div class="input-group input-group input-group-merge">
+                <!-- Change input type to be able to accept dynamic data -->
+                <input
+                  [type]="fieldTextType ? 'text' : 'password'"
+                  class="form-control"
+                  matInput
+                  formControlName="password"
+                  placeholder="{{ '8+ characters required' | translate }}"
+                  aria-label="8+ characters required"
+                  tabindex="2"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i
+                      class="fa"
+                      [ngClass]="{
+                        'tio-hidden-outlined': !fieldTextType,
+                        'tio-visible-outlined': fieldTextType
+                      }"
+                      (click)="toggleFieldTextType()"
+                    ></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <!-- End Form Group -->
+
+            <div class="CTA">
+              <p class="input-label-secondary" style="color: red" *ngIf="error">
+                {{ error }}
+              </p>
+              <button
+                type="submit"
+                class="btn btn-lg btn-block btn-primary"
+                tabindex="3"
+              >
+                {{ "Sign in" | translate }}
+              </button>
+            </div>
+          </form>
+          <!-- End Form -->
+        </div>
+      </div>
+      <!-- End Card -->
+      <div class="row">
+        <div class="col-sm-6 col-md-6">
+          <select
+            class="select2-selection custom-select"
+            #langSelect
+            (change)="changeLang(langSelect.value)"
+          >
+            <option
+              *ngFor="let lang of translate.getLangs()"
+              [value]="lang"
+              [selected]="lang === translate.currentLang"
+            >
+              {{ lang }}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-6 col-md-6" style="display: inline-block">
+          <ul class="footer-link">
+            <li>
+              <a href="https://quelines.com/help-desk/" target="_blank">{{
+                "Help" | translate
+              }}</a>
+            </li>
+            <li>
+              <a href="https://quelines.com/privacy-policy/" target="_blank">{{
+                "Privacy" | translate
+              }}</a>
+            </li>
+            <li>
+              <a href="https://quelines.com/terms/" target="_blank">{{
+                "Terms" | translate
+              }}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+
+      <!-- End Footer -->
+    </div>
+  </div>
+</div>

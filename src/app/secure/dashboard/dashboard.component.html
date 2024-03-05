@@ -1,0 +1,901 @@
+<style>
+  .green-dot {
+    bottom: 64.8px;
+    right: 77.8px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.4375rem;
+  }
+</style>
+<div class="content container-fluid">
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Dashboard" | translate }}</h1>
+      </div>
+      <div class="col-sm-auto">
+        <button
+          type="button"
+          *ngIf="storeBooking"
+          class="btn btn-primary mr-2"
+          (click)="bookSlot()"
+        >
+          <i class="tio-home mr-1"></i> {{ "BOOK SLOT" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="reserveSpot()">
+          <i class="tio-home mr-1"></i> {{ "RESERVE SPOT" | translate }}
+        </button>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+  <div
+    class="row gx-2 gx-lg-3"
+    *ngIf="this.isSuperAdmin || this.isBusinessOwner || this.isManager"
+  >
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5"></div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5"></div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <div
+        *ngIf="this.isSuperAdmin && this.companyData?.length > 0"
+        style="margin-right: 2%"
+      >
+        <label for="Business" class="d-block font-size-sm">{{
+          "Business" | translate
+        }}</label>
+        <div class="select2-custom">
+          <select
+            class="form-control custom-select"
+            size="1"
+            [(ngModel)]="this.companyId"
+            id="Business"
+            (ngModelChange)="getLocations()"
+            data-hs-select2-options='{
+              "minimumResultsForSearch": "Infinity"
+            }'
+          >
+            <option *ngFor="let item of companyData" [value]="item.id">
+              <span class="d-flex align-items-center"
+                ><span>{{ item.name }}</span></span
+              >
+            </option>
+          </select>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <div *ngIf="this.locationData?.length > 0">
+        <label for="Branch" class="d-block font-size-sm">{{
+          "Branch" | translate
+        }}</label>
+        <div class="select2-custom">
+          <select
+            class="form-control custom-select"
+            size="1"
+            [(ngModel)]="this.locationId"
+            (ngModelChange)="selectLocation()"
+            data-hs-select2-options='{
+                "minimumResultsForSearch": "Infinity"
+              }'
+          >
+            <option *ngFor="let item of locationData" [value]="item.id">
+              <span class="d-flex align-items-center"
+                ><span>{{ item.name }}</span></span
+              >
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+    <h5 class="card-header-title">{{ "WaitList Data" | translate }}</h5>
+  </div>
+  <div class="row gx-2 gx-lg-3">
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "TODAYS VISITS" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">{{
+                this.dashboardCounts?.totalVisits
+              }}</span>
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <div class="chartjs-custom" style="height: 3rem"></div>
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "WAITLISTED GUESTS" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">{{
+                this.dashboardCounts?.waitListedGuests
+              }}</span>
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <div class="chartjs-custom" style="height: 3rem"></div>
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "AVG WAITING TIME" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">
+                {{ this.dashboardCounts?.averageWaitingTime }}</span
+              >
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <div class="chartjs-custom" style="height: 3rem"></div>
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "OVERALL VISITS" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">{{
+                this.dashboardCounts?.totalMonthlyVisits
+              }}</span>
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+    <h5 class="card-header-title">
+      {{ "Scheduled Booking Data" | translate }}
+    </h5>
+  </div>
+  <div class="row gx-2 gx-lg-3">
+    <!-- Booking Data -->
+
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "Total Bookings" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">
+                {{ this.bbBookingCount?.totalCounts }}</span
+              >
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <div class="chartjs-custom" style="height: 3rem"></div>
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+    <div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+      <!-- Card -->
+      <a class="card card-hover-shadow h-100">
+        <div class="card-body">
+          <h6 class="card-subtitle">{{ "Scheduled Bookings" | translate }}</h6>
+          <div class="row align-items-center gx-2 mb-1">
+            <div class="col-6">
+              <span class="card-title h2">
+                {{ this.bbBookingCount?.scheduledCounts }}</span
+              >
+            </div>
+            <div class="col-6">
+              <!-- Chart -->
+              <div class="chartjs-custom" style="height: 3rem"></div>
+              <!-- End Chart -->
+            </div>
+          </div>
+          <!-- End Row -->
+        </div>
+      </a>
+      <!-- End Card -->
+    </div>
+  </div>
+  <!-- End Stats -->
+  <div class="row gx-2 gx-lg-3">
+    <div class="col-lg-7 mb-3 mb-lg-5">
+      <!-- Card -->
+      <div class="card h-100">
+        <!-- Header -->
+        <div class="card-header">
+          <h5 class="card-header-title">
+            {{ "Wait time distribution" | translate }}
+          </h5>
+        </div>
+        <!-- End Header -->
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Bar Chart -->
+          <!-- WaitList Data -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation">
+              <a
+                class="nav-link active"
+                href="#yearly"
+                aria-controls="yearly"
+                role="tab"
+                data-toggle="tab"
+                ><i class="fa fa-home"></i> 
+                <span>{{ "Yearly" | translate }}</span></a
+              >
+            </li>
+            <li role="presentation">
+              <a
+                class="nav-link"
+                href="#monthly"
+                aria-controls="monthly"
+                role="tab"
+                data-toggle="tab"
+                ><i class="fa fa-user"></i> 
+                <span>{{ "Monthly" | translate }}</span></a
+              >
+            </li>
+            <li role="presentation">
+              <a
+                class="nav-link"
+                href="#weekly"
+                aria-controls="weekly"
+                role="tab"
+                data-toggle="tab"
+                ><i class="fa fa-envelope-o"></i> 
+                <span>{{ "Weekly" | translate }}</span></a
+              >
+            </li>
+            <li role="presentation">
+              <a
+                class="nav-link"
+                href="#today"
+                aria-controls="today"
+                role="tab"
+                data-toggle="tab"
+                ><i class="fa fa-envelope-o"></i> 
+                <span>{{ "Today" | translate }}</span></a
+              >
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="yearly">
+              <div class="chartjs-custom">
+                <canvas
+                  baseChart
+                  [datasets]="barChartDataYearly"
+                  [labels]="barChartLabelsYearly"
+                  [options]="barChartOptionsYearly"
+                  [plugins]="barChartPluginsYearly"
+                  [legend]="barChartLegendYearly"
+                  [chartType]="barChartTypeYearly"
+                >
+                </canvas>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="monthly">
+              <div class="chartjs-custom">
+                <canvas
+                  baseChart
+                  [datasets]="barChartDataMonthly"
+                  [labels]="barChartLabelsMonthly"
+                  [options]="barChartOptionsMonthly"
+                  [plugins]="barChartPluginsMonthly"
+                  [legend]="barChartLegendMonthly"
+                  [chartType]="barChartTypeMonthly"
+                >
+                </canvas>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="weekly">
+              <div class="chartjs-custom">
+                <canvas
+                  baseChart
+                  [datasets]="barChartData"
+                  [labels]="barChartLabels"
+                  [options]="barChartOptions"
+                  [plugins]="barChartPlugins"
+                  [legend]="barChartLegend"
+                  [chartType]="barChartType"
+                >
+                </canvas>
+              </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="today">
+              <div class="chartjs-custom">
+                <canvas
+                  baseChart
+                  [datasets]="barChartDataDay"
+                  [labels]="barChartLabelsDay"
+                  [options]="barChartOptionsDay"
+                  [plugins]="barChartPluginsDay"
+                  [legend]="barChartLegendDay"
+                  [chartType]="barChartTypeDay"
+                >
+                </canvas>
+              </div>
+            </div>
+          </div>
+          <!-- End Bar Chart -->
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+    </div>
+    <div class="col-lg-5 mb-3 mb-lg-5">
+      <!-- Card -->
+      <div class="card h-100">
+        <!-- Header -->
+        <!-- End Header -->
+        <!-- Body -->
+        <div class="card-body">
+          <!-- List Group Item -->
+          <div
+            class="media list-group-item py-3"
+            style="border: none !important"
+          >
+            <div class="media-body">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h5 class="mb-0 text-center">
+                    {{ "Store QR Code" | translate }}
+                  </h5>
+                </div>
+              </div>
+              <div class="col-auto text-center">
+                <a
+                  href="https://www.facebook.com/sharer/sharer.php?u={{
+                    url
+                  }}/reservespot/{{ storeUniqueId }}"
+                  target="_blank"
+                  class="social-icon"
+                  ><img src="assets/images/facebook.png" alt="Facebook"
+                /></a>
+
+                <a
+                  href="https://api.whatsapp.com/send?text={{
+                    url
+                  }}/reservespot/{{ storeUniqueId }}"
+                  target="_blank"
+                  data-action="share/whatsapp/share"
+                  class="social-icon"
+                  ><img src="assets/images/whatsapp.png" alt="WhatsApp"
+                /></a>
+
+                <a
+                  class="social-icon"
+                  (click)="copyMessage()"
+                  target="_blank"
+                  style="cursor: pointer"
+                  ><img src="assets/images/copy.png" alt="click to copy"
+                /></a>
+
+                <a
+                  class="social-icon"
+                  (click)="print()"
+                  style="cursor: pointer"
+                >
+                  <img src="assets/images/Print.png" alt="click to print" />
+                </a>
+              </div>
+              <!-- </div> -->
+              <!-- End Row -->
+            </div>
+          </div>
+          <hr />
+          <!-- End List Group Item -->
+          <div class="chartjs-custom mx-auto">
+            <mat-card-title class="text-center">
+              <div id="print-section">
+                <div id="canvas"></div>
+              </div>
+
+              <div
+                class="container"
+                *ngIf="
+                  this.isSuperAdmin || this.isBusinessOwner || this.isManager
+                "
+              >
+                <button
+                  type="button"
+                  mat-raised-button
+                  (click)="storeActivate()"
+                  [ngClass]="{
+                    'btn-success': activateButtonText === 'ACTIVATE',
+                    'btn-danger': activateButtonText === 'DEACTIVATE'
+                  }"
+                >
+                  {{ activateButtonText | translate }}
+                </button>
+                <div
+                  [ngClass]="{
+                    text: activateText === '* Please Activate the Store',
+                    'text-center':
+                      activateText === '* Please Deactivate the Store'
+                  }"
+                >
+                  <span style="font-size: 12px; font-weight: 600">
+                    {{ activateText | translate }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-title>
+          </div>
+        </div>
+        <!-- End Body -->
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+  <!-- End Row -->
+  <!-- Card -->
+  <div class="card mb-3 mb-lg-5">
+    <div *ngIf="spotData.length > 0" class="table-responsive datatable-custom">
+      <h5 class="card-header-title self-center m-2">
+        {{ "WaitList" | translate }}
+      </h5>
+      <table
+        id="datatable"
+        class="
+          table
+          table-borderless
+          table-thead-bordered
+          table-nowrap
+          table-align-middle
+          card-table
+        "
+      >
+        <thead class="thead-light">
+          <tr>
+            <th>{{ "SPOTID" | translate }}</th>
+            <th>{{ "NAME" | translate }}</th>
+            <th>{{ "DATE" | translate }}</th>
+            <th>{{ "TIME" | translate }}</th>
+            <th>{{ "PARTY SIZE" | translate }}</th>
+            <th>{{ "STATUS" | translate }}</th>
+            <th>{{ "ACTIONS" | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let row of spotData
+                | paginate
+                  : {
+                      id: 'spot_data',
+                      itemsPerPage: 10,
+                      currentPage: page,
+                      totalItems: spotData.length
+                    }
+            "
+          >
+            <td style="padding-left: 1.3125rem">{{ row.spotId }}</td>
+            <td>{{ row.user?.name ? row.user?.name : row.user?.email }}</td>
+            <td>{{ row.bookingTime | date: "MM/dd/yyyy" }}</td>
+            <td>{{ row.bookingTime | date: "HH:mm a" }}</td>
+            <td>
+              <ng-container
+                *ngIf="row.status === 'Waiting' || row.status === 'Serving'"
+              >
+                <a
+                  class="btn-action"
+                  href="javascript:;"
+                  style="
+                    color: rgb(21, 33, 194) !important;
+                    font-weight: bold;
+                    text-decoration: underline;
+                  "
+                  (click)="changePartySize(row)"
+                >
+                  {{ row.partySize }}
+                </a>
+              </ng-container>
+              <ng-container
+                *ngIf="row.status !== 'Waiting' && row.status !== 'Serving'"
+              >
+                <span>
+                  {{ row.partySize }}
+                </span>
+              </ng-container>
+            </td>
+            <td>{{ row.status }}</td>
+            <td>
+              <a
+                class="btn-action"
+                *ngIf="row.status === 'Waiting'"
+                title="Check In"
+                href="javascript:;"
+                (click)="checkIn(row.id, row.partySize)"
+              >
+                <mat-icon>check_circle</mat-icon>
+              </a>
+              <a
+                class="btn-action"
+                *ngIf="row.status === 'Serving'"
+                title="Check Out"
+                href="javascript:;"
+                (click)="checkOut(row.id)"
+              >
+                <mat-icon>next_plan</mat-icon>
+              </a>
+              <a
+                class="btn-action"
+                *ngIf="row.status === 'Waiting'"
+                title="Skip"
+                href="javascript:;"
+                (click)="skip(row.id)"
+              >
+                <mat-icon>exit_to_app</mat-icon>
+              </a>
+
+              <a
+                class="btn-action"
+                *ngIf="row.status === 'Waiting'"
+                href="javascript:;"
+                title="Cancel"
+                (click)="cancel(row.id)"
+              >
+                <mat-icon>disabled_by_default</mat-icon>
+              </a>
+              <a
+                class="btn-action"
+                *ngIf="row.status === 'Resolved' && row.feedback"
+                href="javascript:;"
+                title="Rating"
+                (click)="feedback(row)"
+              >
+                <mat-icon>rate_review_outline</mat-icon>
+              </a>
+              <a
+                class="btn-action"
+                title="Edit"
+                href="javascript:;"
+                (click)="fillSignUp(row.user.id)"
+                data-toggle="modal"
+                data-target="#exampleModalCenter"
+              >
+                <mat-icon>create</mat-icon>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <div class="tab-pane fade p-4 active show text-right">
+            <pagination-controls
+              class="paginator"
+              id="spot_data"
+              (pageChange)="pageChanged($event)"
+              (pageBoundsCorrection)="pageChanged($event)"
+              directionLinks="true"
+              autoHide="true"
+              responsive="true"
+              previousLabel=""
+              nextLabel=""
+              screenReaderPaginationLabel="Pagination"
+              screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"
+            >
+            </pagination-controls>
+          </div>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- End Button trigger modal -->
+
+  <!-- Modal -->
+  <div
+    id="exampleModalCenter"
+    class="modal fade"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form
+          *ngIf="locationinputData && locationinputData.length > 0"
+          class="basic-form"
+          novalidate
+          [formGroup]="frmUser"
+          (submit)="updateUser()"
+        >
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">
+              User details
+            </h5>
+            <button
+              id="closeButton"
+              type="button"
+              class="btn btn-xs btn-icon btn-ghost-secondary"
+              (click)="close()"
+              aria-label="Close"
+            >
+              <i class="tio-clear tio-lg"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div *ngFor="let input of locationinputData">
+              <div *ngIf="input.type === 'Text Field'">
+                <div class="form-group">
+                  <label for="inputTextField" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <div
+                    id="inputTextField"
+                    class="input-group input-group-merge"
+                  >
+                    <input
+                      type="text"
+                      class="form-control"
+                      [placeholder]="input.placeholder"
+                      matInput
+                      [formControlName]="input.name"
+                      (change)="
+                        frmUser.get(input.name).setValue($event.target.value)
+                      "
+                      autocomplete="nope"
+                      [value]="input.defaultInput"
+                    />
+                  </div>
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'Text Area'">
+                <div class="form-group">
+                  <label for="inputTextArea" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <textarea
+                    id="inputTextArea"
+                    class="form-control"
+                    [placeholder]="input.placeholder"
+                    matInput
+                    [formControlName]="input.name"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    autocomplete="nope"
+                    [value]="frmUser.get(input.name)"
+                  ></textarea>
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'Number'">
+                <div class="form-group">
+                  <label for="inputNumber" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <input
+                    id="inputNumber"
+                    class="form-control"
+                    type="number"
+                    [placeholder]="input.placeholder"
+                    matInput
+                    [formControlName]="input.name"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    autocomplete="nope"
+                    [value]="input.defaultInput"
+                  />
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'URL'">
+                <div class="form-group">
+                  <label for="inputURL" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <input
+                    id="inputURL"
+                    class="form-control"
+                    type="url"
+                    [placeholder]="input.placeholder"
+                    matInput
+                    [formControlName]="input.name"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    autocomplete="nope"
+                    [value]="input.defaultInput"
+                  />
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'Date'">
+                <div class="form-group">
+                  <label for="inputDate" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <input
+                    id="inputDate"
+                    class="form-control"
+                    type="text"
+                    [placeholder]="input.placeholder"
+                    matInput
+                    bsDatepicker
+                    [formControlName]="input.name"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    autocomplete="nope"
+                    [value]="input.defaultInput | date: 'yyyy-MM-dd'"
+                    [bsConfig]="{
+                      showWeekNumbers: false,
+                      selectFromOtherMonth: true
+                    }"
+                  />
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'Checkbox'">
+                <!-- <label>{{ input.label }}</label> -->
+                <div class="form-group custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    id="customCheck11"
+                    class="custom-control-input"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    [formControlName]="input.name"
+                    selected="input.preselect"
+                  />
+                  <label class="custom-control-label" for="customCheck11">{{
+                    input.label
+                  }}</label>
+                </div>
+                <mat-validation-message
+                  [control]="input.name"
+                  [message]="input.label"
+                  [formSubmitted]="isFormSubmitted"
+                ></mat-validation-message>
+              </div>
+              <div *ngIf="input.type === 'Selection' && input.multiple">
+                <div class="form-group">
+                  <label class="input-label" for="exampleFormControlSelect1">{{
+                    input.label
+                  }}</label>
+                  <select
+                    id="exampleFormControlSelect1"
+                    class="js-select2-custom custom-select"
+                    size="1"
+                    style="opacity: 1"
+                    [formControlName]="input.name"
+                    data-hs-select2-options='{
+                      "minimumResultsForSearch": "Infinity"
+                    }'
+                    [(ngModel)]="input.defaultValue"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    multiple
+                  >
+                    <option
+                      *ngFor="let item of input.options.split(',')"
+                      [value]="item"
+                    >
+                      {{ item }}
+                    </option>
+                  </select>
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+              <div *ngIf="input.type === 'Selection' && !input.multiple">
+                <div class="form-group">
+                  <label for="inputSelection" class="input-label">{{
+                    input.label
+                  }}</label>
+                  <select
+                    id="inputSelection"
+                    class="js-select2-custom custom-select"
+                    size="1"
+                    style="opacity: 1"
+                    data-hs-select2-options='{
+                      "minimumResultsForSearch": "Infinity"
+                    }'
+                    [formControlName]="input.name"
+                    (change)="
+                      frmUser.get(input.name).setValue($event.target.value)
+                    "
+                    [(ngModel)]="input.defaultInput"
+                  >
+                    <option
+                      *ngFor="let item of input.options.split(',')"
+                      [value]="item"
+                    >
+                      {{ item }}
+                    </option>
+                  </select>
+                  <mat-validation-message
+                    [control]="input.name"
+                    [message]="input.label"
+                    [formSubmitted]="isFormSubmitted"
+                  ></mat-validation-message>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white" (click)="close()">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End Card -->
+</div>
+<iframe id="iframe" class="hidden"></iframe>

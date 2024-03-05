@@ -1,0 +1,380 @@
+<div class="modal-close row">
+  <div class="col-md-1" *ngIf="isEditMode">
+    <button
+      type="button"
+      class="btn btn-icon btn-sm btn-ghost-secondary"
+      data-dismiss="modal"
+      (click)="delete()"
+      aria-label="Delete"
+    >
+      <i class="tio-delete tio-lg"></i>
+    </button>
+  </div>
+  <div class="col-md-1">
+    <button
+      type="button"
+      class="btn btn-icon btn-sm btn-ghost-secondary"
+      data-dismiss="modal"
+      (click)="close()"
+      aria-label="Close"
+    >
+      <i class="tio-clear tio-lg"></i>
+    </button>
+  </div>
+</div>
+<div
+  class="modal fade show"
+  id="welcomeMessageModal"
+  tabindex="-1"
+  role="dialog"
+  *ngIf="isLoaded"
+  aria-modal="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+<div class="content container-fluid">
+  <!-- Step Form -->
+
+  <form
+    class="js-step-form py-md-5"
+    novalidate
+    [formGroup]="frmProfile"
+    (submit)="save()"
+  >
+    <div class="row justify-content-lg-center">
+      <div class="col-lg-12">
+        <!-- Step -->
+        <ul
+          id="addUserStepFormProgress"
+          class="
+            js-step-progress
+            step step-sm step-icon-sm step step-inline step-item-between
+            mb-3 mb-md-5
+          "
+        >
+          <li class="step-item">
+            <a
+              class="step-content-wrapper"
+              href="javascript:;"
+              data-hs-step-form-next-options='{
+                            "targetSelector": "#addUserStepProfile"
+                          }'
+            >
+              <div class="step-content">
+                <h4 class="step-title" *ngIf="isEditMode">
+                  {{ user.firstName }} {{ user.lastName }}
+                </h4>
+                <h4 class="step-title" *ngIf="!isEditMode">
+                  {{ "Add User" | translate }}
+                </h4>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <!-- End Step -->
+        <!-- Content Step Form -->
+        <div id="addUserStepFormContent">
+          <!-- Card -->
+          <div id="addUserStepProfile" class="card card-lg active">
+            <!-- Body -->
+            <div class="card-body">
+              <div class="row form-group">
+                <label
+                  for="firstNameLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Full name" | translate }}
+                  <i
+                    class="tio-help-outlined text-body ml-1"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Displayed on public forums, such as Front."
+                  ></i
+                ></label>
+                <div class="col-sm-9">
+                  <div class="row">
+                    <div class="input-group col">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="firstName"
+                        id="firstNameLabel"
+                        placeholder="First Name"
+                        aria-label="First Name"
+                      />
+
+                      <mat-validation-message
+                        [control]="frmProfile.controls.firstName"
+                        [message]="'First Name'"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </div>
+                    <div class="input-group col">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="lastName"
+                        id="lastNameLabel"
+                        placeholder="Last Name"
+                        aria-label="Last Name"
+                      />
+
+                      <mat-validation-message
+                        [control]="frmProfile.controls.lastName"
+                        [message]="'Last Name'"
+                        [formSubmitted]="isFormSubmitted"
+                      >
+                      </mat-validation-message>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+              <div class="row form-group">
+                <label
+                  for="emailLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Email" | translate }}</label
+                >
+
+                <div class="col-sm-9">
+                  <input
+                    type="email"
+                    class="form-control"
+                    formControlName="email"
+                    id="emailLabel"
+                    placeholder="teste@example.com"
+                    aria-label="test@example.com"
+                  />
+                  <mat-validation-message
+                    [control]="frmProfile.controls.email"
+                    [message]="'Email'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+              <div
+                class="js-add-field row form-group"
+                data-hs-add-field-options='{
+                                  "template": "#addPhoneFieldTemplate",
+                                  "container": "#addPhoneFieldContainer",
+                                  "defaultCreated": 0
+                                }'
+              >
+                <label
+                  for="phoneLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >Phone
+                </label>
+
+                <div class="col-sm-9">
+                  <div
+                    class="
+                      input-group input-group-sm-down-break
+                      align-items-center
+                    "
+                  >
+                    <input
+                      type="text"
+                      class="js-masked-input form-control"
+                      formControlName="phone"
+                      id="phoneLabel"
+                      placeholder="+x(xxx)xxx-xx-xx"
+                      aria-label="+x(xxx)xxx-xx-xx"
+                      data-hs-mask-options='{
+                                        "template": "+0(000)000-00-00"
+                                      }'
+                    />
+                  </div>
+                  <mat-validation-message
+                    [control]="frmProfile.controls.phone"
+                    [message]="'Phone'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+
+              <!-- Form Group -->
+              <div class="row form-group" *ngIf="!isStaff">
+                <label
+                  for="organizationLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{
+                    "Company
+                                    Name"
+                      | translate
+                  }}</label
+                >
+                <div class="col-sm-9">
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="companyName"
+                    id="organizationLabel"
+                    placeholder="Company Name"
+                    aria-label="Company Name"
+                  />
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+              <div class="row form-group" *ngIf="!isEditMode">
+                <label
+                  for="departmentLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Password" | translate }}</label
+                >
+                <div class="col-sm-9">
+                  <div class="input-group input-group input-group-merge">
+                    <input
+                      [type]="fieldTextType ? 'text' : 'password'"
+                      class="form-control"
+                      formControlName="password"
+                      id="departmentLabel"
+                      placeholder="Password"
+                      aria-label="Password"
+                    />
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <i
+                          class="fa"
+                          [ngClass]="{
+                            'tio-hidden-outlined': !fieldTextType,
+                            'tio-visible-outlined': fieldTextType
+                          }"
+                          (click)="toggleFieldTextType()"
+                        ></i>
+                      </span>
+                    </div>
+                  </div>
+                  <mat-validation-message
+                    [control]="frmProfile.controls.password"
+                    [message]="'Password'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- End Form Group -->
+
+              <!-- Form Group -->
+              <div class="row form-group" *ngIf="isStaff">
+                <label
+                  for="departmentLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Location" | translate }}</label
+                >
+
+                <div class="col-sm-9">
+                  <mat-select
+                    formControlName="locationAdminIds"
+                    class="form-control"
+                    multiple
+                    [(ngModel)]="selectedLocations"
+                  >
+                    <mat-option
+                      *ngFor="let item of locationData"
+                      [value]="item.id"
+                    >
+                      {{ item.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-validation-message
+                    [control]="frmProfile.controls.locationAdminIds"
+                    [message]="'Location'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <div class="row form-group" *ngIf="isStaff">
+                <label
+                  for="departmentLabel"
+                  class="col-sm-3 col-form-label input-label"
+                  >{{ "Role" | translate }}</label
+                >
+
+                <div class="col-sm-9">
+                  <mat-select class="form-control" formControlName="role">
+                    <mat-option
+                      *ngFor="let item of roleData"
+                      [value]="item.name"
+                    >
+                      {{ item.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-validation-message
+                    [control]="frmProfile.controls.role"
+                    [message]="'Role'"
+                    [formSubmitted]="isFormSubmitted"
+                  >
+                  </mat-validation-message>
+                </div>
+              </div>
+              <!-- End Form Group -->
+            </div>
+            <!-- End Body -->
+
+            <!-- Footer -->
+            <div
+              class="card-footer d-flex justify-content-end align-items-center"
+            >
+              <button type="submit" class="btn btn-primary">
+                {{ "Save" | translate }}
+              </button>
+            </div>
+            <!-- End Footer -->
+          </div>
+        </div>
+        <!-- End Content Step Form -->
+
+        <!-- Message Body -->
+        <div id="successMessageContent" style="display: none">
+          <div class="text-center">
+            <img
+              class="img-fluid mb-3"
+              src="./assets/svg/illustrations/hi-five.svg"
+              alt="Image Description"
+              style="max-width: 15rem"
+            />
+            <div class="mb-4">
+              <h2>{{ "Successful!" | translate }}</h2>
+              <p>
+                {{ "New" | translate }}
+                <span class="font-weight-bold text-dark">{{
+                  "Ella Lauda" | translate
+                }}</span>
+                {{ "user has been successfully created." | translate }}
+              </p>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <a class="btn btn-white mr-3" href="users.html">
+                <i class="tio-chevron-left ml-1"></i>
+                {{ "Back to users" | translate }}
+              </a>
+              <a class="btn btn-primary" href="users-add-user.html">
+                <i class="tio-user-add mr-1"></i>
+                {{ "Add new user" | translate }}
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- End Message Body -->
+      </div>
+    </div>
+    <!-- End Row -->
+  </form>
+  <!-- End Step Form -->
+</div>

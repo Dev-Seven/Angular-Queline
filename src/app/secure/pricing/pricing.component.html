@@ -1,0 +1,969 @@
+<div class="content container-fluid">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="row align-items-end">
+      <div class="col-sm mb-2 mb-sm-0">
+        <h1 class="page-header-title">{{ "Billing" | translate }}</h1>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+  <!-- End Page Header -->
+
+  <div class="row justify-content-lg-center">
+    <div class="col-lg-9">
+      <!-- Card -->
+      <div class="card mb-3 mb-lg-5">
+        <!-- Body -->
+        <div class="card-body">
+          <div class="row">
+            <div
+              class="col-md mb-3 mb-md-0"
+              *ngIf="planDetails.plan < 3 || planDetails.plan == 10"
+            >
+              <div class="mb-4">
+                <span class="card-subtitle mb-0"
+                  >{{ "YOUR PLAN IS" | translate }} {{ currentPlan }}
+                </span>
+
+                <h3>
+                  {{ "EXPIRES ON" | translate }} -
+                  {{ planDetails.expiry_date | date : "dd MMM yyyy" }}
+                </h3>
+              </div>
+
+              <span class="card-subtitle mb-0"
+                >{{ "TOTAL PER MONTH:" | translate }}
+              </span>
+              <h2 class="h1 text-primary" *ngIf="planDetails.plan == 1">
+                $0 Free
+              </h2>
+              <h2 class="h1 text-primary" *ngIf="planDetails.plan == 2">
+                $69 USD
+              </h2>
+              <h2 class="h1 text-primary" *ngIf="planDetails.plan == 10">
+                $30 USD
+              </h2>
+            </div>
+            <div
+              class="col-md mb-3 mb-md-0"
+              *ngIf="planDetails.plan > 3 && planDetails.plan !== 10"
+            >
+              <span class="card-subtitle mb-0">{{
+                "YOUR PLAN IS LIFE TIME" | translate
+              }}</span>
+            </div>
+            <ul class="list-inline list-unstyled col-md-auto">
+              <li
+                class="list-inline-item mb-2 mr-2"
+                *ngIf="planDetails.plan == 2 || planDetails.plan == 10"
+              >
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#stripeModal"
+                  (click)="changeModel()"
+                >
+                  {{ "Add 1000 Spots @ 29" | translate }}
+                </button>
+              </li>
+              <li
+                class="list-inline-item mb-2 mr-2"
+                *ngIf="planDetails.plan == 2 || planDetails.plan == 10"
+              >
+                <button class="btn btn-danger" (click)="downgradePlan()">
+                  {{ "Cancel Subscription" | translate }}
+                </button>
+              </li>
+              <li
+                class="list-inline-item mb-2"
+                *ngIf="planDetails.plan == 9 && isButtonShow"
+              >
+                <div style="display: flex; justify-content: end">
+                  <a
+                    class="btn btn-primary"
+                    href="javascript:;"
+                    data-toggle="modal"
+                    data-target="#stripeModal"
+                    (click)="changeSmsModel()"
+                    >{{ "Add 600 SMS @ $29" | translate }}</a
+                  >
+                </div>
+                <h6
+                  style="color: red"
+                  *ngIf="planDetails.plan == 9 && isButtonShow"
+                >
+                  {{
+                    "* SMS will only be available for North America" | translate
+                  }}
+                </h6>
+                <h6
+                  style="color: red"
+                  *ngIf="planDetails.plan == 9 && isButtonShow"
+                >
+                  {{ "* Unlimited Emails" | translate }}
+                </h6>
+              </li>
+              <li class="list-inline-item mb-2" *ngIf="planDetails.plan == 1">
+                <div>
+                  <a
+                    class="btn btn-primary"
+                    href="javascript:;"
+                    data-toggle="modal"
+                    data-target="#updatePlanModal"
+                    >{{ "Update Plan" | translate }}</a
+                  >
+                </div>
+              </li>
+              <li
+                class="list-inline-item mb-2"
+                *ngIf="planDetails.plan > 3 && planDetails.plan < 9"
+              >
+                <div>
+                  <a
+                    class="btn btn-primary"
+                    href="javascript:;"
+                    data-toggle="modal"
+                    data-target="#updatePlanModal"
+                    >{{ "Update Plan" | translate }}</a
+                  >
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- End Row -->
+        </div>
+        <!-- End Body -->
+
+        <hr class="my-4" />
+
+        <!-- Body -->
+        <div class="card-body">
+          <div class="row align-items-center flex-grow-1 mb-2">
+            <div class="col">
+              <h4 class="card-header-title">{{ "Spot Usage" | translate }}</h4>
+              <h6 *ngIf="planDetails.plan > 3 && planDetails.plan < 9">
+                {{ "Spot Usage Monthly wise" | translate }}
+              </h6>
+            </div>
+
+            <div class="col-auto">
+              <span class="font-weight-bold text-dark"
+                >{{ planDetails.total_spots - planDetails.spots }}
+                {{ "Spots" | translate }}</span
+              >
+              {{ "used of" | translate }} {{ planDetails.total_spots }}
+              {{ "Spots" | translate }}
+            </div>
+          </div>
+          <!-- End Row -->
+
+          <!-- Progress -->
+          <div class="progress rounded-pill mb-3">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              style="width: {{ usedSpots }}%"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+            <div
+              class="progress-bar opacity"
+              role="progressbar"
+              style="width: {{ unusedSpots - usedSpots }}%"
+              aria-valuenow="10"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <!-- End Progress -->
+
+          <!-- Legend Indicators -->
+          <div class="row">
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary"></span>
+              {{ "Used Spots" | translate }}
+            </div>
+
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary opacity"></span>
+              {{ "Unused Spots" | translate }}
+            </div>
+          </div>
+          <!-- End Legend Indicators -->
+        </div>
+        <!-- End Body -->
+
+        <!-- Body -->
+        <div
+          class="card-body"
+          *ngIf="planDetails.plan > 3 && planDetails.plan < 9"
+        >
+          <div class="row align-items-center flex-grow-1 mb-2">
+            <div class="col">
+              <h4 class="card-header-title">{{ "SMS Usage" | translate }}</h4>
+            </div>
+
+            <div class="col-auto">
+              <span class="font-weight-bold text-dark"
+                >{{ smsDetails.total_sms - smsDetails.sms }}
+                {{ "SMS" | translate }}</span
+              >
+              {{ "used of" | translate }} {{ smsDetails.total_sms }}
+              {{ "SMS" | translate }}
+            </div>
+          </div>
+          <!-- End Row -->
+
+          <!-- Progress -->
+          <div class="progress rounded-pill mb-3">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              style="width: {{ usedSms }}%"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+            <div
+              class="progress-bar opacity"
+              role="progressbar"
+              style="width: {{ unusedSms - usedSms }}%"
+              aria-valuenow="10"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <!-- End Progress -->
+
+          <!-- Legend Indicators -->
+          <div class="row">
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary"></span>
+              {{ "Used SMS" | translate }}
+            </div>
+
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary opacity"></span>
+              {{ "Unused SMS" | translate }}
+            </div>
+          </div>
+          <!-- End Legend Indicators -->
+        </div>
+        <!-- End Body -->
+
+        <div class="card-body" *ngIf="planDetails.plan == 9">
+          <div class="row align-items-center flex-grow-1 mb-2">
+            <div class="col">
+              <h4 class="card-header-title">{{ "SMS Usage" | translate }}</h4>
+            </div>
+
+            <div class="col-auto">
+              <span class="font-weight-bold text-dark"
+                >{{ planDetails.total_sms - planDetails.sms }}
+                {{ "SMS" | translate }}</span
+              >
+              {{ "used of" | translate }} {{ planDetails.total_sms }}
+              {{ "SMS" | translate }}
+            </div>
+          </div>
+          <!-- End Row -->
+
+          <!-- Progress -->
+          <div class="progress rounded-pill mb-3">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              style="width: {{ usedSms }}%"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+            <div
+              class="progress-bar opacity"
+              role="progressbar"
+              style="width: {{ unusedSms - usedSms }}%"
+              aria-valuenow="10"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <!-- End Progress -->
+
+          <!-- Legend Indicators -->
+          <div class="row">
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary"></span>
+              {{ "Used SMS" | translate }}
+            </div>
+
+            <div class="col-auto">
+              <span class="legend-indicator bg-primary opacity"></span>
+              {{ "Unused SMS" | translate }}
+            </div>
+          </div>
+          <!-- End Legend Indicators -->
+        </div>
+      </div>
+      <!-- End Card -->
+
+      <!-- Card -->
+
+      <!-- Card -->
+      <div class="card" *ngIf="orders && orders.length > 0">
+        <div class="card-header">
+          <h4 class="card-header-title">{{ "Order History" | translate }}</h4>
+        </div>
+
+        <div class="table-responsive">
+          <table
+            class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th>{{ "Reference" | translate }}</th>
+                <th>{{ "Type" | translate }}</th>
+                <th>{{ "Amount" | translate }}</th>
+                <th>{{ "Updated" | translate }}</th>
+                <th>{{ "Invoice" | translate }}</th>
+                <th style="width: 5%"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="
+                  let order of orders
+                    | paginate
+                      : {
+                          id: 'orders_data',
+                          itemsPerPage: 10,
+                          currentPage: page,
+                          totalItems: orders.length
+                        }
+                "
+              >
+                <td>
+                  {{ order.ref_no ? order.ref_no : "No Reference Number" }}
+                </td>
+                <td>{{ order.type }}</td>
+                <td>${{ order.amount ? order.amount : 0 }}</td>
+                <td>{{ order.date | date : "dd MMM yyyy" }}</td>
+                <td>
+                  <a
+                    class="btn btn-sm btn-white"
+                    href="javascript:;"
+                    (click)="saveInvoice(order.id)"
+                  >
+                    <i class="tio-download-to mr-1"></i> {{ "PDF" | translate }}
+                  </a>
+                </td>
+                <td>
+                  <div
+                    id="quickViewPopover"
+                    data-toggle="popover"
+                    data-placement="left"
+                    title=""
+                    data-content="Check out this Invoice receipt modal example."
+                    data-html="true"
+                    data-original-title="<div class='d-flex align-items-center'>Invoice receipt <a href='#!' class='close close-light ml-auto'><i id='closeQuickViewPopover' class='tio-clear'></i></a></div>"
+                    aria-describedby="popover326007"
+                  ></div>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <div class="tab-pane fade p-4 active show">
+                <pagination-controls
+                  class="paginator"
+                  id="orders_data"
+                  (pageChange)="pageChanged($event)"
+                  (pageBoundsCorrection)="pageChanged($event)"
+                  directionLinks="true"
+                  autoHide="true"
+                  responsive="true"
+                  previousLabel=""
+                  nextLabel=""
+                  screenReaderPaginationLabel="Pagination"
+                  screenReaderPageLabel="page"
+                  screenReaderCurrentLabel="You're on page"
+                >
+                </pagination-controls>
+              </div>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Row -->
+</div>
+
+<div
+  class="modal fade"
+  id="updatePlanModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="updatePlanModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+    <div class="modal-content">
+      <!-- Header -->
+      <div class="modal-header">
+        <h4 id="updatePlanModalTitle" class="modal-title">
+          {{ "Subscription plan" | translate }}
+        </h4>
+
+        <button
+          type="button"
+          class="btn btn-icon btn-sm btn-ghost-secondary"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+      </div>
+      <!-- End Header -->
+
+      <!-- Body -->
+      <div class="modal-body">
+        <!-- Toggle Switch -->
+        <div class="d-flex justify-content-center align-items-center mb-5">
+          <span>{{ "Monthly" | translate }}</span>
+          <label class="toggle-switch mx-2" for="customSwitch">
+            <input
+              type="checkbox"
+              class="js-toggle-switch toggle-switch-input"
+              id="customSwitch"
+              (change)="onCheckboxChange($event)"
+              data-hs-toggle-switch-options='{
+                       "targetSelector": "#pricingCount1, #pricingCount2, #pricingCount3"
+                     }'
+            />
+            <span class="toggle-switch-label">
+              <span class="toggle-switch-indicator"></span>
+            </span>
+          </label>
+          <span>{{ "Annual" | translate }}</span>
+        </div>
+        <!-- End Toggle Switch -->
+
+        <!-- Pricing -->
+        <div
+          class="row"
+          [ngStyle]="{
+            'justify-content': planDetails.plan > 3 ? 'center' : 'space-between'
+          }"
+        >
+          <div
+            class="col-sm-6 col-lg-3 mb-3 mb-sm-5"
+            *ngIf="planDetails.plan < 3"
+          >
+            <!-- Card -->
+            <div
+              class="card custom-checkbox-card custom-checkbox-card-lg checked"
+            >
+              <!-- Header -->
+              <div class="card-header d-block text-center">
+                <!-- Checkbox -->
+                <input
+                  type="radio"
+                  id="billingPricingRadio1"
+                  name="billingPricingRadio"
+                  class="custom-checkbox-card-input"
+                  checked=""
+                />
+                <label
+                  class="custom-checkbox-card-label custom-checkbox-card-label-stretched"
+                  for="billingPricingRadio1"
+                ></label>
+                <!-- End Checkbox -->
+
+                <small class="card-subtitle">{{ "BASIC" | translate }}</small>
+                <div class="mb-3">
+                  <span class="card-title display-3">{{
+                    "Free" | translate
+                  }}</span>
+                </div>
+
+                <span>{{ "Forever Free" | translate }}</span>
+                <p class="card-text font-weight-bold text-primary">$0</p>
+              </div>
+              <!-- End Header -->
+
+              <!-- Body -->
+              <div class="card-body">
+                <ul
+                  class="list-checked list-checked-primary list-unstyled-py-2"
+                >
+                  <li class="list-checked-item">
+                    {{ "100 Spot/Guests Per Month" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Multiple locations" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Business messaging by Chat / Email" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Max texts per guest ( 4 SMS )" | translate }}
+                  </li>
+
+                  <li class="list-checked-item">
+                    {{ "Customer Feedback" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Role Management" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "User Permissions" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Customize Design" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Chat Support (B2B) Initial Setup" | translate }}
+                  </li>
+                </ul>
+              </div>
+              <!-- End Body -->
+
+              <!-- Footer -->
+              <div class="card-body-stretched">
+                <button
+                  type="button"
+                  class="btn btn-block btn-white custom-checkbox-card-btn"
+                >
+                  {{ "Select Plan" | translate }}
+                </button>
+              </div>
+
+              <div class="card-footer">
+                <p class="card-text small"></p>
+              </div>
+              <!-- End Footer -->
+            </div>
+            <!-- End Card -->
+          </div>
+
+          <div class="col-sm-6 col-lg-3 mb-3 mb-sm-5">
+            <!-- Card -->
+            <div
+              class="card custom-checkbox-card custom-checkbox-card-lg"
+              data-toggle="modal"
+              data-target="#stripeModal"
+              data-dismiss="modal"
+              (click)="selectPlan(2)"
+            >
+              <!-- Header -->
+              <div class="card-header d-block text-center">
+                <!-- Checkbox -->
+                <input
+                  type="radio"
+                  id="billingPricingRadio2"
+                  name="billingPricingRadio"
+                  class="custom-checkbox-card-input"
+                />
+                <label
+                  class="custom-checkbox-card-label custom-checkbox-card-label-stretched"
+                  for="billingPricingRadio2"
+                ></label>
+                <!-- End Checkbox -->
+
+                <small class="card-subtitle">{{ "STARTER" | translate }}</small>
+                <div class="mb-3">
+                  <span class="card-title display-3">
+                    $<span
+                      id="pricingCount1"
+                      data-hs-toggle-switch-item-options='{
+                                      "min": 22,
+                                      "max": 49
+                                    }'
+                      >{{ isYearlyPlan ? "756" : "69" }}</span
+                    >
+                    <small class="font-size-sm text-muted"
+                      >/ {{ isYearlyPlan ? "Year" : "Month" }}</small
+                    >
+                  </span>
+                </div>
+                <div *ngIf="!isYearlyPlan">
+                  <span>{{ "Or prepay annually" | translate }}</span>
+                  <p class="card-text font-weight-bold text-primary">
+                    {{ "Save $72" | translate }}
+                  </p>
+                </div>
+              </div>
+              <!-- End Header -->
+
+              <!-- Body -->
+              <div class="card-body">
+                <ul
+                  class="list-checked list-checked-primary list-unstyled-py-2"
+                >
+                  <li class="list-checked-item">
+                    {{ "Pricing Start of signup Date" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "1000 Spot/Guests Per Month" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Multiple locations" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Business messaging by Chat / Email" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ 'Max texts per guest ("4" SMS )' | translate }}
+                  </li>
+
+                  <li class="list-checked-item">
+                    {{ "Customer Feedback" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Invite Team and Admins" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "User Permissions" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Customize Design" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Remove White-Label Branding" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Export Guest Data" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Import Guest Data" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "API Access" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Chat support (B2B) Initial Setup" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "1000 Extra Spot for $29 / per Month" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Twilio integration included" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "North America SMS included" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Contact Support" | translate }}
+                  </li>
+                </ul>
+              </div>
+              <!-- End Body -->
+
+              <!-- Footer -->
+              <div class="card-body-stretched">
+                <button
+                  type="button"
+                  class="btn btn-block btn-white custom-checkbox-card-btn"
+                >
+                  {{
+                    "Select
+                                    Plan" | translate
+                  }}
+                </button>
+              </div>
+
+              <div class="card-footer">
+                <p class="card-text small">
+                  <i class="tio-help-outlined mr-1"></i>
+                  {{ "Support Included For Integration" | translate }}
+                </p>
+              </div>
+              <!-- End Footer -->
+            </div>
+            <!-- End Card -->
+          </div>
+
+          <div class="col-sm-6 col-lg-3 mb-3 mb-sm-5">
+            <!-- Card -->
+            <div
+              class="card custom-checkbox-card custom-checkbox-card-lg"
+              data-toggle="modal"
+              data-target="#stripeModal"
+              data-dismiss="modal"
+              (click)="selectPlan(10)"
+            >
+              <!-- Header -->
+              <div class="card-header d-block text-center">
+                <!-- Checkbox -->
+                <input
+                  type="radio"
+                  id="billingPricingRadio3"
+                  name="billingPricingRadio"
+                  class="custom-checkbox-card-input"
+                />
+                <label
+                  class="custom-checkbox-card-label custom-checkbox-card-label-stretched"
+                  for="billingPricingRadio3"
+                ></label>
+                <!-- End Checkbox -->
+
+                <small class="card-subtitle">{{
+                  "Business" | translate
+                }}</small>
+                <div class="mb-3">
+                  <span class="card-title display-3">
+                    $<span
+                      id="pricingCount1"
+                      data-hs-toggle-switch-item-options='{
+                                      "min": 22,
+                                      "max": 49
+                                    }'
+                      >{{ isYearlyPlan ? "324" : "30" }}</span
+                    >
+                    <small class="font-size-sm text-muted"
+                      >/ {{ isYearlyPlan ? "Year" : "Month" }}</small
+                    >
+                  </span>
+                </div>
+                <div *ngIf="!isYearlyPlan">
+                  <span>{{ "Or prepay annually" | translate }}</span>
+                  <p class="card-text font-weight-bold text-primary">
+                    {{ "Save $36" | translate }}
+                  </p>
+                </div>
+              </div>
+              <!-- End Header -->
+
+              <!-- Body -->
+              <div class="card-body">
+                <ul
+                  class="list-checked list-checked-primary list-unstyled-py-2"
+                >
+                  <li class="list-checked-item">
+                    {{ "Pricing Start of signup Date" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "1000 Spot/Guests Per Month" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Multiple locations" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Business messaging by Chat / Email" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ 'Max texts per guest ("4" SMS )' | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Customer Feedback" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Invite Team and Admins" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "User Permissions" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Customize Design" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Remove White-Label Branding" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Export Guest Data" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Import Guest Data" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "API Access" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Chat support (B2B) Initial Setup" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "1000 Extra Spot for $29 / per Month" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "SMS not inlcuded" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Twilio integration included" | translate }}
+                  </li>
+                  <li class="list-checked-item">
+                    {{ "Contact Support" | translate }}
+                  </li>
+                </ul>
+              </div>
+              <!-- End Body -->
+
+              <!-- Footer -->
+              <div class="card-body-stretched">
+                <button
+                  type="button"
+                  class="btn btn-block btn-white custom-checkbox-card-btn"
+                >
+                  {{
+                    "Select
+                                    Plan" | translate
+                  }}
+                </button>
+              </div>
+
+              <div class="card-footer">
+                <p class="card-text small">
+                  <i class="tio-help-outlined mr-1"></i>
+                  {{ "Support Included For Integration" | translate }}
+                </p>
+              </div>
+              <!-- End Footer -->
+            </div>
+            <!-- End Card -->
+          </div>
+
+          <div class="col-sm-6 col-lg-3 mb-3 mb-sm-5">
+            <!-- Card -->
+            <div class="card custom-checkbox-card custom-checkbox-card-lg">
+              <!-- Header -->
+              <div class="card-header d-block text-center">
+                <!-- Checkbox -->
+                <input
+                  type="radio"
+                  id="billingPricingRadio4"
+                  name="billingPricingRadio"
+                  class="custom-checkbox-card-input"
+                />
+                <label
+                  class="custom-checkbox-card-label custom-checkbox-card-label-stretched"
+                  for="billingPricingRadio4"
+                ></label>
+                <!-- End Checkbox -->
+
+                <small class="card-subtitle">{{
+                  "BUSINESS" | translate
+                }}</small>
+
+                <div class="mb-3">
+                  <span class="card-title display-3" style="font-size: 2rem">
+                    {{ "Enterprise" | translate }}
+                  </span>
+                </div>
+                <span>{{
+                  "Based on the business size and needs" | translate
+                }}</span>
+                <p class="card-text font-weight-bold text-primary"></p>
+              </div>
+              <!-- End Header -->
+
+              <!-- Body -->
+              <div class="card-body">
+                <ul
+                  class="list-checked list-checked-primary list-unstyled-py-2"
+                >
+                  <li class="list-checked-item">
+                    {{ "Dedicated SMS number (Possible)" | translate }}
+                  </li>
+                </ul>
+              </div>
+              <!-- End Body -->
+
+              <!-- Footer -->
+              <div class="card-body-stretched">
+                <button
+                  type="button"
+                  class="btn btn-block btn-white custom-checkbox-card-btn"
+                  data-dismiss="modal"
+                  (click)="contactus()"
+                  style="z-index: 10"
+                >
+                  {{ "Select Plan" | translate }}
+                </button>
+              </div>
+
+              <div class="card-footer">
+                <p class="card-text small">
+                  <i class="tio-help-outlined mr-1"></i>
+                  {{ "Support Included For Integration" | translate }}
+                </p>
+              </div>
+              <!-- End Footer -->
+            </div>
+            <!-- End Card -->
+          </div>
+        </div>
+        <!-- End Pricing -->
+      </div>
+      <!-- End Body -->
+    </div>
+  </div>
+</div>
+
+<!-- Stripe Modal -->
+<div
+  class="modal fade"
+  id="stripeModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          {{ "Payment" | translate }}
+        </h5>
+        <button
+          type="button"
+          id="stripeCloseButton"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          class="js-validate"
+          novalidate
+          (ngSubmit)="createToken()"
+          [formGroup]="stripeTest"
+        >
+          <div class="modal-body">
+            <div class="js-form-message form-group">
+              <label class="input-label" for="billingEmail">{{
+                "Your Email" | translate
+              }}</label>
+              <input
+                class="form-control form-control-sm"
+                type="text"
+                id="billingEmail"
+                formControlName="email"
+                placeholder="email@example.com"
+              />
+              <mat-validation-message
+                [control]="stripeTest.controls.email"
+                [message]="'Email'"
+                [formSubmitted]="isFormSubmitted"
+              ></mat-validation-message>
+            </div>
+            <div class="js-form-message form-group">
+              <ngx-stripe-card
+                class="form-control form-control-sm"
+                [options]="cardOptions"
+                [elementsOptions]="elementsOptions"
+              ></ngx-stripe-card>
+            </div>
+            <button class="btn btn-primary" type="submit">
+              {{ "Make Payment" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="content container-fluid">
+    <div class="">
+      <div class="modal-close">
+        <button
+          type="button"
+          class="btn btn-icon btn-sm btn-ghost-secondary"
+          data-dismiss="modal"
+          (click)="close()"
+          aria-label="Close"
+        >
+          <i class="tio-clear tio-lg"></i>
+        </button>
+      </div>
+      <div class="modal-body p-sm-5">
+        <div class="text-center">
+          <h4 class="h1">{{ "warning" | translate }}</h4>
+        </div>
+      </div>
+      <div class="col-sm-7 col-md-12" style="text-align: center;">
+        <div>
+           Its updated then all previous booking will  be cancel
+        </div>
+      <div class="centerclass" style="margin-top: 20px;">
+        <button type="button" class="btn btn-primary" mat-raised-button style="margin-bottom: 5%"  (click)="close()">
+          {{ "ok" | translate }}
+        </button>
+      </div>
+      
+      <div>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+
+
+
+
+  

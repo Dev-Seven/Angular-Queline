@@ -1,0 +1,143 @@
+<!-- <div>
+    <div>
+        <div class="msc-overlay">
+        </div>
+        <div class="msc-content msc-alert--animate">
+            <h4 class="msc-title">Term Conditions</h4>
+            <br />
+            <div class="msc-body" style="height: 350px;overflow-y: auto;">
+                <p style="text-align: justify;">
+                    These Terms and Conditions constitute a legally binding agreement made between you, whether
+                    personally or on behalf of an entity (“you”) and [business entity name](“we,” “us” or “our”),
+                    concerning your access to and use of the [website name.com] website as well as any other media form,
+                    media channel, mobile website or mobile application related, linked, or otherwise connected thereto
+                    (collectively, the “Site”).
+                </p>
+                <p style="text-align: justify;">
+                    You agree that by accessing the Site, you have read, understood, and agree to be bound by all of
+                    these Terms and Conditions. If you do not agree with all of these Terms and Conditions, then you are
+                    expressly prohibited from using the Site and you must discontinue use immediately.
+                </p>
+                <p style="text-align: justify;">
+                    Supplemental terms and conditions or documents that may be posted on the Site from time to time are
+                    hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to
+                    make changes or modifications to these Terms and Conditions at any time and for any reason.
+                </p>
+                <p style="text-align: justify;">
+                    We will alert you about any changes by updating the “Last updated” date of these Terms and
+                    Conditions, and you waive any right to receive specific notice of each such change.
+                </p>
+                <p style="text-align: justify;">
+                    It is your responsibility to periodically review these Terms and Conditions to stay informed of
+                    updates.You will be subject to, and will be deemed to have been made aware of and to have accepted,
+                    the changes in any revised Terms and Conditions by your continued use of the Site after the date
+                    such revised Terms and Conditions are posted.
+                </p>
+                <p style="text-align: justify;">
+                    The information provided on the Site is not intended for distribution to or use by any person or
+                    entity in any jurisdiction or country where such distribution or use would be contrary to law or
+                    regulation or which would subject us to any registration requirement within such jurisdiction or
+                    country.
+                </p>
+                <p style="text-align: justify;">
+                    Accordingly, those persons who choose to access the Site from other locations do so on their own
+                    initiative and are solely responsible for compliance with local laws, if and to the extent local
+                    laws are applicable.
+                </p>
+                <p style="text-align: justify;">
+                    These terms and conditions were created using Termly.
+
+                    Option 1: The Site is intended for users who are at least 18 years old. Persons under the age of 18
+                    are not permitted to register for the Site.
+
+                    Option 2: [The Site is intended for users who are at least 13 years of age.] All users who are
+                    minors in the jurisdiction in which they reside (generally under the age of 18) must have the
+                    permission of, and be directly supervised by, their parent or guardian to use the Site. If you are a
+                    minor, you must have your parent or guardian read and agree to these Terms and Conditions prior to
+                    you using the Site.
+                </p>
+            </div>
+            <div>
+                <button type="button" class="btn btn-info btn-transparent" (click)="ok();">
+                    <i class="fa fa-check"></i>
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal fade show" id="welcomeMessageModal" tabindex="-1" role="dialog" aria-modal="true" style="padding-right: 17px; display: block;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-close">
+          <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary" data-dismiss="modal" aria-label="Close" (click)="ok();">
+            <i class="tio-clear tio-lg"></i>
+          </button>
+        </div>
+        <!-- End Header -->
+
+        <!-- Body -->
+        <div class="modal-body p-sm-5">
+          <div class="text-center">
+            <div class="w-75 w-sm-50 mx-auto mb-4">
+              <img class="img-fluid" src="./assets/svg/illustrations/graphs.svg" alt="Image Description">
+            </div>
+
+                    <h4 class="h1">{{ "Term's & Conditions" | translate}}</h4>
+
+                    <p style="text-align: justify;">
+                        These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and [business entity name](“we,” “us” or “our”), concerning your access to and use of the [website name.com] website
+                        as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”).
+                    </p>
+                    <p style="text-align: justify;">
+                        You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms and Conditions. If you do not agree with all of these Terms and Conditions, then you are expressly prohibited from using the Site and you must
+                        discontinue use immediately.
+                    </p>
+                    <p style="text-align: justify;">
+                        Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms and Conditions
+                        at any time and for any reason.
+                    </p>
+                    <p style="text-align: justify;">
+                        We will alert you about any changes by updating the “Last updated” date of these Terms and Conditions, and you waive any right to receive specific notice of each such change.
+                    </p>
+                    <p style="text-align: justify;">
+                        It is your responsibility to periodically review these Terms and Conditions to stay informed of updates.You will be subject to, and will be deemed to have been made aware of and to have accepted, the changes in any revised Terms and Conditions by your
+                        continued use of the Site after the date such revised Terms and Conditions are posted.
+                    </p>
+                    <p style="text-align: justify;">
+                        The information provided on the Site is not intended for distribution to or use by any person or entity in any jurisdiction or country where such distribution or use would be contrary to law or regulation or which would subject us to any registration
+                        requirement within such jurisdiction or country.
+                    </p>
+                    <p style="text-align: justify;">
+                        Accordingly, those persons who choose to access the Site from other locations do so on their own initiative and are solely responsible for compliance with local laws, if and to the extent local laws are applicable.
+                    </p>
+                    <p style="text-align: justify;">
+                        These terms and conditions were created using Termly. Option 1: The Site is intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to register for the Site. Option 2: [The Site is intended for users who are at
+                        least 13 years of age.] All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Site. If
+                        you are a minor, you must have your parent or guardian read and agree to these Terms and Conditions prior to you using the Site.
+                    </p>
+                    <!-- <button type="button" class="btn btn-info btn-primary" (click)="ok();">
+                <i class="fa fa-check"></i>
+               I accept 
+            </button> -->
+          </div>
+        </div>
+        <!-- End Body -->
+
+        <!-- Footer -->
+        <div class="modal-footer d-block text-center py-sm-5">
+          
+
+          <div class="w-85 mx-auto">
+            <div class="row justify-content-between">
+               
+            </div>
+          </div>
+        </div>
+        <!-- End Footer -->
+      </div>
+    </div>
+  </div>
+

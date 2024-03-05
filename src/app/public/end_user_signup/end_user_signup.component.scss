@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.button {
+  width: 290px;
+  line-height: 50px;
+}
+
+.signupButton {
+  background-color: #007bff;
+}
+
+.btn-link {
+  color: #007bff;
+}
+
+.aligned-with-icon {
+  position: absolute;
+}
+
+@media only screen and (max-width: 567px) {
+  .row {
+    margin-right: 15px !important;
+    margin-left: 15px !important;
+  }
+}

@@ -1,0 +1,67 @@
+/* You can add global styles to this file, and also import other style files */
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick,
+.mat-form-field-appearance-outline .mat-form-field-outline,
+.mat-form-field-label {
+  color: black;
+}
+.mat-card {
+  background-color: white;
+}
+.mat-input-element,
+.mat-input-element::-webkit-search-cancel-button,
+.mat-input-element::-webkit-search-decoration,
+.mat-input-element::-webkit-search-results-button,
+.mat-input-element::-webkit-search-results-decoration {
+  color: black;
+}
+input.mat-input-element {
+  color: black;
+}
+.mat-fab.mat-primary,
+.mat-flat-button.mat-primary,
+.mat-mini-fab.mat-primary,
+.mat-raised-button.mat-primary {
+  background-color: #4385ff;
+}
+.mat-select-value-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: black;
+}
+.mat-card-title {
+  display: block;
+  margin-bottom: 8px;
+  color: black;
+}
+.mat-card-actions,
+.mat-card-content,
+.mat-card-subtitle {
+  display: block;
+  margin-bottom: 16px;
+  color: black;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #4385ff;
+  border-color: #4385ff;
+}
+
+.q-row {
+  padding: 10px;
+}
+.q-wrap {
+  flex-flow: row wrap;
+  box-sizing: border-box;
+  display: flex;
+}
+.error-wrapper {
+  margin-top: 2.2em;
+  font-size: 75%;
+  top: calc(100% - 1.79167em);
+}
+.error {
+  font-size: 11px;
+  color: #f44336;
+}

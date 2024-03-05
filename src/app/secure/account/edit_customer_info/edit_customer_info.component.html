@@ -1,0 +1,292 @@
+<div class="msc-overlay"></div>
+<div class="content container-fluid">
+  <div class="">
+    <mat-card class="row msc-content msc-alert--animate" *ngIf="isLoaded">
+      <div class="row">
+        <div class="col-md-10">
+          <mat-card-title
+            style="font-size: 22px; margin-bottom: auto"
+            *ngIf="isEditMode"
+            >Edit {{ locationInput.name }}</mat-card-title
+          >
+          <br />
+          <mat-card-title
+            style="font-size: 22px; margin-bottom: auto"
+            *ngIf="!isEditMode"
+            >New Field</mat-card-title
+          >
+          <br />
+        </div>
+        <div class="col-md-1" *ngIf="isEditMode">
+          <button
+            type="button"
+            class="btn btn-icon btn-sm btn-ghost-secondary"
+            data-dismiss="modal"
+            (click)="delete()"
+            aria-label="Delete"
+          >
+            <i class="tio-delete tio-lg"></i>
+          </button>
+        </div>
+        <div class="col-md-1" *ngIf="!isEditMode"></div>
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="btn btn-icon btn-sm btn-ghost-secondary"
+            data-dismiss="modal"
+            (click)="close()"
+            aria-label="Close"
+          >
+            <i class="tio-clear tio-lg"></i>
+          </button>
+        </div>
+      </div>
+      <form class="basic-form" novalidate [formGroup]="frmLocationInput">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Name</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="name"
+                autocomplete="nope"
+              />
+              <mat-validation-message
+                [control]="frmLocationInput.controls.name"
+                [message]="'Name'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Label</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="label"
+                autocomplete="nope"
+              />
+              <mat-validation-message
+                [control]="frmLocationInput.controls.label"
+                [message]="'Label'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Input Type</mat-label>
+              <mat-select
+                formControlName="type"
+                [(ngModel)]="selectedLocationInputType"
+                (selectionChange)="getTypes()"
+                class="mat-dropdown"
+              >
+                <mat-option
+                  *ngFor="let item of locationInputTypes"
+                  [value]="item.name"
+                >
+                  {{ item.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6" *ngIf="placeholder">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Placeholder</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="placeholder"
+                autocomplete="nope"
+              />
+              <mat-validation-message
+                [control]="frmLocationInput.controls.placeholder"
+                [message]="'Placeholder'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6" *ngIf="options">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Options</mat-label>
+              <mat-chip-list #chipList aria-label="options">
+                <mat-chip
+                  *ngFor="let thing of optionsType"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(thing)"
+                >
+                  {{ thing }}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  matInput
+                  placeholder="Add Options and Press Enter"
+                  formControlName="options"
+                  autocomplete="nope"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="add($event)"
+                />
+              </mat-chip-list>
+              <mat-validation-message
+                [control]="frmLocationInput.controls.options"
+                [message]="'Selection Options'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6" *ngIf="default">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Default Value</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="defaultInput"
+                autocomplete="nope"
+              />
+              <mat-validation-message
+                [control]="frmLocationInput.controls.defaultInput"
+                [message]="'Default Value'"
+                [formSubmitted]="isFormSubmitted"
+              >
+              </mat-validation-message>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6" *ngIf="options">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <mat-label>Default Value</mat-label>
+              <mat-select
+                formControlName="defaultValue"
+                [(ngModel)]="defaultvalue"
+                (selectionChange)="setDefault()"
+                class="mat-dropdown"
+              >
+                <mat-option *ngFor="let item of optionsType" [value]="item">
+                  {{ item }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <mat-card-title><strong>Availability</strong></mat-card-title>
+            <div class="row">
+              <div class="col-md-2" style="margin: auto">Option is</div>
+              <div
+                class="col-md-4"
+                style="
+                  border: 2px solid rgba(0, 0, 0, 0.12);
+                  border-radius: 8px;
+                "
+              >
+                <mat-select
+                  formControlName="availability"
+                  [(ngModel)]="selectedAvailability"
+                  class="mat-dropdown"
+                >
+                  <mat-option
+                    *ngFor="let item of availability"
+                    [value]="item"
+                    >{{ item }}</mat-option
+                  >
+                </mat-select>
+                <mat-validation-message
+                  [control]="frmLocationInput.controls.availability"
+                  [message]="'Role'"
+                  [formSubmitted]="isFormSubmitted"
+                >
+                </mat-validation-message>
+              </div>
+              <div class="col-md-1" style="margin: auto">for</div>
+              <div
+                class="col-md-4"
+                style="
+                  border: 2px solid rgba(0, 0, 0, 0.12);
+                  border-radius: 8px;
+                "
+              >
+                <mat-select
+                  formControlName="availableFor"
+                  [(ngModel)]="selectedAvailableFor"
+                  class="mat-dropdown"
+                >
+                  <mat-option
+                    *ngFor="let item of availableFor"
+                    [value]="item"
+                    >{{ item }}</mat-option
+                  >
+                </mat-select>
+                <mat-validation-message
+                  [control]="frmLocationInput.controls.availableFor"
+                  [message]="'Role'"
+                  [formSubmitted]="isFormSubmitted"
+                >
+                </mat-validation-message>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" style="margin: 2%">
+            <mat-checkbox
+              color="primary"
+              formControlName="required"
+              [ngModelOptions]="{ standalone: true }"
+              >Required</mat-checkbox
+            >
+          </div>
+        </div>
+        <div class="row" *ngIf="preselect">
+          <div class="col-md-6" style="margin-left: 2%">
+            <mat-checkbox
+              color="primary"
+              formControlName="preselect"
+              [ngModelOptions]="{ standalone: true }"
+              >Preselect</mat-checkbox
+            >
+          </div>
+        </div>
+        <div class="row" *ngIf="options">
+          <div class="col-md-6" style="margin-left: 2%">
+            <mat-checkbox
+              color="primary"
+              formControlName="multiple"
+              [ngModelOptions]="{ standalone: true }"
+              >Multiple Input</mat-checkbox
+            >
+          </div>
+        </div>
+
+        <mat-card-content style="text-align: center">
+          <div
+            fxFlex.gt-lg="100"
+            fxFlex.gt-md="100"
+            fxFlex.gt-xs="100"
+            fxFlex="100"
+          >
+            <button
+              type="button"
+              mat-raised-button
+              color="primary"
+              (click)="save()"
+            >
+              SAVE
+            </button>
+          </div>
+        </mat-card-content>
+      </form>
+    </mat-card>
+  </div>
+</div>

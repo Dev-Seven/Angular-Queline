@@ -1,0 +1,105 @@
+<div class="container py-5 py-sm-7">
+  <div class="row justify-content-center" *ngIf="!endUserSignUp">
+    <div class="col-sm-12 col-md-9 col-lg-7 col-xl-5">
+      <!-- Card -->
+      <div
+        class="card card-lg mb-5"
+        [ngStyle]="{ background: theme }"
+        [ngStyle]="{ color: theme !== 'unset' ? white : '' }"
+      >
+        <div class="card-body">
+          <a
+            class="d-flex justify-content-center mb-5"
+            *ngIf="companyLogo == null"
+          >
+            <img
+              class="z-index-2"
+              src="./assets/svg/logos/logo.png"
+              alt="Image Description"
+              style="width: 8rem; height: 2rem"
+            />
+          </a>
+          <a
+            class="d-flex justify-content-center mb-5 clogo"
+            *ngIf="companyLogo !== null"
+          >
+            <img
+              class="z-index-2"
+              src="{{ companyLogo }}"
+              alt="Image Description"
+            />
+          </a>
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ storeName }}</span
+          >
+          <span
+            class="d-flex justify-content-center"
+            style="margin-bottom: 0 !important"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ address }}, {{ city }}, {{ zipCode }}
+          </span>
+          <span
+            class="d-flex justify-content-center mb-5"
+            [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+            >{{ state }}, {{ country }}</span
+          >
+          <div class="text-center" style="padding-bottom: 20px">
+            <div id="map" style="height: 200px; width: 100%"></div>
+          </div>
+
+          <!-- Form -->
+          <div class="justify-content-center row">
+            <button
+              type="button"
+              *ngIf="storeBooking"
+              (click)="selectMode('Booking')"
+              [ngClass]="{
+                'btn-primary': theme == 'unset',
+                'btn-white': theme !== 'unset'
+              }"
+              class="btn btn-lg col-lg-5 list-inline-item mb-2 mr-2"
+            >
+              Booking
+            </button>
+            <button
+              type="button"
+              (click)="selectMode('Waitlist')"
+              [ngClass]="{
+                'btn-primary': theme == 'unset',
+                'btn-white': theme !== 'unset'
+              }"
+              class="btn btn-lg col-lg-5 list-inline-item mb-2 mr-2"
+            >
+              Waitlist
+            </button>
+          </div>
+          <!-- End Form -->
+        </div>
+        <div
+          class="text-center"
+          *ngIf="branding"
+          [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+        >
+          <small class="text-cap mb-4">
+            <img
+              class="navbar-brand-logo"
+              src="./assets/svg/logos/logo/quelines.png"
+              alt=""
+            />
+            {{ "Create Waitlist with Quelines at" | translate }}
+            <a
+              href="/"
+              target="_blank"
+              [ngStyle]="{ color: theme !== 'unset' ? 'white' : '' }"
+              >{{ "link" | translate }}</a
+            >
+          </small>
+        </div>
+      </div>
+      <!-- End Card -->
+    </div>
+  </div>
+</div>
